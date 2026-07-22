@@ -1,16 +1,16 @@
 {
   "status": "PASS",
   "have_telemetry": true,
-  "turns": 5,
+  "turns": 7,
   "subagent_turns": 2,
-  "raw_total": 2549267,
-  "cost_weighted_total": 879165,
-  "overstatement_ratio": 2.9,
+  "raw_total": 2794300,
+  "cost_weighted_total": 915380,
+  "overstatement_ratio": 3.05,
   "by_token_type": {
-    "input_tokens": 426554,
+    "input_tokens": 428302,
     "cache_creation_input_tokens": 0,
-    "cache_read_input_tokens": 2073664,
-    "output_tokens": 49049
+    "cache_read_input_tokens": 2314880,
+    "output_tokens": 51118
   },
   "weights": {
     "input_tokens": 1.0,
@@ -24,14 +24,21 @@
       "turns": 2,
       "raw": 2321376,
       "cost_weighted": 833302,
-      "pct_cost": 94.8
+      "pct_cost": 91.0
     },
     {
       "skill": "mega-sdd:resolve-oq",
       "turns": 2,
       "raw": 166071,
       "cost_weighted": 36636,
-      "pct_cost": 4.2
+      "pct_cost": 4.0
+    },
+    {
+      "skill": "mega-sdd:execute-bolts",
+      "turns": 2,
+      "raw": 245033,
+      "cost_weighted": 36215,
+      "pct_cost": 4.0
     },
     {
       "skill": "mega-sdd:orchestrate-flow",

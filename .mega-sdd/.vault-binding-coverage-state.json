@@ -1,5 +1,5 @@
 {
-  "ts": "2026-07-22T07:47:10.721410Z",
+  "ts": "2026-07-22T08:34:06.627262Z",
   "status": "FAIL",
   "validator": "validate-vault-binding-coverage.sh",
   "slice4_summary": {
@@ -11,8 +11,8 @@
   },
   "slice5_summary": {
     "jwt-login": {
-      "bolts_dir": "absent (pre-execution)",
-      "skipped": true
+      "units_count": 9,
+      "units_without_bolt_report": 9
     }
   },
   "issues_count": 1,

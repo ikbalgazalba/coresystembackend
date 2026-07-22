@@ -12,9 +12,9 @@ engine: tree-sitter
 precision_tier: ast
 tree_sitter_version: "0.26.10"
 grammars_used: ["java"]
-last_scanned_commit: 941e5b40c84d4fc0a18e6db39c888db3b0eac078
+last_scanned_commit: b27e8cbf5e2e8218ef42ca86be373479ea5c2d1e
 scan_mode: incremental-unchanged
-change_signal_note: "Mode D sync --changed-only (2026-07-22): no source-code or manifest changes since the prior scan (the only uncommitted delta was .mega-sdd/ artifacts). Frontmatter stamp refreshed to HEAD; §1–§7 content byte-identical (carried forward)."
+change_signal_note: "Healing (2026-07-22): prior Mode D sync (b27e8cb) completed scan+bind+reconcile but ECONNRESET struck before stamp was bumped and SYNC-REPORT was written. No source-code or manifest changes between 941e5b4 and HEAD (0 paths). Stamp bumped to HEAD; §1–§7 content byte-identical (carried forward)."
 ---
 
 # Codebase Map
@@ -28,7 +28,7 @@ change_signal_note: "Mode D sync --changed-only (2026-07-22): no source-code or 
 
 ```
 coresystembackend/
-├── .git/                          (git repo; HEAD = 941e5b40 Initial Commit Java Project)
+├── .git/                          (git repo; HEAD = b27e8cb mega-sdd: resolve P1 OQs + Mode D sync)
 ├── .mvn/                          (Maven wrapper support)
 ├── CLAUDE.md                      (project instructions)
 ├── HELP.md                        (Spring Initializr help)

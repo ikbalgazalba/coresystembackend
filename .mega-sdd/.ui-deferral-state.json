@@ -1,7 +1,7 @@
 {
   "status": "SKIP",
   "validator": "ui-deferral",
-  "ts": "2026-07-22T07:47:10.639726Z",
+  "ts": "2026-07-22T08:34:06.494229Z",
   "reason": "no bolt-reports found (.mega-sdd/vaults/*/bolts/U-*/bolt-report.md)",
   "deferrals": [],
   "summary": "SKIP \u2014 no bolt-reports found (.mega-sdd/vaults/*/bolts/U-*/bolt-report.md)",
