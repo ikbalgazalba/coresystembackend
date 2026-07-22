@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "checked_file": ".mega-sdd/codebase/codebase-map.md",
+  "checks": [
+    {
+      "check": "frontmatter_present",
+      "status": "PASS"
+    },
+    {
+      "check": "fm_generated_by",
+      "status": "PASS"
+    },
+    {
+      "check": "fm_generated_at",
+      "status": "PASS"
+    },
+    {
+      "check": "fm_repo_root",
+      "status": "PASS"
+    },
+    {
+      "check": "fm_languages_detected",
+      "status": "PASS"
+    },
+    {
+      "check": "sections_complete",
+      "status": "PASS",
+      "detail": "all 7 sections present"
+    },
+    {
+      "check": "interfaces_populated",
+      "status": "PASS",
+      "detail": "\u00a72 has 2 interface rows"
+    },
+    {
+      "check": "interface_depth",
+      "status": "PASS",
+      "detail": "precision_tier: ast with 2 signature-bearing \u00a72 row(s)"
+    }
+  ],
+  "issues": []
+}

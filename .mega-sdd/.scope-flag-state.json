@@ -1,0 +1,6 @@
+{
+  "ts": "2026-07-22T03:14:05.919419Z",
+  "status": "PASS",
+  "reason": "no --scope flag in user message",
+  "scope_requested": null
+}

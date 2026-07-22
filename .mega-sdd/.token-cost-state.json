@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "have_telemetry": true,
+  "turns": 2,
+  "subagent_turns": 2,
+  "raw_total": 2321376,
+  "cost_weighted_total": 833302,
+  "overstatement_ratio": 2.79,
+  "by_token_type": {
+    "input_tokens": 422617,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 1853696,
+    "output_tokens": 45063
+  },
+  "weights": {
+    "input_tokens": 1.0,
+    "cache_creation_input_tokens": 1.25,
+    "cache_read_input_tokens": 0.1,
+    "output_tokens": 5.0
+  },
+  "by_skill": [
+    {
+      "skill": "mega-sdd:phase-advisor",
+      "turns": 2,
+      "raw": 2321376,
+      "cost_weighted": 833302,
+      "pct_cost": 100.0
+    }
+  ]
+}

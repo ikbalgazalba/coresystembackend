@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "validator": "validate-vault-flow-staging.sh",
+  "kb_root": null,
+  "summary": {
+    "drop_count": 0,
+    "advisory_count": 0,
+    "vaults": {
+      "jwt-login": {
+        "flows_checked": 2,
+        "flows_with_kb_source": 0,
+        "staging_drops": 0
+      }
+    }
+  },
+  "issues": [],
+  "advisories": [],
+  "next_action": "Staged-input preserved across KB->vault boundary (or no staged workflows present)."
+}

@@ -1,0 +1,9 @@
+{
+  "status": "SKIP",
+  "conflicts_total": 0,
+  "conflicts_resolved": 0,
+  "conflicts_classified": 0,
+  "conflicts_unclassified": 0,
+  "issues": [],
+  "summary": "no CONFLICT entries found in any binding doc"
+}

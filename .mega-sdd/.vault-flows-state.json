@@ -1,0 +1,1 @@
+{"status": "PASS", "checked_file": ".mega-sdd/vaults/jwt-login/04-flows.md", "checks": [{"check": "vault_flow_mermaid_mandate", "status": "PASS", "detail": "2/2 flow entries carry a Mermaid diagram"}], "issues": [], "summary": "all 2 vault flow(s) are Mermaid; syntax checks pass"}

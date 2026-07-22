@@ -1,0 +1,27 @@
+{
+  "snapshot_version": 1,
+  "generated_by": "mega-sdd:scan-codebase",
+  "generated_at": "2026-07-22T00:00:00Z",
+  "repo_root": "/home/ikbalgazalba/AI/Project/coresystembackend",
+  "engine": "tree-sitter",
+  "precision_tier": "ast",
+  "framework": "spring",
+  "framework_version": "4.1.1-SNAPSHOT",
+  "files_tokenized": [
+    {
+      "path": "src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java",
+      "symbols": ["CoresystembackendApplication", "main"],
+      "kind": ["class", "method"]
+    },
+    {
+      "path": "src/test/java/com/coresystem/coresystembackend/CoresystembackendApplicationTests.java",
+      "symbols": ["CoresystembackendApplicationTests", "contextLoads"],
+      "kind": ["class", "method"]
+    }
+  ],
+  "public_interface_count": 2,
+  "route_count": 0,
+  "entity_count": 0,
+  "starterkit_context_present": true,
+  "note": "Skeleton repo. bind-codebase can skip re-tokenization of these 2 files; all vault claims will be NEW (no existing code to match against)."
+}

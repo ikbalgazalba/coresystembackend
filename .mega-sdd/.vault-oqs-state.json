@@ -1,0 +1,9 @@
+{
+  "ts": "2026-07-22T03:42:26.241122Z",
+  "checked_file": ".mega-sdd/vaults/jwt-login/vault.json",
+  "status": "PASS",
+  "issues_count": 0,
+  "issues": [],
+  "kb_present": false,
+  "next_action": "Vault OQ citations valid, operator surface captured (or N/A), Design-Source OQ present where needed (or N/A)."
+}

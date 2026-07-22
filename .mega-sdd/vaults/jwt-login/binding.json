@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "vault": ".mega-sdd/vaults/jwt-login",
+  "codebase_map": ".mega-sdd/codebase/codebase-map.md",
+  "bound_at": "2026-07-22T00:00:00Z",
+  "strict": false,
+  "codebase_map_provenance": "snapshot-verified",
+  "constitution_hash": "6b2ce92610c1e05a28292ad0bc96a59353c7969a29c2dd86ca60322d8c3f3fcb",
+  "head": null,
+  "implementation_mode": "new",
+  "summary": {
+    "claims_total": 14,
+    "confirmed": 0,
+    "conflict": 0,
+    "oq": 14,
+    "oq_note": "14 = claim-level bindings (NEW claims); the vault carries 17 total Open Questions (see vault.json open_questions_summary.total).",
+    "oq_total": 17
+  },
+  "claims": [
+    {"id": "C-001", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Backend", "claim": "AuthUserController @RestController @RequestMapping(/api/auth), POST /dologin"},
+    {"id": "C-002", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §API contracts", "claim": "POST /api/auth/dologin {uname,pass} -> JwtResponse{token,type,id,uname,mitKode,urole}"},
+    {"id": "C-003", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "03-data-model.md §Entities", "claim": "Entity users (18 fields) @Entity @Table @Id jakarta.persistence"},
+    {"id": "C-004", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Backend", "claim": "Users entity in entity/ package"},
+    {"id": "C-005", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Backend", "claim": "UserRepository extends JpaRepository<Users,Long>, findByUname"},
+    {"id": "C-006", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Backend + 04-flows.md F-S-001", "claim": "JwtUtils.generateTokenFromUname + validate/parse, secret+exp from config"},
+    {"id": "C-007", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Backend", "claim": "SecurityConfig SecurityFilterChain bean 7.x, permitAll /api/auth/**, stateless, CSRF off, PasswordEncoder"},
+    {"id": "C-008", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Backend", "claim": "DTOs LoginRequest, JwtResponse, MessageResponse"},
+    {"id": "C-009", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Backend + Integrations", "claim": "LdapUcsService replicates LDAP_UCS_Utils.authLDAPNew -> {responseCode,responseDescription}, success 00/01"},
+    {"id": "C-010", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "06-constraints.md §Technical", "claim": "Dependencies to add: spring-boot-starter-web/-security/-data-jpa, postgresql, jjwt"},
+    {"id": "C-011", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §starterkit binding", "claim": "Config in application.yaml: jwtSecret env-var placeholder, jwtExpirationMs, PostgreSQL datasource"},
+    {"id": "C-012", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Starterkit binding", "claim": "Package structure controller/service/repository/entity/dto/config"},
+    {"id": "C-013", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Integrations", "claim": "PostgreSQL datasource (JDBC) for persistence"},
+    {"id": "C-014", "verdict": "OQ", "state": "NEW", "anchor": null, "confidence": "n/a", "field_diff": null, "vault_source": "02-architecture.md §Integrations", "claim": "LDAP UCS outbound integration (sync) for credential auth"}
+  ],
+  "tech_oq_recommendations_validated": ["OQ-AR-4"],
+  "tech_oq_recommendations_passthrough": ["OQ-AR-3", "OQ-AR-5", "OQ-DM-1", "OQ-DM-2", "OQ-DM-3", "OQ-CN-2", "OQ-DC-1"],
+  "suggested_hard_rules_count": 14,
+  "suggested_antipatterns_count": 5,
+  "advisor": {
+    "model": "opus",
+    "findings": {"high": 0, "medium": 1, "low": 2},
+    "materialized": ["ADV-BIND-001", "ADV-BIND-002", "ADV-BIND-003"],
+    "clean_categories": ["false_confirmed", "missed_conflict", "missed_match", "false_conflict", "citation_invalid", "greenfield_sanity"]
+  }
+}

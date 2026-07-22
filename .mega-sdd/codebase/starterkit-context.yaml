@@ -1,0 +1,93 @@
+# starterkit-context.yaml
+# Produced by mega-sdd:scan-codebase deep-scan stage.
+# Repo is a Spring Initializr skeleton — NO business code exists yet, so all pattern
+# slices are `not_detected` (this is correct, not a gap). The pack-driven `patterns:`
+# block below is the authoritative convention source for NEW code (consumed by
+# generate-intent pack-aware vault + execute-bolts context enrichment).
+#
+# Downstream consumers: bind-codebase treats these as the starterkit baseline;
+# execute-bolts injects `patterns:` as the Codebase patterns dispatch line.
+
+framework:
+  name: spring
+  version: "4.1.1-SNAPSHOT (Boot 4.x)"
+  pack_path: references/framework-conventions/spring.md
+  confidence: high
+
+# Pattern slices — all not_detected because the skeleton has no implementation code.
+auth:
+  status: not_detected
+  reason: "No spring-boot-starter-security, no SecurityFilterChain, no UserDetailsService, no JWT code present."
+  _source: "scan-codebase §6 Pattern signatures + pom.xml dependency analysis"
+
+authz:
+  status: not_detected
+  reason: "No @EnableMethodSecurity, no @PreAuthorize/@Secured, no authorizeHttpRequests rules present."
+  _source: "scan-codebase §6 Pattern signatures"
+
+ui_ux:
+  status: not_detected
+  reason: "REST-only backend intent; no templates/ or static/ dirs, no Thymeleaf, no frontend assets."
+  _source: "scan-codebase §1 structure + §6 View/component pattern"
+
+libs:
+  status: not_detected
+  reason: "Only spring-boot-starter + spring-boot-starter-test declared. No utility/helper/service classes exist."
+  _source: "pom.xml + scan-codebase §2 Public interfaces"
+
+# Pack-driven patterns — authoritative conventions for NEW code (from spring.md pack).
+# These are NOT detections; they are the starterkit's intended conventions.
+patterns:
+  file_location:
+    controllers: "src/main/java/<pkg>/controller/"
+    services: "src/main/java/<pkg>/service/"
+    repositories: "src/main/java/<pkg>/repository/"
+    entities: "src/main/java/<pkg>/entity/"
+    dtos: "src/main/java/<pkg>/dto/"
+    config: "src/main/java/<pkg>/config/"
+    exception_handlers: "src/main/java/<pkg>/exception/"
+    security_config: "src/main/java/<pkg>/config/SecurityConfig.java"
+    application_properties: "src/main/resources/application.yaml"
+    tests: "src/test/java/<pkg>/"
+  naming:
+    class_case: PascalCase
+    method_case: camelCase
+    controller_suffix: "Controller"
+    service_suffix: "Service"
+    repository_suffix: "Repository"
+    entity: "PascalCase singular noun (@Entity + @Id)"
+    dto_suffix: "Dto | Request | Response"
+    config_suffix: "Config"
+    test_suffix: "Test"
+    db_column: snake_case
+    db_table: snake_case plural
+  idioms:
+    - "Constructor injection over @Autowired field injection (omit @Autowired on single-ctor)"
+    - "Layered: @RestController -> @Service -> @Repository"
+    - "DTOs at API boundaries; never expose @Entity in REST responses"
+    - "Spring Data JPA: extend JpaRepository<Entity, ID>"
+    - "SecurityFilterChain bean (NOT WebSecurityConfigurerAdapter — removed in Spring 6)"
+    - "@Transactional at service layer for multi-step writes"
+    - "@RestControllerAdvice for global exception handling"
+  security_idioms:
+    input_validation: "Bean Validation @Valid/@Validated on @RequestBody DTOs"
+    password_hashing: "BCryptPasswordEncoder via PasswordEncoderFactories.createDelegatingPasswordEncoder()"
+    authn_point: "SecurityFilterChain bean + authorizeHttpRequests + @EnableMethodSecurity"
+    secrets: "Externalize via env vars / placeholders in application.yaml; never commit literals"
+  testing:
+    runner: "./mvnw test"
+    framework: "JUnit 5 (Jupiter)"
+    slice_annotations: ["@SpringBootTest", "@WebMvcTest", "@DataJpaTest", "@MockBean"]
+    http_layer: "MockMvc / TestRestTemplate"
+    mocking: "Mockito (@Mock, @InjectMocks, @ExtendWith(MockitoExtension.class))"
+  version_caveat: "Pack targets Boot 3.x; project is Boot 4.1.1-SNAPSHOT. MUST use jakarta.* (not javax.*) and Spring Security 7.x APIs. Pack structural idioms remain valid."
+
+reuse_index:
+  helpers: []
+  model_api: []
+  services: []
+  commands: []
+  reason: "Skeleton has no reusable code yet."
+
+partial: false
+partial_slices: []

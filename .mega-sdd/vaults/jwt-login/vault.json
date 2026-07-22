@@ -1,0 +1,423 @@
+{
+  "vault_version": "1.1",
+  "generated_at": "2026-07-22T00:00:00Z",
+  "phase": 1,
+  "phase_total": 1,
+  "project_shape": "api-only",
+  "implementation_mode": "new",
+  "mode_migrate_after": "first commit lands on main branch (mode=new only)",
+  "prd_status": "draft",
+  "output_mode": "compact",
+  "constitution_version": "1.0.0",
+  "constitution_hash": "6b2ce92610c1e05a28292ad0bc96a59353c7969a29c2dd86ca60322d8c3f3fcb",
+  "source_documents": [
+    {
+      "type": "seed-PRD",
+      "path": "source/seed-PRD.md",
+      "version": "draft",
+      "date": "2026-07-22"
+    },
+    {
+      "type": "reference-controller",
+      "path": "/home/ikbalgazalba/AI/Project/newmojf/src/main/java/com/bankmega/newmojf/controller/AuthUserController.java"
+    },
+    {
+      "type": "reference-entity",
+      "path": "/home/ikbalgazalba/AI/Project/newmojf/src/main/java/com/bankmega/newmojf/model/mojf/mojf_users_Model.java"
+    },
+    {
+      "type": "reference-dto",
+      "path": "/home/ikbalgazalba/AI/Project/newmojf/src/main/java/com/bankmega/newmojf/model/mojf/response/JwtResponse.java"
+    },
+    {
+      "type": "reference-jwt-impl",
+      "path": "/home/ikbalgazalba/AI/Project/newmojf/src/main/java/com/bankmega/newmojf/security/jwt/JwtUtils.java"
+    },
+    {
+      "type": "reference-ldap-impl",
+      "path": "/home/ikbalgazalba/AI/Project/newmojf/src/main/java/com/bankmega/newmojf/utils/LDAP_UCS_Utils.java"
+    },
+    {
+      "type": "reference-security-config",
+      "path": "/home/ikbalgazalba/AI/Project/newmojf/src/main/java/com/bankmega/newmojf/configuration/security_Config.java"
+    },
+    {
+      "type": "reference-config",
+      "path": "/home/ikbalgazalba/AI/Project/newmojf/src/main/resources/application-test.properties"
+    },
+    {
+      "type": "codebase-map",
+      "path": ".mega-sdd/codebase/codebase-map.md"
+    }
+  ],
+  "entities": [
+    {
+      "name": "users",
+      "purpose": "Data user terdaftar untuk lookup login (findByUname); mitKode/urole dipakai di JwtResponse",
+      "doc": "03-data-model.md",
+      "fields_count": 18
+    }
+  ],
+  "flows": [
+    {
+      "id": "F-U-001",
+      "title": "Login (JWT issuance)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "dod_count": 9,
+      "source_acs": [
+        "D-001",
+        "D-002",
+        "D-006"
+      ]
+    },
+    {
+      "id": "F-S-001",
+      "title": "JWT token generation & validation wiring",
+      "type": "system",
+      "doc": "04-flows.md",
+      "dod_count": 4,
+      "source_acs": [
+        "D-002"
+      ]
+    }
+  ],
+  "adrs": [
+    {
+      "id": "D-001",
+      "title": "Autentikasi via LDAP UCS (replikasi newmojf)",
+      "doc": "05-decisions.md",
+      "status": "accepted"
+    },
+    {
+      "id": "D-002",
+      "title": "JWT diterbitkan dari uname (bukan Authentication object)",
+      "doc": "05-decisions.md",
+      "status": "accepted"
+    },
+    {
+      "id": "D-003",
+      "title": "Migrasi namespace javax \u2192 jakarta (Boot 4.x)",
+      "doc": "05-decisions.md",
+      "status": "accepted"
+    },
+    {
+      "id": "D-004",
+      "title": "Spring Security 7.x SecurityFilterChain bean",
+      "doc": "05-decisions.md",
+      "status": "accepted"
+    },
+    {
+      "id": "D-005",
+      "title": "Constructor injection (bukan field @Autowired)",
+      "doc": "05-decisions.md",
+      "status": "accepted"
+    },
+    {
+      "id": "D-006",
+      "title": "DTO di boundary API (entity tidak di-expose)",
+      "doc": "05-decisions.md",
+      "status": "accepted"
+    }
+  ],
+  "open_questions": [
+    {
+      "tag": "OQ-AR-1",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "02-architecture.md",
+      "status": "pending",
+      "resolver_owner": null
+    },
+    {
+      "tag": "OQ-AR-2",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "02-architecture.md",
+      "status": "pending",
+      "resolver_owner": null
+    },
+    {
+      "tag": "OQ-AR-3",
+      "priority": "P2",
+      "category": "tech",
+      "resolution_mode": "recommend",
+      "classification_confidence": "medium",
+      "doc": "02-architecture.md",
+      "status": "pending",
+      "recommendation": "Externalize via env var / placeholder di application.yaml (coresystem.app.jwtSecret=${JWT_SECRET:dev-only-secret}); jangan hardcode literal.",
+      "rationale": "Pack security idiom melarang secret di source; referensi newmojf hardcode jwtMojfSecretkey (security smell). Spring Boot placeholder + env var konsisten dengan pack dan aman untuk snapshot builds.",
+      "scan_citations": [
+        "application-test.properties:24",
+        "framework-conventions/spring.md \u00a7Security idioms \u00a7Secrets / config"
+      ],
+      "fallback_if_wrong": "Jika env var tidak feasible di env deploy, fallback ke Spring Cloud Config/Vault."
+    },
+    {
+      "tag": "OQ-AR-4",
+      "priority": "P2",
+      "category": "tech",
+      "resolution_mode": "recommend",
+      "classification_confidence": "high",
+      "doc": "02-architecture.md",
+      "status": "pending",
+      "recommendation": "io.jsonwebtoken:jjwt-api + jjwt-impl + jjwt-jackson versi 0.12.x (runtime scope untuk impl/jackson). WAJIB rewrite API legacy newmojf ke 0.12.x API.",
+      "rationale": "newmojf VERIFIED memakai jjwt (JwtUtils.java:12-17 import io.jsonwebtoken.*). Impl-nya pakai API legacy signWith(SignatureAlgorithm.HS512, jwtSecret) (JwtUtils.java:38,48) dan Jwts.parser().setSigningKey(...) (:53,58) \u2014 dihapus di jjwt 0.11+. Replikasi ke 0.12.x WAJIB rewrite: Jwts.builder().signWith(Key) (Keys.hmacShaKeyFor) + Jwts.parserBuilder().verifyWith(key).build(). Versi 0.12.x mendukung Jakarta + Java 21.",
+      "scan_citations": [
+        "JwtUtils.java:12-17",
+        "JwtUtils.java:38,48,53,58",
+        "codebase-map.md \u00a77"
+      ],
+      "fallback_if_wrong": "Jika jjwt 0.12.x tidak kompatibel snapshot Boot 4.x, fallback ke nimbus-jose-jwt atau Spring Security OAuth2 resource server JWT."
+    },
+    {
+      "tag": "OQ-AR-5",
+      "priority": "P2",
+      "category": "tech",
+      "resolution_mode": "recommend",
+      "classification_confidence": "medium",
+      "doc": "02-architecture.md",
+      "status": "pending",
+      "recommendation": "Konfigurasi CORS via SecurityFilterChain http.cors(Customizer.withDefaults()) + CorsConfigurationSource bean dengan allowed-origins eksplisit (bukan wildcard *), kecuali dev local.",
+      "rationale": "Wildcard @CrossOrigin(origins=\"*\") pada API stateless JWT adalah security smell (pack spring.md \u00a7Security idioms); konfigurasi terpusat via SecurityConfig lebih\u53ef\u63a7 + sesuai pack. newmojf pakai wildcard (legacy smell) \u2014 adaptasi ke CORS config eksplisit.",
+      "scan_citations": [
+        "AuthUserController.java:34",
+        "framework-conventions/spring.md \u00a7Security idioms"
+      ],
+      "fallback_if_wrong": "Jika client coresystembackend membutuhkan wildcard (banyak origin dinamis), pertimbangkan allowlist pattern atau * hanya di profile dev."
+    },
+    {
+      "tag": "OQ-AR-6",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "02-architecture.md",
+      "status": "pending",
+      "resolver_owner": null
+    },
+    {
+      "tag": "OQ-AR-7",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "medium",
+      "doc": "02-architecture.md",
+      "status": "pending",
+      "resolver_owner": null
+    },
+    {
+      "tag": "OQ-DM-1",
+      "priority": "P2",
+      "category": "tech",
+      "resolution_mode": "recommend",
+      "classification_confidence": "medium",
+      "doc": "03-data-model.md",
+      "status": "pending",
+      "recommendation": "users (pack standard) KECUALI jika replikasi ke DB newmojf existing \u2014 maka @Table(name=\"mojf_users\") untuk kompatibilitas data.",
+      "rationale": "Pack menetapkan users; tapi jika OQ-AR-2 memilih pakai DB newmojf existing, nama tabel harus cocok skema existing (mojf_users) agar lookup user terdaftar berhasil.",
+      "scan_citations": [
+        "mojf_users_Model.java:13",
+        "framework-conventions/spring.md \u00a7Naming standards"
+      ],
+      "fallback_if_wrong": "Jika tabel existing beda nama, sesuaikan @Table(name=...)."
+    },
+    {
+      "tag": "OQ-DM-2",
+      "priority": "P3",
+      "category": "tech",
+      "resolution_mode": "recommend",
+      "classification_confidence": "low",
+      "doc": "03-data-model.md",
+      "status": "pending",
+      "recommendation": "Tidak update last_login di v1 (replikasi verbatim pola newmojf yang hanya lookup, tidak write).",
+      "rationale": "/dologin newmojf hanya read user via findUserAccount; menambah write last_login = scope creep di luar replikasi.",
+      "scan_citations": [
+        "AuthUserController.java:130",
+        "mojf_users_Model.java:39-40"
+      ],
+      "fallback_if_wrong": "Jika PO ingin audit login, tambahkan @Transactional write di service layer."
+    },
+    {
+      "tag": "OQ-DM-3",
+      "priority": "P3",
+      "category": "tech",
+      "resolution_mode": "recommend",
+      "classification_confidence": "medium",
+      "doc": "03-data-model.md",
+      "status": "pending",
+      "recommendation": "spring.jpa.hibernate.ddl-auto=none (skema dikelola DBA/eksternal, replikasi pola newmojf).",
+      "rationale": "newmojf pakai ddl-auto=none; skema tabel users sudah ada di DB target. none mencegah Hibernate mengubah skema produksi.",
+      "scan_citations": [
+        "application-test.properties:3",
+        "framework-conventions/spring.md \u00a7Idioms"
+      ],
+      "fallback_if_wrong": "Jika DB baru khusus coresystembackend (OQ-AR-2), pertimbangkan Flyway untuk DDL terkontrol."
+    },
+    {
+      "tag": "OQ-FL-1",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "04-flows.md",
+      "status": "pending",
+      "resolver_owner": null
+    },
+    {
+      "tag": "OQ-FL-2",
+      "priority": "P3",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "low",
+      "doc": "04-flows.md",
+      "status": "pending",
+      "resolver_owner": null
+    },
+    {
+      "tag": "OQ-FL-3",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "medium",
+      "doc": "04-flows.md",
+      "status": "pending",
+      "resolver_owner": null
+    },
+    {
+      "tag": "OQ-CN-1",
+      "priority": "P3",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "low",
+      "doc": "06-constraints.md",
+      "status": "pending",
+      "resolver_owner": null
+    },
+    {
+      "tag": "OQ-CN-2",
+      "priority": "P3",
+      "category": "tech",
+      "resolution_mode": "recommend",
+      "classification_confidence": "medium",
+      "doc": "06-constraints.md",
+      "status": "pending",
+      "recommendation": "SLF4J manual LoggerFactory.getLogger(...) (atau @Slf4j hanya jika Lombok sudah di dependency).",
+      "rationale": "Skeleton belum deklaras Lombok; menambah dependency baru perlu review. SLF4J manual zero-dependency dan memenuhi pack forbidden pattern (no System.out).",
+      "scan_citations": [
+        "AuthUserController.java:32",
+        "codebase-map.md \u00a72"
+      ],
+      "fallback_if_wrong": "Jika tim sudah standar pakai Lombok, tambahkan org.projectlombok:lombok (provided scope) + @Slf4j."
+    },
+    {
+      "tag": "OQ-DC-1",
+      "priority": "P3",
+      "category": "tech",
+      "resolution_mode": "recommend",
+      "classification_confidence": "medium",
+      "doc": "05-decisions.md",
+      "status": "pending",
+      "recommendation": "v1: pertahankan subject=uname saja (replikasi newmojf); resource-server future resolve role via DB lookup findByUname saat validasi token.",
+      "rationale": "Replikasi verbatim pola newmojf (generateJwtTokenUname set hanya subject); menambah role claim = scope creep + masalah sinkronisasi (role berubah \u2192 token stale). Trade-off: lookup DB per request terproteksi (latency) vs token lebih besar (stateless). v1 tidak punya endpoint terproteksi jadi lookup belum relevan.",
+      "scan_citations": [
+        "AuthUserController.java:128-138",
+        "JwtUtils.java:42-50"
+      ],
+      "fallback_if_wrong": "Jika future resource-server OQ menunjukkan cost lookup tidak terima, embed role claim di token (refresh saat role berubah)."
+    },
+    {
+      "tag": "OQ-OV-1",
+      "priority": "P3",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "low",
+      "doc": "01-overview.md",
+      "status": "pending",
+      "resolver_owner": null
+    }
+  ],
+  "open_questions_summary": {
+    "total": 17,
+    "by_priority": {
+      "P1": 4,
+      "P2": 6,
+      "P3": 7
+    },
+    "by_status": {
+      "open": 17,
+      "resolved": 0,
+      "deferred": 0,
+      "out_of_scope": 0
+    },
+    "by_category": {
+      "business": 9,
+      "tech": 8
+    }
+  },
+  "design_system_flags": {
+    "HAS_UI_COMPONENTS": false,
+    "HAS_TOKENS": false,
+    "HAS_A11Y": false,
+    "HAS_VOICE_BRAND": false
+  },
+  "starterkit_binding": {
+    "pack": "spring",
+    "pack_path": "references/framework-conventions/spring.md",
+    "scan_path": ".mega-sdd/codebase/codebase-map.md",
+    "framework_version": "4.1.1-SNAPSHOT",
+    "version_caveat": "Pack targets Boot 3.x; project is Boot 4.1.1-SNAPSHOT. MUST use jakarta.* (not javax.*) and Spring Security 7.x APIs."
+  },
+  "advisor": {
+    "model": "opus",
+    "findings": {
+      "high": 3,
+      "medium": 3,
+      "low": 2
+    },
+    "materialized": [
+      "ADV-001",
+      "ADV-002",
+      "ADV-003",
+      "ADV-004",
+      "ADV-005",
+      "ADV-006",
+      "ADV-007",
+      "ADV-008"
+    ]
+  },
+  "changelog": [
+    {
+      "event": "bind",
+      "bound_at": "2026-07-22T00:00:00Z",
+      "conflict": 0,
+      "confirmed": 0,
+      "oq_claims": 14,
+      "oq_total": 17,
+      "bound_vault_produced": true,
+      "advisor_findings_materialized": 3,
+      "constitution_hash": "6b2ce92610c1e05a28292ad0bc96a59353c7969a29c2dd86ca60322d8c3f3fcb"
+    },
+    {
+      "event": "units_generated",
+      "at": "2026-07-22T00:00:00Z",
+      "count": 9,
+      "p1_blocker_units": [
+        "U-007",
+        "U-008"
+      ],
+      "modules": [
+        "M-foundation",
+        "M-persistence",
+        "M-security",
+        "M-integration",
+        "M-api"
+      ]
+    }
+  ],
+  "mode": "existing"
+}

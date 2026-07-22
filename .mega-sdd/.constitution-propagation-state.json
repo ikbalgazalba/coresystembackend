@@ -1,0 +1,55 @@
+{
+  "status": "FAIL",
+  "drops": [
+    {
+      "clause_id": "A-002",
+      "binding_sources": [
+        ".mega-sdd/vaults/jwt-login/binding.md"
+      ],
+      "detail": "constitution clause A-002 cited in .mega-sdd/vaults/jwt-login/binding.md but absent from all 9 units"
+    },
+    {
+      "clause_id": "A-003",
+      "binding_sources": [
+        ".mega-sdd/vaults/jwt-login/binding.md"
+      ],
+      "detail": "constitution clause A-003 cited in .mega-sdd/vaults/jwt-login/binding.md but absent from all 9 units"
+    },
+    {
+      "clause_id": "B-004",
+      "binding_sources": [
+        ".mega-sdd/vaults/jwt-login/binding.md"
+      ],
+      "detail": "constitution clause B-004 cited in .mega-sdd/vaults/jwt-login/binding.md but absent from all 9 units"
+    },
+    {
+      "clause_id": "C-012",
+      "binding_sources": [
+        ".mega-sdd/vaults/jwt-login/binding.md"
+      ],
+      "detail": "constitution clause C-012 cited in .mega-sdd/vaults/jwt-login/binding.md but absent from all 9 units"
+    },
+    {
+      "clause_id": "C-013",
+      "binding_sources": [
+        ".mega-sdd/vaults/jwt-login/binding.md"
+      ],
+      "detail": "constitution clause C-013 cited in .mega-sdd/vaults/jwt-login/binding.md but absent from all 9 units"
+    },
+    {
+      "clause_id": "C-014",
+      "binding_sources": [
+        ".mega-sdd/vaults/jwt-login/binding.md"
+      ],
+      "detail": "constitution clause C-014 cited in .mega-sdd/vaults/jwt-login/binding.md but absent from all 9 units"
+    }
+  ],
+  "summary": {
+    "binding_docs": 1,
+    "binding_clauses": 25,
+    "unit_clauses": 22,
+    "units_checked": 9,
+    "drops": 6,
+    "carried": 19
+  }
+}

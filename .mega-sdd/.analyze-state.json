@@ -1,0 +1,142 @@
+{
+  "status": "FAIL",
+  "analyzed_at": "2026-07-22T04:01:10Z",
+  "boundaries": {
+    "binding_units_handoff": {
+      "status": "NOT_RUN",
+      "state_file": ".validation-blockers.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "unit_spec": {
+      "status": "SKIP",
+      "state_file": ".unit-spec-state.json",
+      "detail": "no applicable files found"
+    },
+    "bolt_artifacts": {
+      "status": "SKIP",
+      "state_file": ".bolt-artifacts-state.json",
+      "detail": "no applicable files found"
+    },
+    "bolt_orphans": {
+      "status": "NOT_RUN",
+      "state_file": ".bolt-orphans-state.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "vault_oqs": {
+      "status": "PASS",
+      "state_file": ".vault-oqs-state.json",
+      "detail": ""
+    },
+    "fsd_slots": {
+      "status": "SKIP",
+      "state_file": ".fsd-slots-state.json",
+      "detail": "no applicable files found"
+    },
+    "vault_binding_coverage": {
+      "status": "FAIL",
+      "state_file": ".vault-binding-coverage-state.json",
+      "detail": ""
+    },
+    "kb_output": {
+      "status": "SKIP",
+      "state_file": ".kb-output-state.json",
+      "detail": "no applicable files found"
+    },
+    "kb_markers": {
+      "status": "SKIP",
+      "state_file": ".kb-markers-state.json",
+      "detail": "no applicable files found"
+    },
+    "kb_flows": {
+      "status": "SKIP",
+      "state_file": ".kb-flows-state.json",
+      "detail": "no applicable files found"
+    },
+    "vault_flows": {
+      "status": "PASS",
+      "state_file": ".vault-flows-state.json",
+      "detail": "all 2 vault flow(s) are Mermaid; syntax checks pass"
+    },
+    "starterkit_conformance": {
+      "status": "SKIP",
+      "state_file": ".starterkit-conformance-state.json",
+      "detail": ""
+    },
+    "kb_citations": {
+      "status": "SKIP",
+      "state_file": ".kb-citations-state.json",
+      "detail": "no applicable files found"
+    },
+    "conflict_classification": {
+      "status": "SKIP",
+      "state_file": ".conflict-classification-state.json",
+      "detail": "no CONFLICT entries found in any binding doc"
+    },
+    "domain_rules": {
+      "status": "NOT_RUN",
+      "state_file": ".domain-rules-state.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "constitution": {
+      "status": "NOT_RUN",
+      "state_file": ".constitution-state.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "constitution_propagation": {
+      "status": "SKIP",
+      "state_file": ".constitution-propagation-state.json",
+      "detail": "binding_docs=1; binding_clauses=25; unit_clauses=0; units_checked=0"
+    },
+    "codebase_map": {
+      "status": "PASS",
+      "state_file": ".codebase-map-state.json",
+      "detail": ""
+    },
+    "flow_coverage": {
+      "status": "NOT_RUN",
+      "state_file": ".flow-coverage-state.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "sibling_consistency": {
+      "status": "NOT_RUN",
+      "state_file": ".sibling-consistency-state.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "cross_cutting_registration": {
+      "status": "NOT_RUN",
+      "state_file": ".cross-cutting-state.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "ui_quality": {
+      "status": "NOT_RUN",
+      "state_file": ".ui-quality-blockers.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "dispatch_prompt (advisory)": {
+      "status": "NOT_RUN",
+      "state_file": ".dispatch-prompt-state.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "fanout_parity (advisory)": {
+      "status": "NOT_RUN",
+      "state_file": ".fanout-parity-state.json",
+      "detail": "no state file (validator not yet run this chain)"
+    },
+    "ui_deferral (advisory)": {
+      "status": "SKIP",
+      "state_file": ".ui-deferral-state.json",
+      "detail": "SKIP \u2014 no bolt-reports found (.mega-sdd/vaults/*/bolts/U-*/bolt-report.md)"
+    },
+    "vault_flow_staging (advisory)": {
+      "status": "PASS",
+      "state_file": ".vault-flow-staging-state.json",
+      "detail": "drop_count=0; advisory_count=0; vaults={'jwt-login': {'flows_checked': 2, 'flows_with_kb_source': 0, 'staging_drops': 0}}"
+    }
+  },
+  "vault_consistency": [],
+  "validators_run": 12,
+  "validators_total": 26,
+  "validators_pass": 3,
+  "validators_fail": 1,
+  "validators_skip": 11
+}

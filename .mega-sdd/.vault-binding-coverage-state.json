@@ -1,0 +1,32 @@
+{
+  "ts": "2026-07-22T04:21:05.975239Z",
+  "status": "FAIL",
+  "validator": "validate-vault-binding-coverage.sh",
+  "slice4_summary": {
+    "jwt-login": {
+      "vault_sections_found": 2,
+      "orphaned_in_binding": 1,
+      "binding_doc": ".mega-sdd/vaults/jwt-login/binding.md"
+    }
+  },
+  "slice5_summary": {
+    "jwt-login": {
+      "bolts_dir": "absent (pre-execution)",
+      "skipped": true
+    }
+  },
+  "issues_count": 1,
+  "issues": [
+    {
+      "halt_type": "vault_binding_coverage_gap",
+      "vault": "jwt-login",
+      "detail": "vault jwt-login has 1 section(s) not tracked in binding.md",
+      "orphaned_sections": [
+        "F-U-001"
+      ],
+      "binding_doc": ".mega-sdd/vaults/jwt-login/binding.md",
+      "severity": "advisory"
+    }
+  ],
+  "next_action": "Advisory: vault sections may need binding entries; partial bolt execution detected. Review listed issues."
+}

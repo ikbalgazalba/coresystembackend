@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "validator": "preflight",
+  "ts": "2026-07-22T04:09:52.671180Z",
+  "skill": "mega-sdd:generate-units",
+  "fatal_check_id": null,
+  "fatal_on_fail": null,
+  "warnings": [],
+  "checks": [
+    {
+      "check": "units_input_complete",
+      "status": "PASS"
+    }
+  ],
+  "summary": "preflight clean for mega-sdd:generate-units"
+}
