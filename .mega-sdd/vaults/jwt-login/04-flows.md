@@ -24,6 +24,10 @@ flowchart TD
     L --> NullCheck{"respLdap != null?"}
     NullCheck -- "no" --> NullFail(["400 MessageResponse 'Failed to connect to LDAP service'"])
     NullCheck -- "yes" --> Code{"responseCode == '00' atau '01'?"}
+    %% ⚠️ CORRECTION v1.2 (OQ-FL-1): kode sukses "00"/"01" TIDAK TERVERIFIKASI di newmojf.
+    %% authLDAPNew return JSON mentah UCS saat sukses; kode sukses sebenarnya HARUS dikonfirmasi
+    %% dari endpoint UCS OpenAPI bankmega (mark [INFERRED] sampai integration-test).
+    %% Failure codes verified: 502/503 (token), 401 (process).
     Code -- "no" --> BadCred(["400 MessageResponse(responseDescription)"])
     Code -- "yes" --> Jwt["JwtUtils.generateTokenFromUname(uname)"]
     Jwt --> Lookup["UserRepository.findByUname(uname) → Users"]
@@ -34,10 +38,10 @@ flowchart TD
 
 **Definition of Done**:
 - [ ] `POST /api/auth/dologin` menerima JSON `{uname, pass}` dan mem-parsing ke `LoginRequest`.
-- [ ] Kredensial valid (LDAP `responseCode` "00"/"01") → response `200` dengan `JwtResponse` field verbatim newmojf: `token` (JWT non-empty), `type` ("Bearer "), `id`, `uname`, `mitKode` (nilai dari entity.kodeMitra), `urole` (nilai `ROLE_<urole>`). (Nama field final → OQ-AR-7.)
+- [ ] Kredensial valid (LDAP `responseCode` "00"/"01") → response `200` dengan `JwtResponse` field verbatim newmojf: `token` (JWT non-empty), `type` ("Bearer "), `id`, `uname`, `mitKode` (nilai dari entity.kodeMitra), `urole` (nilai `ROLE_<urole>`). (Nama field final → OQ-AR-7.) ⚠️ **Koreksi v1.2 (OQ-FL-1)**: kode sukses "00"/"01" `[INFERRED]` — belum terverifikasi di newmojf; konfirmasi via integration-test ke endpoint UCS asli sebelum DoD dianggap terpenuhi.
 - [ ] Token JWT diterbitkan dari `uname` dengan secret + expiration dari config (`jwtExpirationMs`).
 - [ ] `mitKode` dan `urole` di-response berasal dari data user di tabel `users` (lookup `findByUname`), bukan hardcoded.
-- [ ] Kredensial salah (LDAP `responseCode` bukan "00"/"01") → `400` `MessageResponse(responseDescription)`. ⚠️ `responseDescription` dari LDAP_UCS bisa berisi pesan error internal/raw exception (`e.getMessage()`) — risiko information leakage (lihat OQ-FL-3).
+- [ ] Kredensial salah (LDAP `responseCode` bukan "00"/"01") → `400` `MessageResponse(responseDescription)`. ⚠️ `responseDescription` dari LDAP_UCS bisa berisi pesan error internal/raw exception (`e.getMessage()`) — risiko information leakage (lihat OQ-FL-3). ⚠️ **Koreksi v1.2 (OQ-FL-1)**: failure code terverifikasi `401`/`502`/`503`; sukses-contract `[INFERRED]`; B-007 → map ke generic "Invalid credentials", JANGAN echo `responseDescription` verbatim.
 - [ ] LDAP tidak respons (`respLdap == null`) → `400` `MessageResponse("Failed to connect to LDAP service")`.
 - [ ] Exception saat generate JWT/lookup → `401` `MessageResponse("Authentication failed")`.
 - [ ] `/api/auth/**` permitAll di `SecurityConfig` (endpoint login tidak butuh token).
@@ -89,6 +93,6 @@ flowchart TD
 
 ## Open Questions
 
-- [ ] **OQ-FL-1** [P1] [business] [conf: high]: kontrak response LDAP UCS (`responseCode`/`responseDescription`, kode sukses "00"/"01") — valid untuk coresystembackend? Endpoint LDAP UCS apa yang dipakai (host/credential)? — resolve: infra/security team
+- [x] **OQ-FL-1** [P1] [business] [conf: high]: kontrak response LDAP UCS (`responseCode`/`responseDescription`, kode sukses "00"/"01") — valid untuk coresystembackend? Endpoint LDAP UCS apa yang dipakai (host/credential)? → **Resolved v1.2** (2026-07-22, with correction): endpoint LDAP UCS TERVERIFIKASI (lihat OQ-AR-1): `urlToken` (OAuth2 password-grant → Bearer) + `urlVerifyPassword` (GET `…/verifypassword/userid/{uname}/password/{AES-ECB-hashed}`) di `openapidev2.bankmega.local:15000` (UAT). **KOREKSI MATERIAL**: asumsi kode sukses `"00"/"01"` di flow F-U-001 **TIDAK TERVERIFIKASI** di kode newmojf — `LDAP_UCS_Utils.authLDAPNew` (baris 87-100) mengembalikan JSON mentah dari endpoint UCS saat sukses (`JSONParser` parse + return apa adanya, baris 243-249); newmojf tidak pernah men-set `"00"` sebagai responseCode sukses. Kode failure yang TERVERIFIKASI: token-error → `responseCode="502"/"503"` (baris 73-74, 95-96), process-error → `responseCode="401"` + `responseDescription=e.getMessage()` (baris 257-258, **pelanggaran B-007**). Kontrak `responseCode`/`responseDescription` sukses sebenarnya **HARUS dikonfirmasi dari endpoint UCS OpenAPI bankmega asli** — tandai `[INFERRED]` sampai integration-test ke endpoint asli; jangan berasumsi `"00"/"01"`. B-007: `responseDescription` JANGAN di-echo ke client (map ke generic "Invalid credentials"). Lihat catatan koreksi di F-U-001.
 - [ ] **OQ-FL-2** [P3] [business] [conf: low]: rate-limiting / lockout akun setelah N percobaan gagal — tidak disebut newmojf; perlu di v1? — resolve: PO/security
 - [ ] **OQ-FL-3** [P2] [business] [conf: medium]: sanitasi error body LDAP — `responseDescription` dari `LDAP_UCS_Utils` bisa berisi pesan internal/raw exception (`e.getMessage()`, `LDAP_UCS_Utils.java:257-258`) yang di-echo verbatim ke `400 MessageResponse` (`AuthUserController.java:144`). Replikasi verbatim (echo) atau map ke generic "Invalid credentials" (security hardening, anti information-leakage)? — resolve: PO/security

@@ -1,6 +1,6 @@
 {
-  "status": "FAIL",
-  "ts": "2026-07-22T04:21:05.639155Z",
+  "status": "PASS",
+  "ts": "2026-07-22T07:48:19.745981Z",
   "validator": "validate-handoff-binding-units.sh",
   "slice": "binding-to-units / OQ-IDs + CONFLICT-IDs propagation + CONFLICT resolution",
   "summary": {
@@ -8,56 +8,13 @@
     "units_checked": 9,
     "oq_ids_in_binding": 17,
     "conflict_ids_in_binding": 0,
-    "oq_ids_cited_by_some_unit": 11,
+    "oq_ids_cited_by_some_unit": 17,
     "conflict_ids_cited_by_some_unit": 0,
     "conflicts_unresolved": 0,
-    "drops": 6,
+    "drops": 0,
     "extras": 0
   },
-  "drops": [
-    {
-      "type": "oq_id_dropped",
-      "oq_id": "OQ-CN-1",
-      "source_binding": ".mega-sdd/vaults/jwt-login/binding.md",
-      "expected_in": "any unit's frontmatter binding_refs (or any field within `---...---`)",
-      "found_in_units": []
-    },
-    {
-      "type": "oq_id_dropped",
-      "oq_id": "OQ-CN-2",
-      "source_binding": ".mega-sdd/vaults/jwt-login/binding.md",
-      "expected_in": "any unit's frontmatter binding_refs (or any field within `---...---`)",
-      "found_in_units": []
-    },
-    {
-      "type": "oq_id_dropped",
-      "oq_id": "OQ-DC-1",
-      "source_binding": ".mega-sdd/vaults/jwt-login/binding.md",
-      "expected_in": "any unit's frontmatter binding_refs (or any field within `---...---`)",
-      "found_in_units": []
-    },
-    {
-      "type": "oq_id_dropped",
-      "oq_id": "OQ-DM-2",
-      "source_binding": ".mega-sdd/vaults/jwt-login/binding.md",
-      "expected_in": "any unit's frontmatter binding_refs (or any field within `---...---`)",
-      "found_in_units": []
-    },
-    {
-      "type": "oq_id_dropped",
-      "oq_id": "OQ-FL-2",
-      "source_binding": ".mega-sdd/vaults/jwt-login/binding.md",
-      "expected_in": "any unit's frontmatter binding_refs (or any field within `---...---`)",
-      "found_in_units": []
-    },
-    {
-      "type": "oq_id_dropped",
-      "oq_id": "OQ-OV-1",
-      "source_binding": ".mega-sdd/vaults/jwt-login/binding.md",
-      "expected_in": "any unit's frontmatter binding_refs (or any field within `---...---`)",
-      "found_in_units": []
-    }
-  ],
+  "drops": [],
   "extras": [],
-  "next_action": "Append the listed OQ-IDs to the relevant unit's frontmatter `binding_refs:` list, then re-run validator (or save the unit \u2014 PostToolUse will auto-re-validate)."
+  "next_action": "No action needed \u2014 handoff trace is clean."
 }

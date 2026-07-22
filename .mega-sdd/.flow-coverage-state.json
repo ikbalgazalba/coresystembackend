@@ -1,7 +1,7 @@
 {
   "status": "SKIP",
   "validator": "flow-coverage",
-  "ts": "2026-07-22T04:21:05.748380Z",
+  "ts": "2026-07-22T07:47:10.557874Z",
   "reason": "'## Flow-artifact derivation' present but no parseable endpoint_kinds (with flow_signal + path_glob)",
   "missing_artifacts": [],
   "dead_scaffold": [],

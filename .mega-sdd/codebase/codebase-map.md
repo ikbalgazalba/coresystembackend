@@ -1,6 +1,6 @@
 ---
 generated_by: mega-sdd:scan-codebase
-generated_at: 2026-07-22T00:00:00Z
+generated_at: 2026-07-22T06:35:00Z
 repo_root: /home/ikbalgazalba/AI/Project/coresystembackend
 scan_depth: 8
 scan_includes: ["src/**", "pom.xml", "mvnw", "mvnw.cmd", "CLAUDE.md", "HELP.md"]
@@ -12,8 +12,9 @@ engine: tree-sitter
 precision_tier: ast
 tree_sitter_version: "0.26.10"
 grammars_used: ["java"]
-# repo is a git repo with no commits yet (empty HEAD) — staleness stamp omitted; consumers fall back to full-content comparison
-last_scanned_commit: <no-commits-yet>
+last_scanned_commit: 941e5b40c84d4fc0a18e6db39c888db3b0eac078
+scan_mode: incremental-unchanged
+change_signal_note: "Mode D sync --changed-only (2026-07-22): no source-code or manifest changes since the prior scan (the only uncommitted delta was .mega-sdd/ artifacts). Frontmatter stamp refreshed to HEAD; §1–§7 content byte-identical (carried forward)."
 ---
 
 # Codebase Map
@@ -27,7 +28,7 @@ last_scanned_commit: <no-commits-yet>
 
 ```
 coresystembackend/
-├── .git/                          (git repo, no commits yet)
+├── .git/                          (git repo; HEAD = 941e5b40 Initial Commit Java Project)
 ├── .mvn/                          (Maven wrapper support)
 ├── CLAUDE.md                      (project instructions)
 ├── HELP.md                        (Spring Initializr help)
@@ -49,8 +50,8 @@ coresystembackend/
 
 | File | Type | Symbol | Signature | Last_Scanned_Sha256 |
 |---|---|---|---|---|
-| `src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java:8` | class | `CoresystembackendApplication` | `@SpringBootApplication class CoresystembackendApplication` | — |
-| `src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java:10` | method | `CoresystembackendApplication.main` | `public static void main(String[] args)` → `SpringApplication.run(CoresystembackendApplication.class, args)` | — |
+| `src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java:8` | class | `CoresystembackendApplication` | `@SpringBootApplication class CoresystembackendApplication` | 4c86b293e7626a9b3101242e812606385640c751f0e4fae33eded5500adef4cb |
+| `src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java:10` | method | `CoresystembackendApplication.main` | `public static void main(String[] args)` → `SpringApplication.run(CoresystembackendApplication.class, args)` | 4c86b293e7626a9b3101242e812606385640c751f0e4fae33eded5500adef4cb |
 
 > No other public types (no controllers, services, repositories, entities, DTOs, config, or
 > security classes) exist yet. The `com.coresystem.coresystembackend` package contains only the

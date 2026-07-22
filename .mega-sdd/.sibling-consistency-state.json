@@ -1,7 +1,7 @@
 {
   "status": "PASS",
   "validator": "sibling-consistency",
-  "ts": "2026-07-22T04:21:05.705067Z",
+  "ts": "2026-07-22T07:47:10.500402Z",
   "summary": {
     "units_checked": 9,
     "sibling_groups": 5,

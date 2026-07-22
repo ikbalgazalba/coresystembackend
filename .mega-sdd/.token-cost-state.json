@@ -1,16 +1,16 @@
 {
   "status": "PASS",
   "have_telemetry": true,
-  "turns": 2,
+  "turns": 5,
   "subagent_turns": 2,
-  "raw_total": 2321376,
-  "cost_weighted_total": 833302,
-  "overstatement_ratio": 2.79,
+  "raw_total": 2549267,
+  "cost_weighted_total": 879165,
+  "overstatement_ratio": 2.9,
   "by_token_type": {
-    "input_tokens": 422617,
+    "input_tokens": 426554,
     "cache_creation_input_tokens": 0,
-    "cache_read_input_tokens": 1853696,
-    "output_tokens": 45063
+    "cache_read_input_tokens": 2073664,
+    "output_tokens": 49049
   },
   "weights": {
     "input_tokens": 1.0,
@@ -24,7 +24,21 @@
       "turns": 2,
       "raw": 2321376,
       "cost_weighted": 833302,
-      "pct_cost": 100.0
+      "pct_cost": 94.8
+    },
+    {
+      "skill": "mega-sdd:resolve-oq",
+      "turns": 2,
+      "raw": 166071,
+      "cost_weighted": 36636,
+      "pct_cost": 4.2
+    },
+    {
+      "skill": "mega-sdd:orchestrate-flow",
+      "turns": 1,
+      "raw": 61820,
+      "cost_weighted": 9228,
+      "pct_cost": 1.0
     }
   ]
 }

@@ -1,16 +1,16 @@
 {
   "status": "FAIL",
-  "analyzed_at": "2026-07-22T04:01:10Z",
+  "analyzed_at": "2026-07-22T06:41:44Z",
   "boundaries": {
     "binding_units_handoff": {
-      "status": "NOT_RUN",
+      "status": "PASS",
       "state_file": ".validation-blockers.json",
-      "detail": "no state file (validator not yet run this chain)"
+      "detail": "binding_docs_checked=1; units_checked=9; oq_ids_in_binding=17; conflict_ids_in_binding=0"
     },
     "unit_spec": {
-      "status": "SKIP",
+      "status": "PASS",
       "state_file": ".unit-spec-state.json",
-      "detail": "no applicable files found"
+      "detail": ""
     },
     "bolt_artifacts": {
       "status": "SKIP",
@@ -18,9 +18,9 @@
       "detail": "no applicable files found"
     },
     "bolt_orphans": {
-      "status": "NOT_RUN",
+      "status": "PASS",
       "state_file": ".bolt-orphans-state.json",
-      "detail": "no state file (validator not yet run this chain)"
+      "detail": ""
     },
     "vault_oqs": {
       "status": "PASS",
@@ -83,9 +83,9 @@
       "detail": "no state file (validator not yet run this chain)"
     },
     "constitution_propagation": {
-      "status": "SKIP",
+      "status": "FAIL",
       "state_file": ".constitution-propagation-state.json",
-      "detail": "binding_docs=1; binding_clauses=25; unit_clauses=0; units_checked=0"
+      "detail": "binding_docs=1; binding_clauses=25; unit_clauses=22; units_checked=9"
     },
     "codebase_map": {
       "status": "PASS",
@@ -93,14 +93,14 @@
       "detail": ""
     },
     "flow_coverage": {
-      "status": "NOT_RUN",
+      "status": "SKIP",
       "state_file": ".flow-coverage-state.json",
-      "detail": "no state file (validator not yet run this chain)"
+      "detail": "SKIP \u2014 '## Flow-artifact derivation' present but no parseable endpoint_kinds (with flow_signal + path_glob)"
     },
     "sibling_consistency": {
-      "status": "NOT_RUN",
+      "status": "PASS",
       "state_file": ".sibling-consistency-state.json",
-      "detail": "no state file (validator not yet run this chain)"
+      "detail": "units_checked=9; sibling_groups=5; concerns_loaded=0; inconsistent_count=0"
     },
     "cross_cutting_registration": {
       "status": "NOT_RUN",
@@ -118,9 +118,9 @@
       "detail": "no state file (validator not yet run this chain)"
     },
     "fanout_parity (advisory)": {
-      "status": "NOT_RUN",
+      "status": "SKIP",
       "state_file": ".fanout-parity-state.json",
-      "detail": "no state file (validator not yet run this chain)"
+      "detail": "SKIP \u2014 pack declares no `## UI quality signatures` view_glob (cannot identify view-bearing units)"
     },
     "ui_deferral (advisory)": {
       "status": "SKIP",
@@ -134,9 +134,9 @@
     }
   },
   "vault_consistency": [],
-  "validators_run": 12,
+  "validators_run": 13,
   "validators_total": 26,
-  "validators_pass": 3,
-  "validators_fail": 1,
+  "validators_pass": 7,
+  "validators_fail": 2,
   "validators_skip": 11
 }

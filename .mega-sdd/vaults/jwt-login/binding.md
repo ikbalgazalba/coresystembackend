@@ -122,17 +122,17 @@ constitution_hash: 6b2ce92610c1e05a28292ad0bc96a59353c7969a29c2dd86ca60322d8c3f3
 
 | ID | Question | Source | Auto-resolve attempted |
 |---|---|---|---|
-| OQ-AR-1 | LDAP UCS infra aktif untuk coresystembackend? (P1 business) | 02-architecture.md | N/A (business/blocking) |
-| OQ-AR-2 | Target DB: PostgreSQL newmojf existing atau DB baru? (P1 business) | 02-architecture.md | N/A (business/blocking) |
+| OQ-AR-1 | LDAP UCS infra aktif untuk coresystembackend? (P1 business) | 02-architecture.md | **RESOLVED v1.2** — pakai infra existing newmojf (`openapidev2.bankmega.local:15000` UAT) |
+| OQ-AR-2 | Target DB: PostgreSQL newmojf existing atau DB baru? (P1 business) | 02-architecture.md | **RESOLVED v1.2** — pakai DB newmojf existing; migrate to new DB post-deploy |
 | OQ-AR-3 | jwtSecret: hardcode vs env var? (P2 tech/recommend) | 02-architecture.md | passed-through (medium conf) |
 | OQ-AR-4 | lib JWT jjwt 0.12.x + legacy API rewrite? (P2 tech/recommend/high) | 02-architecture.md | VALIDATED (citations resolve) |
 | OQ-AR-5 | CORS: wildcard vs SecurityFilterChain config? (P2 tech/recommend) | 02-architecture.md | passed-through (medium conf) |
-| OQ-AR-6 | Prasyarat LDAP UCS (AES key, cred, URLs) tersedia? (P1 business) | 02-architecture.md | N/A (business/blocking) |
+| OQ-AR-6 | Prasyarat LDAP UCS (AES key, cred, URLs) tersedia? (P1 business) | 02-architecture.md | **RESOLVED v1.2** — tersedia via `DB_Connection.properties` newmojf; externalize secret |
 | OQ-AR-7 | Nama field DTO: verbatim mitKode/urole vs rename? (P2 business) | 02-architecture.md | N/A (business/blocking) |
 | OQ-DM-1 | Tabel `users` vs `mojf_users`? (P2 tech/recommend) | 03-data-model.md | passed-through (medium conf) |
 | OQ-DM-2 | Update last_login saat login? (P3 tech/recommend) | 03-data-model.md | passed-through (low conf) |
 | OQ-DM-3 | DDL: ddl-auto=none vs Flyway? (P3 tech/recommend) | 03-data-model.md | passed-through (medium conf) |
-| OQ-FL-1 | Kontrak response LDAP UCS valid? (P1 business) | 04-flows.md | N/A (business/blocking) |
+| OQ-FL-1 | Kontrak response LDAP UCS valid? (P1 business) | 04-flows.md | **RESOLVED v1.2 (correction)** — endpoint verified; "00"/"01" `[INFERRED]` |
 | OQ-FL-2 | Rate-limiting/lockout? (P3 business) | 04-flows.md | N/A (business/blocking) |
 | OQ-FL-3 | Sanitasi error body LDAP (info-leakage)? (P2 business) | 04-flows.md | N/A (business/blocking) |
 | OQ-CN-1 | Compliance regime (PDP-Indonesia)? (P3 business) | 06-constraints.md | N/A (business/blocking) |

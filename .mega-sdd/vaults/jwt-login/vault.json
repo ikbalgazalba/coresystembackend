@@ -1,5 +1,5 @@
 {
-  "vault_version": "1.1",
+  "vault_version": "1.2",
   "generated_at": "2026-07-22T00:00:00Z",
   "phase": 1,
   "phase_total": 1,
@@ -128,8 +128,10 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "02-architecture.md",
-      "status": "pending",
-      "resolver_owner": null
+      "status": "resolved",
+      "resolved_at": "2026-07-22T00:00:00Z",
+      "resolver_owner": "infra/user (via newmojf DB_Connection.properties)",
+      "resolution": "coresystembackend pakai infra LDAP UCS existing newmojf (BUKAN mock/fallback). Endpoint terverifikasi (UAT, appEnv=UAT): host=openapidev2.bankmega.local, urlToken=https://openapidev2.bankmega.local:15000/realms/quarkus/protocol/openid-connect/token, urlVerifyPassword=https://openapidev2.bankmega.local:15000/openapi/v1.0/ldap/verifypassword/. Endpoint .bankmega.local internal-only; dev tanpa akses jaringan butuh mock via @Profile(\"dev\") stub LdapUcsService (bukan P1 blocker spec). Source: newmojf/src/main/resources/DB_Connection.properties + DB_Connection.java + LDAP_UCS_Utils.java."
     },
     {
       "tag": "OQ-AR-2",
@@ -138,8 +140,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "02-architecture.md",
-      "status": "pending",
-      "resolver_owner": null
+      "status": "resolved",
+      "resolved_at": "2026-07-22T00:00:00Z",
+      "resolver_owner": "user (stakeholder decision)",
+      "resolution": "PAKAI DB newmojf existing untuk v1 (jdbc:postgresql://10.95.1.43:5432/newmojf UAT, terverifikasi dari DB_Connection.properties + DB_Connection.java:235). Tabel users existing berisi data user terdaftar (lookup findByUname). Kredensial dbSID/dbpass TIDAK ditulis ke vault (B-003/D-002) — externalize via SPRING_DATASOURCE_URL/USERNAME/PASSWORD env var. Migrasi ke DB baru khusus coresystembackend = fase pasca-deploy sukses (bukan scope v1); saat migrasi, revisi vault via diff-vault/resolve-oq. Konsekuensi: mendorong OQ-DM-1 ke cabang @Table(name=\"mojf_users\") (DB existing); OQ-DM-1 tetap pending review final.",
+      "verified_fact_v1_2": "Endpoint DB existing newmojf terverifikasi (UAT, appEnv=UAT): dbServer=10.95.1.43, dbDname=newmojf, jdbc URL dibangun di DB_Connection.java:235 sebagai jdbc:postgresql://10.95.1.43:5432/newmojf."
     },
     {
       "tag": "OQ-AR-3",
@@ -197,8 +202,10 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "02-architecture.md",
-      "status": "pending",
-      "resolver_owner": null
+      "status": "resolved",
+      "resolved_at": "2026-07-22T00:00:00Z",
+      "resolver_owner": "infra/security (via newmojf DB_Connection.properties)",
+      "resolution": "Prasyarat LDAP UCS TERSEDIA via newmojf/src/main/resources/DB_Connection.properties, di-load per-env oleh DB_Connection.java constructor (prop.getProperty(appEnv+\".X\"), baris 177-186). Field terverifikasi: clientId, clientSecret, username, password, partnerId, channelId, host, aesKey, urlToken, urlVerifyPassword. UAT ref: clientId=ldapucs, partnerId=51529703-..., channelId=95221, host=openapidev2.bankmega.local. aesKey dipakai LDAP_UCS_Utils.encryptPassword (AES/ECB/PKCS5Padding, baris 267-279). SECRET VALUES TIDAK DITULIS KE VAULT (B-003/D-002) — coresystembackend WAJIB externalize via application.yaml placeholder + env var; JANGAN salin .properties newmojf verbatim (D-001)."
     },
     {
       "tag": "OQ-AR-7",
@@ -265,8 +272,10 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "04-flows.md",
-      "status": "pending",
-      "resolver_owner": null
+      "status": "resolved",
+      "resolved_at": "2026-07-22T00:00:00Z",
+      "resolver_owner": "infra/security (via newmojf source)",
+      "resolution": "Endpoint LDAP UCS terverifikasi (lihat OQ-AR-1): urlToken (OAuth2 password-grant) + urlVerifyPassword (GET .../verifypassword/userid/{uname}/password/{AES-ECB-hashed}) di openapidev2.bankmega.local:15000 (UAT). KOREKSI MATERIAL: asumsi kode sukses 00/01 TIDAK TERVERIFIKASI di kode newmojf — LDAP_UCS_Utils.authLDAPNew (baris 87-100) mengembalikan JSON mentah endpoint UCS saat sukses (JSONParser parse + return apa adanya, baris 243-249); newmojf tidak set 00 sebagai responseCode sukses. Failure codes terverifikasi: token-error 502/503, process-error 401 (responseDescription=e.getMessage(), B-007 violation). Kontrak responseCode/responseDescription sukses sebenarnya HARUS dikonfirmasi dari endpoint UCS OpenAPI bankmega asli — mark [INFERRED] sampai integration-test; B-007 apply (map ke generic 'Invalid credentials', jangan echo responseDescription)."
     },
     {
       "tag": "OQ-FL-2",
@@ -349,8 +358,8 @@
       "P3": 7
     },
     "by_status": {
-      "open": 17,
-      "resolved": 0,
+      "open": 13,
+      "resolved": 4,
       "deferred": 0,
       "out_of_scope": 0
     },
@@ -417,6 +426,34 @@
         "M-integration",
         "M-api"
       ]
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-AR-1",
+      "at": "2026-07-22T00:00:00Z",
+      "action": "A",
+      "round": "v1.2"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-AR-6",
+      "at": "2026-07-22T00:00:00Z",
+      "action": "A",
+      "round": "v1.2"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-FL-1",
+      "at": "2026-07-22T00:00:00Z",
+      "action": "A",
+      "round": "v1.2"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-AR-2",
+      "at": "2026-07-22T00:00:00Z",
+      "action": "A",
+      "round": "v1.2"
     }
   ],
   "mode": "existing"

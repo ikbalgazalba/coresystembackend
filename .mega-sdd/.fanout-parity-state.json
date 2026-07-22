@@ -1,7 +1,7 @@
 {
   "status": "SKIP",
   "validator": "fanout-parity",
-  "ts": "2026-07-22T04:21:05.683219Z",
+  "ts": "2026-07-22T07:47:10.487226Z",
   "reason": "pack declares no `## UI quality signatures` view_glob (cannot identify view-bearing units)",
   "divergences": [],
   "summary": "SKIP \u2014 pack declares no `## UI quality signatures` view_glob (cannot identify view-bearing units)",

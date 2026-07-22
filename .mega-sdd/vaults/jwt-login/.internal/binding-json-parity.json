@@ -1,6 +1,6 @@
 {
   "status": "PASS",
   "validator": "validate-binding-json.sh",
-  "vault": "/home/ikbalgazalba/AI/Project/coresystembackend/.mega-sdd/vaults/jwt-login",
+  "vault": ".mega-sdd/vaults/jwt-login",
   "errors": []
 }
