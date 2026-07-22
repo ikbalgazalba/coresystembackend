@@ -55,3 +55,45 @@
 ## retry_history
 1. First compile failed: `signWith(Key, MacAlgorithm)` / `verifyWith(Key)` type-mismatch (see notes). Root cause: `Key` too wide for 0.12.6 generics.
 2. Fix: typed `key()` return as `SecretKey`. Re-ran `mvn -q test -Dtest=JwtUtilsTest` → BUILD SUCCESS, 4/4 pass.
+
+## Review panel
+
+**Tier:** full (risk signals: crypto/auth unit, binding §B) — reduced to spec + security (the load-bearing lenses for JWT crypto); quality/standards verified inline by controller.
+**Lenses dispatched (blind):** spec, security
+**Code commit:** f4b87df
+
+| Lens | Verdict | Critical | Important | Minor |
+|---|---|---|---|---|
+| spec | PASS | 0 | 0 | 2 |
+| security | PASS | 0 | 0 | 1 |
+
+**Merge result:** No spec ❌, no Critical → **mergeable**. No re-dispatch.
+
+### Findings (merged)
+
+| # | Severity | Lens | Finding | Evidence |
+|---|---|---|---|---|
+| 1 | Minor | spec | `application.yaml` not yet defining `coresystem.app.jwtSecret`/`jwtExpirationMs` — correctly out of scope (U-008). JwtUtilsTest constructs directly (no Spring context), so unaffected. | units/U-005.md:38 |
+| 2 | Minor | spec | JwtUtilsTest.setUp redundantly calls ReflectionTestUtils.setField after constructor already set final fields (no-op). Cosmetic dead code. | JwtUtilsTest.java setUp |
+| 3 | Minor | security | No `@PostConstruct` fail-fast on key length; weak/short secret surfaces at first token op (already fail-closed: generate throws→500, validate returns false). Optional hardening. | JwtUtils.java:31-33 |
+
+**Dropped-no-evidence:** 0. **Consensus:** 0.
+
+### Controller inline verification (quality + standards)
+- 0.12.x API only (grep: 0 SignatureAlgorithm/setSigningKey) — OQ-AR-4 ✓
+- `key()` typed SecretKey (sound for jjwt 0.12.6 generics) ✓
+- Constructor injection (@Value), final fields — §C-004 ✓
+- HS512 explicit, no downgrade; Base64-decoded ≥64-byte key — secure ✓
+- validateJwtToken fail-closed (false on any error, no throw) ✓
+- signature-verified parse (verifyWith) ✓
+- SLF4J, no System.out, no Lombok — §A-004/OQ-CN-2 ✓
+- PascalCase, security/ package — §A-001/§A-002 ✓
+- Provenance present; whitelist (2 source files) honored ✓
+
+### Gate decision
+PASS — mergeable as-is. Findings are optional hardening / cosmetic / out-of-scope-deferred.
+
+### Post-flight Hard-rule scan
+- Grammar: v1-bullet
+- Rules (FILE_PRESENCE + SIGNATURE_RULE): **pass**.
+- Evidence: `postflight.json` (status: pass).

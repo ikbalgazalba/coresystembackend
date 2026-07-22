@@ -1,0 +1,23 @@
+{
+  "unit": "U-005",
+  "status": "pass",
+  "grammar": "v1-bullet",
+  "rules": [
+    {"rule": "FILE_PRESENCE security/JwtUtils.java", "verdict": "pass"},
+    {"rule": "SIGNATURE_RULE generateTokenFromUname(String)=>String", "verdict": "pass", "evidence": "line 35: public String generateTokenFromUname(String uname)"}
+  ],
+  "anti_patterns_verified": {
+    "OQ-AR-4_no_legacy_api": true,
+    "no_SignatureAlgorithm": true,
+    "no_setSigningKey": true,
+    "modern_0.12.x_signWith_key_HS512": true,
+    "verifyWith_key": true,
+    "D-002_jwtSecret_externalized": true,
+    "no_hardcoded_secret": true,
+    "A-004_SLF4J_no_sysout": true,
+    "no_lombok": true
+  },
+  "test_result": "Tests run: 4, Failures: 0, Errors: 0 — BUILD SUCCESS",
+  "deviation": "key() typed javax.crypto.SecretKey (not java.security.Key) for jjwt 0.12.6 generics — documented type-narrowing, behaviorally equivalent",
+  "provenance_trailer": "present"
+}
