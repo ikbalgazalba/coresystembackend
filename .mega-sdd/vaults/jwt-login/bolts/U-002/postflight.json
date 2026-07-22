@@ -1,0 +1,20 @@
+{
+  "unit": "U-002",
+  "status": "pass",
+  "grammar": "v1-bullet",
+  "rules": [
+    {"rule": "FILE_PRESENCE entity/Users.java", "verdict": "pass"},
+    {"rule": "NAMING_RULE entity/*.java PascalCase", "verdict": "pass", "evidence": "class Users"}
+  ],
+  "anti_patterns_verified": {
+    "B-001_no_javax": true,
+    "jakarta_persistence": true,
+    "table_users_not_mojf_users": true,
+    "java_util_Date_not_sql": true,
+    "no_lombok": true,
+    "no_business_logic_no_callbacks": true,
+    "no_last_login_write": true
+  },
+  "field_count_note": "17 fields replicated exactly from newmojf reference (spec said 18 — off-by-one in spec; reference has 17, no fabrication). Column mappings diff-verified identical.",
+  "provenance_trailer": "present"
+}
