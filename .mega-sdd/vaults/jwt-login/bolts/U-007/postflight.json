@@ -1,0 +1,29 @@
+{
+  "unit": "U-007",
+  "status": "pass",
+  "grammar": "v1-bullet",
+  "rules": [
+    {"rule": "FILE_PRESENCE service/LdapUcsService.java", "verdict": "pass"},
+    {"rule": "NAMING_RULE service/*.java PascalCase", "verdict": "pass", "evidence": "class LdapUcsService"}
+  ],
+  "anti_patterns_verified": {
+    "B-006_no_ssl_bypass": true,
+    "zero_ssl_trust_imports": true,
+    "B-007_generic_errors": true,
+    "e_getMessage_logger_only": true,
+    "test_asserts_no_leak": true,
+    "D-002_all_value_placeholders": true,
+    "no_hardcoded_urls_creds": true,
+    "C-004_constructor_injection_final_fields": true,
+    "A-004_SLF4J_no_sysout": true,
+    "no_lombok": true,
+    "jackson_not_json_simple": true
+  },
+  "test_result": "Tests run: 3, Failures: 0, Errors: 0 — BUILD SUCCESS",
+  "deviations": [
+    "Jackson 3.x package tools.jackson.databind (Boot 4.1.1 ships Jackson 3.x at compile scope; com.fasterxml is runtime-only via jjwt-jackson) — documented",
+    "token-failure responseCode 401 (not skeleton's 502) — aligned to acceptance test case 3 + strengthens §B-007"
+  ],
+  "pre_existing_unrelated_failure": "contextLoads fails (missing spring.datasource in application.yaml — U-008 scope, not U-007)",
+  "provenance_trailer": "present"
+}

@@ -135,3 +135,51 @@
 - grep for `responseDescription.*e.getMessage` / `e.getMessage.*responseDescription` / `put("responseDescription"...)`
   → no matches. Every exception branch returns the literal "Authentication failed".
 - grep for `bankmega|openapidev2|"https?://` in source → no matches (all via @Value).
+
+## Review panel
+
+**Tier:** full (highest-risk unit: external auth integration, crypto, binding §B). Dispatched combined spec+security lens (the load-bearing pair for this constitution-critical unit); quality/standards verified inline.
+**Lenses dispatched (blind):** spec + security (combined)
+**Code commit:** 53a4b9a
+
+| Lens | Verdict | Critical | Important | Minor |
+|---|---|---|---|---|
+| spec | PASS | 0 | 0 | 4 |
+| security | PASS | 0 | 0 | 0 |
+
+**Merge result:** No spec ❌, no Critical, no security Critical → **mergeable**. No re-dispatch.
+
+### Findings (merged — all Minor, all sound/defensible)
+
+| # | Severity | Finding | Evidence |
+|---|---|---|---|
+| 1 | Minor | Token-failure collapsed to 401 (ref used 502/503). Defensible §B-007 hardening (uniform error surface leaks no stage). Spec silent on failure code. | LdapUcsService.java:119,125 |
+| 2 | Minor | Success code "00"/"01" not validated — passthrough instead. Correct per OQ-FL-1 [INFERRED] correction ("do NOT assume 00/01"). | getLdapProcess passthrough |
+| 3 | Minor | SimpleDateFormat per-call (safe, wasteful). Faithful reference replication. Future: DateTimeFormatter. | :288-291 |
+| 4 | Minor | `username`/`password` config = service-account creds for getToken (not end-user) — mirrors reference DB_Connection fields. Cosmetic Javadoc opportunity. | constructor :65-76 |
+
+### Constitution-grade security — VERIFIED CLEAN
+- **§B-006:** ZERO executable SSL bypass (grep TrustManager/SSLContext/X509/HostnameVerifier/javax.net.ssl/setDefaultSSLSocketFactory/checkServerTrusted/allHostsValid = 0 in src). Only Javadoc/provenance mentions describing absence. ✅
+- **§B-007:** All 7 `new LdapAuthResult(...)` call sites use generic literal "Authentication failed" (the :215 passthrough is upstream responseDescription, not exception). e.getMessage() ONLY in logger.error. Test asserts no-leak (doesNotContain host/Exception/Connection). ✅
+- **§D-002:** All 10 config via @Value; zero hardcoded URLs/creds in src/main. ✅
+
+### Controller inline verification (quality + standards)
+- AES/ECB/PKCS5Padding replicates ref :267-279 ✓; HMAC-SHA512 over method:path:token:sha256(body):timestamp replicates :286-319 ✓
+- Constructor injection, final fields, @Service — §C-003/§C-004 ✓
+- Jackson (tools.jackson 3.x — Boot 4.1.1), no json-simple — D-001 ✓
+- SLF4J, no System.out, no Lombok — §A-004 ✓
+- PascalCase, service/ package — §A-001/§A-002 ✓
+- Provenance present; whitelist (2 src files) honored ✓
+- Test: MockRestServiceServer drives real HTTP path; 3/3 pass ✓
+
+### Documented deviations (both assessed sound)
+- Jackson 3.x `tools.jackson.databind` (Boot 4.1.1 ships Jackson 3.x at compile scope; com.fasterxml is runtime-only) — reviewer compiled a probe, resolves. No dep added.
+- Token-failure 401 — §B-007 hardening, aligned to acceptance test case 3.
+
+### Gate decision
+PASS — mergeable as-is. Highest-risk unit clean on all constitution-grade constraints.
+
+### Post-flight Hard-rule scan
+- Grammar: v1-bullet
+- Rules (FILE_PRESENCE + NAMING_RULE): **pass**.
+- Evidence: `postflight.json` (status: pass).
