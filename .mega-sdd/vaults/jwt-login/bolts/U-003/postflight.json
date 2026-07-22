@@ -1,0 +1,17 @@
+{
+  "unit": "U-003",
+  "status": "pass",
+  "grammar": "v1-bullet",
+  "rules": [
+    {"rule": "FILE_PRESENCE repository/UserRepository.java", "verdict": "pass"},
+    {"rule": "NAMING_RULE repository/*.java PascalCase", "verdict": "pass", "evidence": "interface UserRepository"}
+  ],
+  "anti_patterns_verified": {
+    "no_EntityManager_no_native_sql": true,
+    "derived_query_findByUname": true,
+    "Optional_return_null_safe": true,
+    "jakarta_namespace_inherited": true
+  },
+  "acceptance": "mvn -q compile exit 0",
+  "provenance_trailer": "present"
+}
