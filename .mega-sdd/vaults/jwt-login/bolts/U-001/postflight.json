@@ -1,0 +1,14 @@
+{
+  "unit": "U-001",
+  "status": "pass",
+  "grammar": "v1-bullet",
+  "rules": [
+    {
+      "rule": "DO NOT add new package.json dependencies (§D-003 DO_NOT_ADD_DEPS)",
+      "verdict": "pass",
+      "evidence": "package.json does not exist in repo (Spring/Maven project) — rule is a no-op guard. Dependency discipline honored: committed pom.xml declares exactly the declared set (web, security, jpa, postgresql, jjwt-api/impl/jackson 0.12.6) with no extras and no Lombok."
+    }
+  ],
+  "provenance_trailer": "present (SDD-PROVENANCE XML comment before </project>)",
+  "target_files_verified": ["pom.xml"]
+}
