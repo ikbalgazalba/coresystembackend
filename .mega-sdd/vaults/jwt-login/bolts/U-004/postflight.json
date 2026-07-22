@@ -1,0 +1,16 @@
+{
+  "unit": "U-004",
+  "status": "pass",
+  "grammar": "v1-bullet",
+  "rules": [
+    {"rule": "FILE_PRESENCE JwtResponse.java", "verdict": "pass"},
+    {"rule": "FILE_PRESENCE LoginRequest.java", "verdict": "pass"},
+    {"rule": "FILE_PRESENCE MessageResponse.java", "verdict": "pass"}
+  ],
+  "anti_patterns_verified": {
+    "OQ-AR-7_verbatim_fields": "mitKode/urole preserved, type='Bearer ' present",
+    "no_JsonProperty": true,
+    "no_lombok": true
+  },
+  "provenance_trailer": "present in all 3 files"
+}
