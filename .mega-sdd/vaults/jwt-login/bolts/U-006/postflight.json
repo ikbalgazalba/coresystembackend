@@ -1,0 +1,31 @@
+{
+  "unit": "U-006",
+  "status": "pass",
+  "grammar": "v1-bullet",
+  "rules": [
+    {
+      "rule": "FILE_PRESENCE src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java",
+      "type": "FILE_PRESENCE_RULE",
+      "pre_state": "absent",
+      "post_state": "present",
+      "verdict": "pass",
+      "evidence": "file exists, sha256 87affd94b25d147408eca82ac959d7d67d4014c467c19ecfea3902360001c149"
+    }
+  ],
+  "anti_patterns_verified": {
+    "no_WebSecurityConfigurerAdapter": true,
+    "no_EnableGlobalMethodSecurity": true,
+    "no_antMatchers": true,
+    "no_authorizeRequests": true,
+    "no_NoOpPasswordEncoder": true,
+    "no_addAllowedOrigin_star": true,
+    "csrf_disable_has_explanatory_comment": true,
+    "cors_explicit_origins_not_wildcard": true,
+    "no_System_out": true,
+    "no_chained_string_http_csrf_disable": true
+  },
+  "test_result": "Tests run: 2, Failures: 0, Errors: 0 — BUILD SUCCESS (mvn test -Dtest=SecurityConfigTest)",
+  "deviation": "Test approach: manual MockMvc + focused @SpringBootTest(classes=SecurityConfig.class) instead of @AutoConfigureMockMvc + datasource-exclusion (Boot 4.1.1 repackaged those). Accepts 401-or-403 per spec. This is a tighter, more robust test.",
+  "provenance_trailer": "present (confirmed in SecurityConfig.java line 51)",
+  "code_commit": "574fce888ab12b24f65e5d500bdc21a74c00ad16"
+}

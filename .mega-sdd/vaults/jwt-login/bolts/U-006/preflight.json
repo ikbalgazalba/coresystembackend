@@ -1,0 +1,39 @@
+{
+  "unit": "U-006",
+  "grammar": "v1-bullet",
+  "snapshot_ts_iso": "2026-07-23T00:00:00Z",
+  "head": "0ef2a1f87f7e7d23f439c5a5b0079c8fdb05b56a",
+  "rules": [
+    {
+      "rule": "FILE_PRESENCE src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java",
+      "type": "FILE_PRESENCE_RULE",
+      "pre_state": "absent",
+      "post_expectation": "present"
+    }
+  ],
+  "checks": {
+    "superpowers_bridge": "real_install (superpowers 6.1.1 official cache); default executor = mega-sdd:bolt-implementer",
+    "unit_validity": "pass — frontmatter parses, task_type=create, target_files=1 create, acceptance_test has type:test, depends_on=[U-001,U-005] resolved",
+    "repo_state": "clean-of-src-changes — working tree has only .mega-sdd state churn + target/ artifacts; no rebase/merge in progress",
+    "test_framework": "mvn 3.9.16 present (./mvnw broken — substitute mvn)",
+    "commit_hooks": "none; gpgsign off",
+    "ast_grep_for_v2": "n/a — grammar is v1-bullet (no YAML rules); ast-grep 0.44.1 available regardless"
+  },
+  "classpath_facts": {
+    "spring_security_version": "7.1.0 (resolved; spring-security-config + spring-security-web jars present in ~/.m2)",
+    "dsl_api": "lambda DSL — csrf(csrf->csrf.disable()), authorizeHttpRequests, requestMatchers, sessionManagement, cors(Customizer.withDefaults)",
+    "config_package_exists": false,
+    "jwt_utils_present": true,
+    "auth_endpoint_not_yet_wired": true
+  },
+  "anti_patterns_to_scan_post": [
+    "no_WebSecurityConfigurerAdapter",
+    "no_EnableGlobalMethodSecurity",
+    "no_antMatchers",
+    "no_authorizeRequests",
+    "no_NoOpPasswordEncoder",
+    "no_addAllowedOrigin_star",
+    "csrf_disable_has_explanatory_comment",
+    "cors_explicit_origins_not_wildcard"
+  ]
+}
