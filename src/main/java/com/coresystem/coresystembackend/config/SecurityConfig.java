@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -92,6 +93,20 @@ public class SecurityConfig {
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
+	}
+
+	/**
+	 * {@link RestClient.Builder} bean. Spring Boot 4.x no longer auto-configures a
+	 * {@code RestClient.Builder} bean (the auto-config was removed from the starter), so it is
+	 * provided explicitly here for {@code LdapUcsService} (U-007) to consume via constructor
+	 * injection. Default client with default converters; TLS uses the JVM default trust store
+	 * (constitution §B-006 — no trust-all bypass).
+	 *
+	 * @return a {@link RestClient.Builder}
+	 */
+	@Bean
+	public RestClient.Builder restClientBuilder() {
+		return RestClient.builder();
 	}
 
 }
