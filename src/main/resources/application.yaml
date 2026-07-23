@@ -13,7 +13,9 @@ spring:
 
 coresystem:
   app:
-    jwtSecret: ${JWT_SECRET:dev-only-secret-change-me}
+    # Dev-only default: valid Base64, >=64 bytes for HS512 (jjwt WeakKeyException guard).
+    # MUST be overridden by JWT_SECRET env var in any non-dev environment (§D-002).
+    jwtSecret: ${JWT_SECRET:ZGV2LW9ubHktand0LXNlY3JldC1jaGFuZ2UtbWUtYmFzZTY0LWtleS1mb3ItaHM1MTItbWluaW11bS02NC1ieXRlcw==}
     jwtExpirationMs: 86400000
   ldap:
     urlToken: ${LDAP_URL_TOKEN:https://openapidev2.bankmega.local:15000/realms/quarkus/protocol/openid-connect/token}

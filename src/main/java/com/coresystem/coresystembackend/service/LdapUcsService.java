@@ -118,7 +118,11 @@ public class LdapUcsService {
 				logger.error("LDAP auth failed: token was null/empty for user={}", uname);
 				return new LdapAuthResult("401", "Authentication failed");
 			}
-			return getLdapProcess(uname, pass, token);
+			logger.info("LDAP UCS token acquired for user={}, calling verify-password", uname);
+			LdapAuthResult ldapResult = getLdapProcess(uname, pass, token);
+			logger.info("LDAP UCS verify-password result for user={}: responseCode={} responseDescription={}",
+					uname, ldapResult.responseCode(), ldapResult.responseDescription());
+			return ldapResult;
 		} catch (Exception e) {
 			// §B-007: log raw detail server-side, return GENERIC message to caller.
 			logger.error("LDAP auth failed for user={}: {}", uname, e.getMessage(), e);
@@ -150,6 +154,12 @@ public class LdapUcsService {
 			logger.debug("Token response received from LDAP UCS token endpoint");
 			String accessToken = extractAccessToken(responseBody);
 			return "Bearer " + accessToken;
+		} catch (org.springframework.web.client.RestClientResponseException e) {
+			// §B-007: log the upstream status + body SERVER-SIDE only for diagnosis;
+			// the caller still gets a generic result, never this raw detail.
+			logger.error("Failed to fetch LDAP UCS token: status={} body={}",
+					e.getStatusCode(), e.getResponseBodyAsString(), e);
+			return null;
 		} catch (Exception e) {
 			logger.error("Failed to fetch LDAP UCS token: {}", e.getMessage(), e);
 			return null;

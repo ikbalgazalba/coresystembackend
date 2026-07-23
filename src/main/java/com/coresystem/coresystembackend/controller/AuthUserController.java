@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Authentication controller exposing the login endpoint.
  *
@@ -35,6 +38,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthUserController {
+
+	private static final Logger logger = LoggerFactory.getLogger(AuthUserController.class);
 
 	private final LdapUcsService ldapUcsService;
 	private final JwtUtils jwtUtils;
@@ -94,7 +99,9 @@ public class AuthUserController {
 					.body(new MessageResponse("Authentication failed"));
 
 		} catch (Exception e) {
-			// Exception during LDAP call -> 401 with generic message
+			// Exception during LDAP/JWT/DB call -> 401 with generic message (§B-007).
+			// Log raw detail server-side for diagnosis; never expose to client.
+			logger.error("Login failed for user={}: {}", loginRequest.getUname(), e.getMessage(), e);
 			return ResponseEntity
 					.status(HttpStatus.UNAUTHORIZED)
 					.body(new MessageResponse("Authentication failed"));
