@@ -1,0 +1,15 @@
+{
+  "status": "green",
+  "timestamp_iso": "2026-07-23T18:50:00Z",
+  "head_sha": "44acadf10688c8a2c318ffa489b8df7edffe4d5f",
+  "base_sha": "e5fcf62",
+  "test_command": "mvn test",
+  "total_tests": 18,
+  "passed": 18,
+  "failed": 0,
+  "errors": 0,
+  "skipped": 0,
+  "units": ["U-008", "U-009"],
+  "bypass_commits": [],
+  "notes": "U-008 (AuthUserController + application.yaml) and U-009 (AuthLoginIntegrationTest) committed. Batch-gate fix: added RestClient.Builder bean to SecurityConfig (Boot 4.1.1 removed auto-config) and mocked LdapUcsService/UserRepository in contextLoads smoke test. All 18 tests green."
+}
