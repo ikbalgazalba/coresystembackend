@@ -1,0 +1,10 @@
+{
+  "status": "SKIP",
+  "validator": "dispatch-prompt",
+  "ts": "2026-07-23T09:49:14.113903Z",
+  "reason": "pack declares no '## UI quality signatures' view_glob (cannot determine what a view exemplar looks like in this stack)",
+  "prompts_checked": 0,
+  "issues": [],
+  "summary": "SKIP \u2014 pack declares no '## UI quality signatures' view_glob (cannot determine what a view exemplar looks like in this stack)",
+  "next_action": "No action \u2014 this check does not apply to the current project/pack."
+}

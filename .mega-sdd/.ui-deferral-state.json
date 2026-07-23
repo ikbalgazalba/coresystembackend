@@ -1,9 +1,12 @@
 {
-  "status": "SKIP",
+  "status": "PASS",
   "validator": "ui-deferral",
-  "ts": "2026-07-22T08:34:06.494229Z",
-  "reason": "no bolt-reports found (.mega-sdd/vaults/*/bolts/U-*/bolt-report.md)",
+  "ts": "2026-07-23T09:56:22.803805Z",
+  "summary": {
+    "bolt_reports_scanned": 7,
+    "units_with_ui_contract": 0,
+    "deferral_count": 0
+  },
   "deferrals": [],
-  "summary": "SKIP \u2014 no bolt-reports found (.mega-sdd/vaults/*/bolts/U-*/bolt-report.md)",
-  "next_action": "No action \u2014 this check does not apply to the current project/pack."
+  "next_action": "No action \u2014 no UI obligation was deferred."
 }

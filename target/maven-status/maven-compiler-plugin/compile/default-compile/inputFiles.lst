@@ -1,0 +1,10 @@
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/dto/JwtResponse.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/dto/LoginRequest.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/dto/MessageResponse.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/entity/Users.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/repository/UserRepository.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java

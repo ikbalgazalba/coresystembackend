@@ -1,6 +1,6 @@
 {
   "status": "FAIL",
-  "analyzed_at": "2026-07-22T08:00:54Z",
+  "analyzed_at": "2026-07-23T09:50:33Z",
   "boundaries": {
     "binding_units_handoff": {
       "status": "PASS",
@@ -13,9 +13,9 @@
       "detail": ""
     },
     "bolt_artifacts": {
-      "status": "SKIP",
+      "status": "PASS",
       "state_file": ".bolt-artifacts-state.json",
-      "detail": "no applicable files found"
+      "detail": ""
     },
     "bolt_orphans": {
       "status": "PASS",
@@ -113,9 +113,9 @@
       "detail": "no state file (validator not yet run this chain)"
     },
     "dispatch_prompt (advisory)": {
-      "status": "NOT_RUN",
+      "status": "SKIP",
       "state_file": ".dispatch-prompt-state.json",
-      "detail": "no state file (validator not yet run this chain)"
+      "detail": "SKIP \u2014 pack declares no '## UI quality signatures' view_glob (cannot determine what a view exemplar looks like in this s"
     },
     "fanout_parity (advisory)": {
       "status": "SKIP",
@@ -123,9 +123,9 @@
       "detail": "SKIP \u2014 pack declares no `## UI quality signatures` view_glob (cannot identify view-bearing units)"
     },
     "ui_deferral (advisory)": {
-      "status": "SKIP",
+      "status": "PASS",
       "state_file": ".ui-deferral-state.json",
-      "detail": "SKIP \u2014 no bolt-reports found (.mega-sdd/vaults/*/bolts/U-*/bolt-report.md)"
+      "detail": "bolt_reports_scanned=7; units_with_ui_contract=0; deferral_count=0"
     },
     "vault_flow_staging (advisory)": {
       "status": "PASS",
@@ -134,9 +134,9 @@
     }
   },
   "vault_consistency": [],
-  "validators_run": 13,
+  "validators_run": 14,
   "validators_total": 26,
-  "validators_pass": 7,
+  "validators_pass": 8,
   "validators_fail": 2,
-  "validators_skip": 11
+  "validators_skip": 10
 }

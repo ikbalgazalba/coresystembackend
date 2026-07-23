@@ -1,0 +1,52 @@
+{
+  "unit": "U-008",
+  "grammar": "v1-bullet",
+  "snapshot_ts_iso": "2026-07-23T00:20:00Z",
+  "head": "e5fcf626ab12b24f65e5d500bdc21a74c00ad16",
+  "rules": [
+    {
+      "rule": "FILE_PRESENCE src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java",
+      "type": "FILE_PRESENCE_RULE",
+      "pre_state": "absent",
+      "post_expectation": "present"
+    },
+    {
+      "rule": "NAMING_RULE controller/*.java PascalCase",
+      "type": "NAMING_RULE",
+      "pre_state": "n/a (package absent)",
+      "post_expectation": "AuthUserController.java PascalCase"
+    }
+  ],
+  "checks": {
+    "superpowers_bridge": "real install (superpowers 6.1.1 official cache); default executor = mega-sdd:bolt-implementer",
+    "unit_validity": "pass — frontmatter parses, task_type=create, target_files=2 (controller + yaml modify), acceptance_test has type:test, depends_on=[U-003,U-004,U-005,U-007] all resolved",
+    "repo_state": "clean-of-src-changes — working tree has only .mega-sdd state churn + target/ artifacts; no rebase/merge in progress",
+    "test_framework": "mvn 3.9.16 present (./mvnw broken — substitute mvn)",
+    "commit_hooks": "none; gpgsign off"
+  },
+  "classpath_facts": {
+    "spring_boot_version": "4.1.1-SNAPSHOT",
+    "spring_security_version": "7.1.0",
+    "jackson_version": "3.x (tools.jackson.databind.ObjectMapper)",
+    "jjwt_version": "0.12.6",
+    "controller_package_exists": false,
+    "dto_classes_present": ["JwtResponse", "LoginRequest", "MessageResponse"],
+    "service_classes_present": ["LdapUcsService"],
+    "repository_classes_present": ["UserRepository"],
+    "jwt_utils_present": true
+  },
+  "integration_contracts": {
+    "LdapUcsService_authLDAPNew": "LdapAuthResult authLDAPNew(String uname, String pass) — returns record(responseCode, responseDescription)",
+    "JwtUtils_generateTokenFromUname": "String generateTokenFromUname(String uname)",
+    "UserRepository_findByUname": "Optional<Users> findByUname(String uname)",
+    "Users_getUrole": "Long getUrole() — needs prefix ROLE_",
+    "Users_getKodeMitra": "String getKodeMitra()"
+  },
+  "anti_patterns_to_scan_post": [
+    "no_field_Autowired",
+    "no_CrossOrigin",
+    "no_entity_in_response",
+    "no_hardcoded_jwtSecret",
+    "no_raw_responseDescription_echo"
+  ]
+}

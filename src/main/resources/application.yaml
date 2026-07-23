@@ -1,3 +1,28 @@
 spring:
   application:
     name: coresystembackend
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://10.95.1.43:5432/newmojf}
+    username: ${SPRING_DATASOURCE_USERNAME:}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+coresystem:
+  app:
+    jwtSecret: ${JWT_SECRET:dev-only-secret-change-me}
+    jwtExpirationMs: 86400000
+  ldap:
+    urlToken: ${LDAP_URL_TOKEN:}
+    urlVerifyPassword: ${LDAP_URL_VERIFY_PASSWORD:}
+    clientId: ${LDAP_CLIENT_ID:}
+    clientSecret: ${LDAP_CLIENT_SECRET:}
+    username: ${LDAP_USERNAME:}
+    password: ${LDAP_PASSWORD:}
+    partnerId: ${LDAP_PARTNER_ID:}
+    channelId: ${LDAP_CHANNEL_ID:}
+    host: ${LDAP_HOST:}
+    aesKey: ${LDAP_AES_KEY:}

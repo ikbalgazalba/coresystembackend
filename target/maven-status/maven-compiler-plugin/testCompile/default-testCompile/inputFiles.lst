@@ -1,0 +1,5 @@
+/home/ikbalgazalba/AI/Project/coresystembackend/src/test/java/com/coresystem/coresystembackend/CoresystembackendApplicationTests.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/test/java/com/coresystem/coresystembackend/config/SecurityConfigTest.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/test/java/com/coresystem/coresystembackend/controller/AuthUserControllerTest.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/test/java/com/coresystem/coresystembackend/security/JwtUtilsTest.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/test/java/com/coresystem/coresystembackend/service/LdapUcsServiceTest.java
