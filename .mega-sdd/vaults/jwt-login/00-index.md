@@ -27,13 +27,13 @@ Vault ini menspec fitur login JWT untuk coresystembackend: endpoint `POST /api/a
 - [ ] Figma — tidak dikonsumsi (api-only, tidak ada UI)
 - [x] Tech stack — defined (Spring Boot 4.x snapshot, Java 21, Maven, pack=spring.md)
 - [ ] Sign-off — 0/Y stakeholders
-- Open Questions: **17** total — **P1: 4** (all resolved v1.2) · **P2: 6** · **P3: 7** → **13 open** (4 resolved)
+- Open Questions: **17** total — **P1: 4** (all resolved) · **P2: 6** (all resolved) · **P3: 7** (5 resolved, 2 deferred) → **0 open** (15 resolved, 2 deferred post-v1)
 
 ## Vault Lock Status
 
 - **PROJECT_SHAPE**: `api-only` (backend REST login API; tidak ada layer FE/mobile — `HAS_UI_COMPONENTS=false`)
-- **IMPLEMENTATION_MODE**: `new` (greenfield — skeleton belum punya kode fitur)
-- **mode_migrate_after**: first commit lands on main branch
+- **IMPLEMENTATION_MODE**: `existing` (migrated from `new` 2026-07-23 — jwt-login vault fully implemented: 9/9 units, 18/18 tests green, login verified live HTTP 200 for orisys06, commit de3f828)
+- **mode_migrate_after**: COMPLETED — code landed on main branch; migration new→existing done (v1.3)
 - **PRD_STATUS**: `draft`
 - **OUTPUT_MODE**: `compact`
 - **design_system_flags**: `{HAS_UI_COMPONENTS: false, HAS_TOKENS: false, HAS_A11Y: false, HAS_VOICE_BRAND: false}` — api-only, tidak ada design-system section (sesuai anti-halu rail: no shape-based defaulting)
@@ -106,21 +106,21 @@ Vault ini menspec fitur login JWT untuk coresystembackend: endpoint `POST /api/a
 - [x] **OQ-FL-1** [P1] [business] [conf: high]: kontrak response LDAP UCS (`responseCode`/`responseDescription`, kode sukses "00"/"01") — valid? Endpoint LDAP UCS apa yang dipakai? `[04-flows.md]` → Resolved v1.2 (with correction): endpoint verified; ⚠️ kode sukses "00"/"01" `[INFERRED]` (tidak terverifikasi di newmojf — `authLDAPNew` return JSON mentah UCS); konfirmasi via integration-test; failure codes verified 502/503/401; B-007 apply.
 
 ### Config, naming & API contract (PRIORITY-2)
-- [ ] **OQ-AR-3** [P2] [tech / recommend] [conf: medium]: `jwtSecret` — hardcode (referensi) atau externalize via env var? `[02-architecture.md]`
-- [ ] **OQ-AR-4** [P2] [tech / recommend] [conf: high]: lib JWT jjwt 0.12.x kompatibel Boot 4.x? (newmojf VERIFIED jjwt tapi API legacy — butuh rewrite). `[02-architecture.md]`
-- [ ] **OQ-AR-5** [P2] [tech / recommend] [conf: medium]: CORS — replikasi `@CrossOrigin(origins="*")` wildcard atau SecurityFilterChain config eksplisit? `[02-architecture.md]`
-- [ ] **OQ-AR-7** [P2] [business] [conf: medium]: nama field DTO response — verbatim newmojf (`mitKode`/`urole`) atau rename (`kodeMitra`/`role`)? `[02-architecture.md]`
-- [ ] **OQ-DM-1** [P2] [tech / recommend] [conf: medium]: nama tabel entity — `users` (pack) atau `mojf_users` (referensi)? `[03-data-model.md]`
-- [ ] **OQ-FL-3** [P2] [business] [conf: medium]: sanitasi error body LDAP — echo verbatim `responseDescription` atau map generic (anti info-leakage)? `[04-flows.md]`
+- [x] **OQ-AR-3** [P2] [tech / recommend] [conf: medium]: `jwtSecret` — hardcode (referensi) atau externalize via env var? `[02-architecture.md]` → Resolved v1.3: externalize via `${JWT_SECRET:base64-dev-default}` (commit de3f828); default sebelumnya invalid Base64 → fixed.
+- [x] **OQ-AR-4** [P2] [tech / recommend] [conf: high]: lib JWT jjwt 0.12.x kompatibel Boot 4.x? (newmojf VERIFIED jjwt tapi API legacy — butuh rewrite). `[02-architecture.md]` → Resolved v1.3: jjwt 0.12.6 kompatibel, API rewrite (signWith(Key)+verifyWith) verified live (commit f4b87df U-005).
+- [x] **OQ-AR-5** [P2] [tech / recommend] [conf: medium]: CORS — replikasi `@CrossOrigin(origins="*")` wildcard atau SecurityFilterChain config eksplisit? `[02-architecture.md]` → Resolved v1.3: CORS eksplisit via SecurityFilterChain + CorsConfigurationSource (origins localhost:3000/8080, bukan wildcard) (commit 574fce8 U-006).
+- [x] **OQ-AR-7** [P2] [business] [conf: medium]: nama field DTO response — verbatim newmojf (`mitKode`/`urole`) atau rename (`kodeMitra`/`role`)? `[02-architecture.md]` → Resolved v1.3: verbatim newmojf (`mitKode`/`urole`); live response konfirmasi (commit 6783558 U-008 / de3f828).
+- [x] **OQ-DM-1** [P2] [tech / recommend] [conf: medium]: nama tabel entity — `users` (pack) atau `mojf_users` (referensi)? `[03-data-model.md]` → Resolved v1.3: `@Table(name="mojf_users")` (DB existing newmojf); fixed dari drift (commit 810fd54 — P1).
+- [x] **OQ-FL-3** [P2] [business] [conf: medium]: sanitasi error body LDAP — echo verbatim `responseDescription` atau map generic (anti info-leakage)? `[04-flows.md]` → Resolved v1.3: map ke generic "Authentication failed", raw detail log server-side only (§B-007) (commit 6783558 U-008 + de3f828).
 
 ### Persistence, design & refinement (PRIORITY-3)
-- [ ] **OQ-DM-2** [P3] [tech / recommend] [conf: low]: update `last_login` saat login sukses? `[03-data-model.md]`
-- [ ] **OQ-DM-3** [P3] [tech / recommend] [conf: medium]: DDL — `ddl-auto=none` atau Flyway? `[03-data-model.md]`
-- [ ] **OQ-FL-2** [P3] [business] [conf: low]: rate-limiting/lockout setelah N percobaan gagal? `[04-flows.md]`
-- [ ] **OQ-DC-1** [P3] [tech / recommend] [conf: medium]: JWT bawa uname-only atau role claim? `[05-decisions.md]`
-- [ ] **OQ-CN-1** [P3] [business] [conf: low]: regime compliance (PDP-Indonesia/lainnya) untuk kredensial login? `[06-constraints.md]`
-- [ ] **OQ-CN-2** [P3] [tech / recommend] [conf: medium]: Lombok `@Slf4j` atau SLF4J manual? `[06-constraints.md]`
-- [ ] **OQ-OV-1** [P3] [business] [conf: low]: success criteria kuantitatif (latency/RPS)? `[01-overview.md]`
+- [x] **OQ-DM-2** [P3] [tech / recommend] [conf: low]: update `last_login` saat login sukses? `[03-data-model.md]` → Resolved v1.3: tidak update (read-only, replikasi newmojf) (commit 6783558 U-008).
+- [x] **OQ-DM-3** [P3] [tech / recommend] [conf: medium]: DDL — `ddl-auto=none` atau Flyway? `[03-data-model.md]` → Resolved v1.3: `ddl-auto=none` (skema existing dikelola eksternal) (commit 6595b3b U-008).
+- [~] **OQ-FL-2** [P3] [business] [conf: low]: rate-limiting/lockout setelah N percobaan gagal? `[04-flows.md]` → Deferred v1.3 (PO decision): defer ke post-v1; mitigasi sementara via network-layer rate-limit.
+- [x] **OQ-DC-1** [P3] [tech / recommend] [conf: medium]: JWT bawa uname-only atau role claim? `[05-decisions.md]` → Resolved v1.3: subject=uname only; role via DB lookup saat validasi (commit f4b87df U-005).
+- [x] **OQ-CN-1** [P3] [business] [conf: low]: regime compliance (PDP-Indonesia/lainnya) untuk kredensial login? `[06-constraints.md]` → Resolved v1.3 (PO/compliance): PDP Law Indonesia (UU PDP); v1 sudah HTTPS+externalize+generic-error+no-log-password.
+- [x] **OQ-CN-2** [P3] [tech / recommend] [conf: medium]: Lombok `@Slf4j` atau SLF4J manual? `[06-constraints.md]` → Resolved v1.3: SLF4J manual (no Lombok dep, zero-dependency) (commits U-005/007/008).
+- [~] **OQ-OV-1** [P3] [business] [conf: low]: success criteria kuantitatif (latency/RPS)? `[01-overview.md]` → Deferred v1.3 (PO decision): belum ada target; v1 pakai default wajar (live ~1.4s end-to-end).
 
 ## Source documents
 

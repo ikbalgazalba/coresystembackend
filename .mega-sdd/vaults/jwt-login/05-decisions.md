@@ -50,7 +50,7 @@ newmojf `AuthUserController.java:40-47` memakai field `@Autowired`. **Decision**
 
 ## Open Questions
 
-- [ ] **OQ-DC-1** [P3] [tech / recommend] [conf: medium]: apakah D-002 (JWT hanya bawa uname, role dari DB lookup) cukup, atau token sebaiknya bawa role claim agar resource server tidak perlu lookup DB? — resolve: lihat Auto-Classification Review
+- [x] **OQ-DC-1** [P3] [tech / recommend] [conf: medium]: apakah D-002 (JWT hanya bawa uname, role dari DB lookup) cukup, atau token sebaiknya bawa role claim agar resource server tidak perlu lookup DB? → **Resolved v1.3** (2026-07-23, implementation-verified, commit f4b87df U-005): VERIFIED — `JwtUtils.generateTokenFromUname` set hanya `.subject(uname)` + issuedAt + expiration + typ=JWT. Tidak ada role/mitKode claim di token (role di-return di JwtResponse response body saja, bukan di token). Sesuai rekomendasi v1. Saat resource-server future dibuat, resolve role via DB lookup `findByUname` saat validasi token (token tetap stateless kecil). Live token (orisys06) decoded: `{sub:orisys06, iat, exp}` — konfirmasi hanya subject.
   - recommendation: v1: pertahankan subject=uname saja (replikasi newmojf); resource-server future resolve role via DB lookup `findByUname` saat validasi token.
   - rationale: replikasi verbatim pola newmojf (`generateJwtTokenUname` set hanya subject); menambah role claim = scope creep + masalah sinkronisasi (role berubah → token stale). Trade-off: lookup DB per request terproteksi (latency) vs token lebih besar (stateless). v1 tidak punya endpoint terproteksi jadi lookup belum relevan.
   - scan_citations: `AuthUserController.java:128-138` (generateJwtTokenUname + lookup), `JwtUtils.java:42-50` (subject=uname saja)

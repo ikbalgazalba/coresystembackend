@@ -4,8 +4,8 @@
   "phase": 1,
   "phase_total": 1,
   "project_shape": "api-only",
-  "implementation_mode": "new",
-  "mode_migrate_after": "first commit lands on main branch (mode=new only)",
+  "implementation_mode": "existing",
+  "mode_migrate_after": "COMPLETED — code landed on main branch (jwt-login vault fully implemented + verified live 2026-07-23, commit de3f828). Migration new→existing done.",
   "prd_status": "draft",
   "output_mode": "compact",
   "constitution_version": "1.0.0",
@@ -153,14 +153,17 @@
       "resolution_mode": "recommend",
       "classification_confidence": "medium",
       "doc": "02-architecture.md",
-      "status": "pending",
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commit de3f828)",
       "recommendation": "Externalize via env var / placeholder di application.yaml (coresystem.app.jwtSecret=${JWT_SECRET:dev-only-secret}); jangan hardcode literal.",
       "rationale": "Pack security idiom melarang secret di source; referensi newmojf hardcode jwtMojfSecretkey (security smell). Spring Boot placeholder + env var konsisten dengan pack dan aman untuk snapshot builds.",
       "scan_citations": [
         "application-test.properties:24",
         "framework-conventions/spring.md \u00a7Security idioms \u00a7Secrets / config"
       ],
-      "fallback_if_wrong": "Jika env var tidak feasible di env deploy, fallback ke Spring Cloud Config/Vault."
+      "fallback_if_wrong": "Jika env var tidak feasible di env deploy, fallback ke Spring Cloud Config/Vault.",
+      "resolution": "VERIFIED di implementasi: application.yaml baris 18 `jwtSecret: ${JWT_SECRET:<base64-dev-default>}`. Secret di-externalize via Spring placeholder + env var JWT_SECRET (override wajib di non-dev, \u00a7D-002). Default dev-only adalah Base64 valid 67-byte (HS512 minimum) \u2014 bukan literal plaintext newmojf. Catatan: default sebelumnya 'dev-only-secret-change-me' adalah Base64 INVALID (menyebabkan runtime DecodingException, fixed di commit de3f828)."
     },
     {
       "tag": "OQ-AR-4",
@@ -169,7 +172,9 @@
       "resolution_mode": "recommend",
       "classification_confidence": "high",
       "doc": "02-architecture.md",
-      "status": "pending",
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commit f4b87df U-005)",
       "recommendation": "io.jsonwebtoken:jjwt-api + jjwt-impl + jjwt-jackson versi 0.12.x (runtime scope untuk impl/jackson). WAJIB rewrite API legacy newmojf ke 0.12.x API.",
       "rationale": "newmojf VERIFIED memakai jjwt (JwtUtils.java:12-17 import io.jsonwebtoken.*). Impl-nya pakai API legacy signWith(SignatureAlgorithm.HS512, jwtSecret) (JwtUtils.java:38,48) dan Jwts.parser().setSigningKey(...) (:53,58) \u2014 dihapus di jjwt 0.11+. Replikasi ke 0.12.x WAJIB rewrite: Jwts.builder().signWith(Key) (Keys.hmacShaKeyFor) + Jwts.parserBuilder().verifyWith(key).build(). Versi 0.12.x mendukung Jakarta + Java 21.",
       "scan_citations": [
@@ -177,7 +182,8 @@
         "JwtUtils.java:38,48,53,58",
         "codebase-map.md \u00a77"
       ],
-      "fallback_if_wrong": "Jika jjwt 0.12.x tidak kompatibel snapshot Boot 4.x, fallback ke nimbus-jose-jwt atau Spring Security OAuth2 resource server JWT."
+      "fallback_if_wrong": "Jika jjwt 0.12.x tidak kompatibel snapshot Boot 4.x, fallback ke nimbus-jose-jwt atau Spring Security OAuth2 resource server JWT.",
+      "resolution": "VERIFIED di implementasi: pom.xml U-001 deklarasikan jjwt-api/impl/jackson 0.12.6 (impl+jackson runtime scope). JwtUtils.java pakai API 0.12.x: `Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret))` + `Jwts.builder().signWith(key(), Jwts.SIG.HS512)` + `Jwts.parser().verifyWith(key()).build().parseSignedClaims(token)`. Kompatibel Boot 4.1.1 + Java 21, teruji live (token valid di-generate & parse)."
     },
     {
       "tag": "OQ-AR-5",
@@ -186,14 +192,17 @@
       "resolution_mode": "recommend",
       "classification_confidence": "medium",
       "doc": "02-architecture.md",
-      "status": "pending",
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commit 574fce8 U-006)",
       "recommendation": "Konfigurasi CORS via SecurityFilterChain http.cors(Customizer.withDefaults()) + CorsConfigurationSource bean dengan allowed-origins eksplisit (bukan wildcard *), kecuali dev local.",
       "rationale": "Wildcard @CrossOrigin(origins=\"*\") pada API stateless JWT adalah security smell (pack spring.md \u00a7Security idioms); konfigurasi terpusat via SecurityConfig lebih\u53ef\u63a7 + sesuai pack. newmojf pakai wildcard (legacy smell) \u2014 adaptasi ke CORS config eksplisit.",
       "scan_citations": [
         "AuthUserController.java:34",
         "framework-conventions/spring.md \u00a7Security idioms"
       ],
-      "fallback_if_wrong": "Jika client coresystembackend membutuhkan wildcard (banyak origin dinamis), pertimbangkan allowlist pattern atau * hanya di profile dev."
+      "fallback_if_wrong": "Jika client coresystembackend membutuhkan wildcard (banyak origin dinamis), pertimbangkan allowlist pattern atau * hanya di profile dev.",
+      "resolution": "VERIFIED di implementasi: SecurityConfig.java U-006 \u2014 `http.cors(Customizer.withDefaults())` + `corsConfigurationSource()` bean dengan `setAllowedOrigins(List.of(\"http://localhost:3000\", \"http://localhost:8080\"))` (origins EKSPLISIT, bukan wildcard). AllowedHeaders=\"*\" diizinkan (rule scoped ke origin, bukan header). AuthUserController TIDAK pakai @CrossOrigin (CORS terpusat di SecurityConfig, sesuai OQ-AR-5). Saat client frontend definitif diketahui, tambahkan origin-nya ke allowlist."
     },
     {
       "tag": "OQ-AR-6",
@@ -214,8 +223,10 @@
       "resolution_mode": "blocking",
       "classification_confidence": "medium",
       "doc": "02-architecture.md",
-      "status": "pending",
-      "resolver_owner": null
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commit 6783558 U-008) + live test (commit de3f828)",
+      "resolution": "VERIFIED: replikasi VERBATIM nama DTO newmojf — `mitKode` dan `urole` (bukan rename ke kodeMitra/role). JwtResponse.java field: `token, type=\"Bearer \", id, uname, mitKode, urole`. Nilai: mitKode dari entity.kodeMitra (nullable→\"\"), urole dari `\"ROLE_\" + user.getUrole()`. Live test konfirmasi response: `{token, id:1561, uname:orisys06, mitKode:\"001\", urole:\"ROLE_0\", type:\"Bearer \"}`. ADV-001 field-name conflation resolved: Jackson serialisasi nama field DTO (mitKode/urole), sumber nilai dari entity (kodeMitra/urole)."
     },
     {
       "tag": "OQ-DM-1",
@@ -224,14 +235,17 @@
       "resolution_mode": "recommend",
       "classification_confidence": "medium",
       "doc": "03-data-model.md",
-      "status": "pending",
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commit 810fd54 \u2014 OQ-DM-1 P1 drift fix)",
       "recommendation": "users (pack standard) KECUALI jika replikasi ke DB newmojf existing \u2014 maka @Table(name=\"mojf_users\") untuk kompatibilitas data.",
       "rationale": "Pack menetapkan users; tapi jika OQ-AR-2 memilih pakai DB newmojf existing, nama tabel harus cocok skema existing (mojf_users) agar lookup user terdaftar berhasil.",
       "scan_citations": [
         "mojf_users_Model.java:13",
         "framework-conventions/spring.md \u00a7Naming standards"
       ],
-      "fallback_if_wrong": "Jika tabel existing beda nama, sesuaikan @Table(name=...)."
+      "fallback_if_wrong": "Jika tabel existing beda nama, sesuaikan @Table(name=...).",
+      "resolution": "VERIFIED + RESOLVED: cabang OQ-AR-2 (pakai DB newmojf existing) \u2192 entity Users pakai `@Table(name=\"mojf_users\")` (Users.java:14). Awalnya drift (table=\"users\", lookup gagal); fixed di commit 810fd54 (OQ-DM-1 P1 drift detect). Live test konfirmasi: findByUname(\"orisys06\") \u2192 user id=1561 ditemukan di tabel mojf_users DB newmojf."
     },
     {
       "tag": "OQ-DM-2",
@@ -240,14 +254,17 @@
       "resolution_mode": "recommend",
       "classification_confidence": "low",
       "doc": "03-data-model.md",
-      "status": "pending",
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commit 6783558 U-008)",
       "recommendation": "Tidak update last_login di v1 (replikasi verbatim pola newmojf yang hanya lookup, tidak write).",
       "rationale": "/dologin newmojf hanya read user via findUserAccount; menambah write last_login = scope creep di luar replikasi.",
       "scan_citations": [
         "AuthUserController.java:130",
         "mojf_users_Model.java:39-40"
       ],
-      "fallback_if_wrong": "Jika PO ingin audit login, tambahkan @Transactional write di service layer."
+      "fallback_if_wrong": "Jika PO ingin audit login, tambahkan @Transactional write di service layer.",
+      "resolution": "VERIFIED: v1 read-only — tidak ada write last_login. AuthUserController hanya panggil userRepository.findByUname (read); tidak ada setLastLogin/save. Sesuai rekomendasi (replikasi verbatim pola newmojf). Field lastLogin tetap ada di entity untuk mapping kolom DB, tapi tidak di-write di flow login. Audit-login = future enhancement jika PO minta."
     },
     {
       "tag": "OQ-DM-3",
@@ -256,14 +273,17 @@
       "resolution_mode": "recommend",
       "classification_confidence": "medium",
       "doc": "03-data-model.md",
-      "status": "pending",
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commit 6595b3b U-008)",
       "recommendation": "spring.jpa.hibernate.ddl-auto=none (skema dikelola DBA/eksternal, replikasi pola newmojf).",
       "rationale": "newmojf pakai ddl-auto=none; skema tabel users sudah ada di DB target. none mencegah Hibernate mengubah skema produksi.",
       "scan_citations": [
         "application-test.properties:3",
         "framework-conventions/spring.md \u00a7Idioms"
       ],
-      "fallback_if_wrong": "Jika DB baru khusus coresystembackend (OQ-AR-2), pertimbangkan Flyway untuk DDL terkontrol."
+      "fallback_if_wrong": "Jika DB baru khusus coresystembackend (OQ-AR-2), pertimbangkan Flyway untuk DDL terkontrol.",
+      "resolution": "VERIFIED: application.yaml `spring.jpa.hibernate.ddl-auto: none`. Sesuai cabang OQ-AR-2 (pakai DB newmojf existing) \u2014 skema mojf_users dikelola eksternal/DBA, Hibernate tidak mengubah skema. Flyway tidak dipakai di v1 (skema existing sudah ada); jika future migrasi ke DB baru khusus coresystembackend, pertimbangkan Flyway."
     },
     {
       "tag": "OQ-FL-1",
@@ -275,7 +295,8 @@
       "status": "resolved",
       "resolved_at": "2026-07-22T00:00:00Z",
       "resolver_owner": "infra/security (via newmojf source)",
-      "resolution": "Endpoint LDAP UCS terverifikasi (lihat OQ-AR-1): urlToken (OAuth2 password-grant) + urlVerifyPassword (GET .../verifypassword/userid/{uname}/password/{AES-ECB-hashed}) di openapidev2.bankmega.local:15000 (UAT). KOREKSI MATERIAL: asumsi kode sukses 00/01 TIDAK TERVERIFIKASI di kode newmojf — LDAP_UCS_Utils.authLDAPNew (baris 87-100) mengembalikan JSON mentah endpoint UCS saat sukses (JSONParser parse + return apa adanya, baris 243-249); newmojf tidak set 00 sebagai responseCode sukses. Failure codes terverifikasi: token-error 502/503, process-error 401 (responseDescription=e.getMessage(), B-007 violation). Kontrak responseCode/responseDescription sukses sebenarnya HARUS dikonfirmasi dari endpoint UCS OpenAPI bankmega asli — mark [INFERRED] sampai integration-test; B-007 apply (map ke generic 'Invalid credentials', jangan echo responseDescription)."
+      "resolution": "Endpoint LDAP UCS terverifikasi (lihat OQ-AR-1): urlToken (OAuth2 password-grant) + urlVerifyPassword (GET .../verifypassword/userid/{uname}/password/{AES-ECB-hashed}) di openapidev2.bankmega.local:15000 (UAT). KOREKSI MATERIAL: asumsi kode sukses 00/01 TIDAK TERVERIFIKASI di kode newmojf — LDAP_UCS_Utils.authLDAPNew (baris 87-100) mengembalikan JSON mentah endpoint UCS saat sukses (JSONParser parse + return apa adanya, baris 243-249); newmojf tidak set 00 sebagai responseCode sukses. Failure codes terverifikasi: token-error 502/503, process-error 401 (responseDescription=e.getMessage(), B-007 violation). Kontrak responseCode/responseDescription sukses sebenarnya HARUS dikonfirmasi dari endpoint UCS OpenAPI bankmega asli — mark [INFERRED] sampai integration-test; B-007 apply (map ke generic 'Invalid credentials', jangan echo responseDescription).",
+      "verified_fact_v1_3": "LIVE INTEGRATION TEST (commit de3f828, 2026-07-23): kontrak sukses TERVERIFIKASI via endpoint UCS asli. POST /api/auth/dologin {orisys06/B@nkmega03} → LDAP verify-password return responseCode=\"00\" responseDescription=\"SUCCESS\" (ter-log di app: 'LDAP UCS verify-password result for user=orisys06: responseCode=00 responseDescription=SUCCESS'). Login sukses → HTTP 200 + JwtResponse. Kode sukses \"00\" KONFIRMASI valid (bukan lagi [INFERRED]). Catatan: controller juga terima \"01\" sebagai sukses (defensif), tapi endpoint asli UCS mengembalikan \"00\"."
     },
     {
       "tag": "OQ-FL-2",
@@ -284,8 +305,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "low",
       "doc": "04-flows.md",
-      "status": "pending",
-      "resolver_owner": null
+      "status": "deferred",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "PO decision (user, 2026-07-23)",
+      "resolver_note": "Question: rate-limiting/lockout akun setelah N percobaan login gagal — perlu di v1? Answer: Defer ke post-v1.",
+      "resolution": "DEFERRED ke post-v1 (user decision 2026-07-23). Replikasi verbatim pola newmojf — newmojf tidak punya fitur rate-limiting/lockout, jadi v1 tidak mengimplementasikannya. Login endpoint tetap permitAll tanpa lockout. Rate-limiting/lockout = future enhancement (post-v1), memerlukan unit baru + modifikasi vault jika diadopsi. Tidak blocking v1 deploy. Pertimbangan security: tanpa lockout, endpoint rentan brute-force — mitigasi sementara via network-layer rate-limit (API gateway/reverse proxy) direkomendasikan sampai fitur diaplikasikan."
     },
     {
       "tag": "OQ-FL-3",
@@ -294,8 +318,10 @@
       "resolution_mode": "blocking",
       "classification_confidence": "medium",
       "doc": "04-flows.md",
-      "status": "pending",
-      "resolver_owner": null
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commit 6783558 U-008 + de3f828 logging fix)",
+      "resolution": "VERIFIED: map ke generic, BUKAN echo responseDescription verbatim. AuthUserController.login(): untuk non-success responseCode, return `MessageResponse(\"Authentication failed\")` (generic) — TIDAK echo result.responseDescription() ke client (§B-007). LdapUcsService juga: semua catch-block log raw detail SERVER-SIDE only (logger.error e.getMessage/body), return LdapAuthResult(\"401\",\"Authentication failed\") generic. Live test konfirmasi: login gagal → `{message:\"Authentication failed\"}` tanpa bocor detail internal Keycloak/LDAP. Komitmen de3f828 menambah logging server-side di getToken() (RestClientResponseException body) + authLDAPNew() + controller catch — untuk diagnosis tanpa information-leakage ke client."
     },
     {
       "tag": "OQ-CN-1",
@@ -304,8 +330,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "low",
       "doc": "06-constraints.md",
-      "status": "pending",
-      "resolver_owner": null
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "PO/compliance (user decision, 2026-07-23)",
+      "resolver_note": "Question: regime compliance mana yang berlaku? Answer: PDP Law Indonesia (UU PDP).",
+      "resolution": "RESOLVED: PDP Law Indonesia (UU No. 27/2022 Perlindungan Data Pribadi) berlaku. Kredensial/password login & data user (uname, kodeMitra, urole) = data pribadi. Implikasi yang SUDAH terpenuhi di v1: (1) kredensial in-transit via HTTPS (LDAP UCS endpoint https, §B-006 trust store); (2) secret/credential di-externalize via env var, tidak hardcode (§D-002, OQ-AR-3); (3) error generic ke client, tidak bocor detail (§B-007, OQ-FL-3); (4) password tidak di-log (log hanya uname + responseCode generik); (5) ddl-auto=none, tidak menulis/mengubah data user. Implikasi YANG PERLU ditindaklanjuti compliance team: retensi data, hak subjek data (akses/hapus), DPIA formal, register pemrosesan — di luar scope teknis v1, koordinasi dengan tim compliance Bank Mega."
     },
     {
       "tag": "OQ-CN-2",
@@ -314,14 +343,17 @@
       "resolution_mode": "recommend",
       "classification_confidence": "medium",
       "doc": "06-constraints.md",
-      "status": "pending",
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commits U-005/007/008/de3f828)",
       "recommendation": "SLF4J manual LoggerFactory.getLogger(...) (atau @Slf4j hanya jika Lombok sudah di dependency).",
       "rationale": "Skeleton belum deklaras Lombok; menambah dependency baru perlu review. SLF4J manual zero-dependency dan memenuhi pack forbidden pattern (no System.out).",
       "scan_citations": [
         "AuthUserController.java:32",
         "codebase-map.md \u00a72"
       ],
-      "fallback_if_wrong": "Jika tim sudah standar pakai Lombok, tambahkan org.projectlombok:lombok (provided scope) + @Slf4j."
+      "fallback_if_wrong": "Jika tim sudah standar pakai Lombok, tambahkan org.projectlombok:lombok (provided scope) + @Slf4j.",
+      "resolution": "VERIFIED: SLF4J manual `LoggerFactory.getLogger(...)` di semua class (JwtUtils, LdapUcsService, AuthUserController). Tidak ada dependency Lombok di pom.xml (zero-dependency logging). Memenuhi pack forbidden pattern (no System.out, \u00a7A-004). Jika future tim standar pakai Lombok, dapat migrasi ke @Slf4j (provided scope) tanpa breaking."
     },
     {
       "tag": "OQ-DC-1",
@@ -330,14 +362,17 @@
       "resolution_mode": "recommend",
       "classification_confidence": "medium",
       "doc": "05-decisions.md",
-      "status": "pending",
+      "status": "resolved",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "implementation-verified (commit f4b87df U-005)",
       "recommendation": "v1: pertahankan subject=uname saja (replikasi newmojf); resource-server future resolve role via DB lookup findByUname saat validasi token.",
       "rationale": "Replikasi verbatim pola newmojf (generateJwtTokenUname set hanya subject); menambah role claim = scope creep + masalah sinkronisasi (role berubah \u2192 token stale). Trade-off: lookup DB per request terproteksi (latency) vs token lebih besar (stateless). v1 tidak punya endpoint terproteksi jadi lookup belum relevan.",
       "scan_citations": [
         "AuthUserController.java:128-138",
         "JwtUtils.java:42-50"
       ],
-      "fallback_if_wrong": "Jika future resource-server OQ menunjukkan cost lookup tidak terima, embed role claim di token (refresh saat role berubah)."
+      "fallback_if_wrong": "Jika future resource-server OQ menunjukkan cost lookup tidak terima, embed role claim di token (refresh saat role berubah).",
+      "resolution": "VERIFIED: JwtUtils.generateTokenFromUname set hanya `.subject(uname)` + issuedAt + expiration + typ=JWT. Tidak ada role/mitKode claim di token (role di-return di JwtResponse response body saja, bukan di token). Sesuai rekomendasi v1. Saat resource-server future dibuat, resolve role via DB lookup findByUname saat validasi token (token tetap stateless kecil). Live token (orisys06) decoded: {sub:orisys06, iat, exp} \u2014 konfirmasi hanya subject."
     },
     {
       "tag": "OQ-OV-1",
@@ -346,8 +381,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "low",
       "doc": "01-overview.md",
-      "status": "pending",
-      "resolver_owner": null
+      "status": "deferred",
+      "resolved_at": "2026-07-23T19:57:00Z",
+      "resolver_owner": "PO/stakeholder (user decision, 2026-07-23)",
+      "resolver_note": "Question: success criteria kuantitatif (response time/RPS target) ada? Answer: Tidak ada target eksplisit — defer.",
+      "resolution": "DEFERRED (user decision 2026-07-23). PO belum tetapkan target kuantitatif (response time p95, RPS SLO). v1 pakai default wajar: response time didominasi LDAP round-trip (live test ~1.4s end-to-end untuk orisys06: 18:705 token-acquired → 20:133 verify-password success → 20:xxx JWT+DB), tidak ada explicit RPS SLO. Tidak blocking v1 deploy. Saat PO menetapkan target (mis. p95<2s, N RPS), revisi via resolve-oq + tambah NFR constraint + load-test. Jika target tidak tercapai, optimasi: connection pooling RestClient, caching token UCS (TTL), atau paralelisasi."
     }
   ],
   "open_questions_summary": {
@@ -358,9 +396,9 @@
       "P3": 7
     },
     "by_status": {
-      "open": 13,
-      "resolved": 4,
-      "deferred": 0,
+      "open": 0,
+      "resolved": 15,
+      "deferred": 2,
       "out_of_scope": 0
     },
     "by_category": {
@@ -454,6 +492,127 @@
       "at": "2026-07-22T00:00:00Z",
       "action": "A",
       "round": "v1.2"
+    },
+    {
+      "event": "mode-migrated",
+      "from": "new",
+      "to": "existing",
+      "at": "2026-07-23T19:57:00Z",
+      "trigger": "jwt-login vault fully implemented (9/9 units, 18/18 tests green) + verified live (login HTTP 200 for orisys06, commit de3f828). Per mode_migrate_after rule: first commit lands on main → migrate to existing.",
+      "round": "v1.3"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-AR-3",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (commit de3f828)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-AR-4",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (commit f4b87df U-005)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-AR-5",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (commit 574fce8 U-006)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-AR-7",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (commit 6783558 U-008) + live test (de3f828)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-DM-1",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (commit 810fd54 — P1 drift fix)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-DM-2",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (commit 6783558 U-008)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-DM-3",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (commit 6595b3b U-008)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-FL-1",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "live integration test (commit de3f828) — success code '00' CONFIRMED, no longer [INFERRED]",
+      "note": "prior resolution v1.2 stood; v1.3 adds live verification of the [INFERRED] success contract"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-FL-3",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (commit 6783558 U-008 + de3f828 logging)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-CN-1",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "PO decision — PDP Law Indonesia (UU PDP)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-CN-2",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (SLF4J manual, no Lombok)"
+    },
+    {
+      "event": "oq-resolved",
+      "id": "OQ-DC-1",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "A",
+      "round": "v1.3",
+      "basis": "implementation-verified (commit f4b87df U-005)"
+    },
+    {
+      "event": "oq-deferred",
+      "id": "OQ-FL-2",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "D",
+      "round": "v1.3",
+      "basis": "PO decision — defer rate-limiting/lockout to post-v1 (replikasi verbatim newmojf, no rate-limit)"
+    },
+    {
+      "event": "oq-deferred",
+      "id": "OQ-OV-1",
+      "at": "2026-07-23T19:57:00Z",
+      "action": "D",
+      "round": "v1.3",
+      "basis": "PO decision — no quantitative NFR target yet; defer response-time/RPS SLO"
     }
   ],
   "mode": "existing"

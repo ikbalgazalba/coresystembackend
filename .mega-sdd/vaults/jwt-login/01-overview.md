@@ -48,4 +48,4 @@ coresystembackend saat ini skeleton Spring Initializr tanpa layer HTTP/security 
 
 ## Open Questions
 
-- [ ] **OQ-OV-1** [P3] [business] [conf: low]: success criteria kuantitatif (response time target, RPS) — tidak dinyatakan di brief; perlu konfirmasi PO? — resolve: PO/stakeholder
+- [~] **OQ-OV-1** [P3] [business] [conf: low]: success criteria kuantitatif (response time target, RPS) — tidak dinyatakan di brief; perlu konfirmasi PO? → **Deferred v1.3** (2026-07-23, PO/stakeholder decision): DEFERRED. PO belum tetapkan target kuantitatif (response time p95, RPS SLO). v1 pakai default wajar: response time didominasi LDAP round-trip (live test ~1.4s end-to-end untuk orisys06: token-acquired → verify-password success → JWT+DB), tidak ada explicit RPS SLO. Tidak blocking v1 deploy. Saat PO menetapkan target (mis. p95<2s, N RPS), revisi via `resolve-oq` + tambah NFR constraint + load-test. Jika target tidak tercapai, optimasi: connection pooling RestClient, caching token UCS (TTL), atau paralelisasi.

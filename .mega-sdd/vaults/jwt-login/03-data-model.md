@@ -72,17 +72,17 @@ Note: 'Adaptasi mojf_users_Model.java tabel mojf_users → jakarta.persistence (
 
 ## Open Questions
 
-- [ ] **OQ-DM-1** [P2] [tech / recommend] [conf: medium]: nama tabel entity — pakai `users` (pack standard snake_case plural) atau replikasi `mojf_users` (referensi newmojf)? — resolve: lihat Auto-Classification Review
+- [x] **OQ-DM-1** [P2] [tech / recommend] [conf: medium]: nama tabel entity — pakai `users` (pack standard snake_case plural) atau replikasi `mojf_users` (referensi newmojf)? → **Resolved v1.3** (2026-07-23, implementation-verified, commit 810fd54 — P1 drift fix): VERIFIED + RESOLVED. Cabang OQ-AR-2 (pakai DB newmojf existing) → entity `Users` pakai `@Table(name="mojf_users")` (`Users.java:14`). Awalnya drift (table=`users`, lookup gagal); dideteksi & diperbaiki di commit 810fd54 (OQ-DM-1 P1 drift detect). Live test konfirmasi: `findByUname("orisys06")` → user id=1561 ditemukan di tabel `mojf_users` DB newmojf.
   - recommendation: `users` (pack standard) KECUALI jika replikasi ke DB newmojf existing yang tabelnya `mojf_users` — maka `@Table(name="mojf_users")` untuk kompatibilitas data.
   - rationale: pack menetapkan `users`; tapi jika OQ-AR-2 memilih pakai DB newmojf existing, nama tabel harus cocok skema existing (`mojf_users`) agar lookup user terdaftar berhasil.
   - scan_citations: `mojf_users_Model.java:13` (`@Table(name="mojf_users")`), `framework-conventions/spring.md §Naming standards` (`users`)
   - fallback_if_wrong: jika tabel existing beda nama, sesuaikan `@Table(name=...)`.
-- [ ] **OQ-DM-2** [P3] [tech / recommend] [conf: low]: update `last_login` saat login sukses? newmojf punya kolomnya tapi `/dologin` tidak terlihat mengupdatenya. — resolve: lihat Auto-Classification Review
+- [x] **OQ-DM-2** [P3] [tech / recommend] [conf: low]: update `last_login` saat login sukses? newmojf punya kolomnya tapi `/dologin` tidak terlihat mengupdatenya. → **Resolved v1.3** (2026-07-23, implementation-verified, commit 6783558 U-008): VERIFIED — v1 read-only, tidak ada write `last_login`. `AuthUserController` hanya panggil `userRepository.findByUname` (read); tidak ada `setLastLogin`/`save`. Field `lastLogin` tetap ada di entity untuk mapping kolom DB, tapi tidak di-write di flow login. Sesuai rekomendasi (replikasi verbatim pola newmojf). Audit-login = future enhancement jika PO minta.
   - recommendation: Tidak update `last_login` di v1 (replikasi verbatim pola newmojf yang hanya lookup, tidak write).
   - rationale: `/dologin` newmojf hanya read user via `findUserAccount`; menambah write `last_login` = scope creep di luar replikasi.
   - scan_citations: `AuthUserController.java:130` (read-only lookup), `mojf_users_Model.java:39-40` (kolom last_login ada)
   - fallback_if_wrong: jika PO ingin audit login, tambahkan `@Transactional` write di service layer.
-- [ ] **OQ-DM-3** [P3] [tech / recommend] [conf: medium]: strategi DDL — Hibernate `ddl-auto=none` (sesuai newmojf, skema dikelola eksternal) atau `update`/Flyway? — resolve: lihat Auto-Classification Review
+- [x] **OQ-DM-3** [P3] [tech / recommend] [conf: medium]: strategi DDL — Hibernate `ddl-auto=none` (sesuai newmojf, skema dikelola eksternal) atau `update`/Flyway? → **Resolved v1.3** (2026-07-23, implementation-verified, commit 6595b3b U-008): VERIFIED — `application.yaml` `spring.jpa.hibernate.ddl-auto: none`. Sesuai cabang OQ-AR-2 (pakai DB newmojf existing): skema `mojf_users` dikelola eksternal/DBA, Hibernate tidak mengubah skema. Flyway tidak dipakai di v1 (skema existing sudah ada); jika future migrasi ke DB baru khusus coresystembackend, pertimbangkan Flyway.
   - recommendation: `spring.jpa.hibernate.ddl-auto=none` (skema dikelola DBA/eksternal, replikasi pola newmojf).
   - rationale: newmojf pakai `ddl-auto=none` (application-test.properties:3); skema tabel `users` sudah ada di DB target. `none` mencegah Hibernate mengubah skema produksi.
   - scan_citations: `application-test.properties:3` (`ddl-auto=none`), `framework-conventions/spring.md §Idioms`
