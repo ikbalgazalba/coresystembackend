@@ -1,5 +1,5 @@
 package com.coresystem.coresystembackend.entity;
-// SDD-PROVENANCE: U-002 | vault: .mega-sdd/vaults/jwt-login | replicated from newmojf mojf_users_Model (jakarta.persistence, table=users)
+// SDD-PROVENANCE: U-002 | vault: .mega-sdd/vaults/jwt-login | replicated from newmojf mojf_users_Model (jakarta.persistence, table=mojf_users — OQ-DM-1 RESOLVED: newmojf existing DB uses mojf_users)
 
 import java.util.Date;
 
@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "users")
+@Table(name = "mojf_users")
 public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
