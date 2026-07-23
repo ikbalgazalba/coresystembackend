@@ -2,133 +2,132 @@ package com.coresystem.coresystembackend.controller;
 
 import com.coresystem.coresystembackend.dto.JwtResponse;
 import com.coresystem.coresystembackend.dto.LoginRequest;
+import com.coresystem.coresystembackend.dto.MessageResponse;
 import com.coresystem.coresystembackend.entity.Users;
 import com.coresystem.coresystembackend.repository.UserRepository;
 import com.coresystem.coresystembackend.security.JwtUtils;
 import com.coresystem.coresystembackend.service.LdapUcsService;
 import com.coresystem.coresystembackend.service.LdapUcsService.LdapAuthResult;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Tests for AuthUserController login endpoint.
  *
- * <p>Uses @WebMvcTest slice with @MockBean for services.
- * Security filters are automatically added; for unit testing the controller logic,
- * we test the raw controller behavior.
+ * <p>Pure unit test — no Spring context needed (Boot 4.1.1 does not ship
+ * @WebMvcTest in spring-boot-test-autoconfigure; spring-security-test is
+ * not on the test classpath). Controller is instantiated directly with
+ * mocked collaborators.
  */
-@WebMvcTest(AuthUserController.class)
 class AuthUserControllerTest {
 
-	@Autowired
-	private MockMvc mockMvc;
+    private LdapUcsService ldapUcsService;
+    private JwtUtils jwtUtils;
+    private UserRepository userRepository;
+    private AuthUserController controller;
 
-	@Autowired
-	private ObjectMapper objectMapper;
+    @BeforeEach
+    void setUp() {
+        ldapUcsService = mock(LdapUcsService.class);
+        jwtUtils = mock(JwtUtils.class);
+        userRepository = mock(UserRepository.class);
+        controller = new AuthUserController(ldapUcsService, jwtUtils, userRepository);
+    }
 
-	@MockitoBean
-	private LdapUcsService ldapUcsService;
+    @Test
+    void loginSuccess_returns200JwtResponse() {
+        // Given: LDAP returns success code "00"
+        LdapAuthResult successResult = new LdapAuthResult("00", "Success");
+        when(ldapUcsService.authLDAPNew("testuser", "testpass")).thenReturn(successResult);
+        when(jwtUtils.generateTokenFromUname("testuser")).thenReturn("mock-jwt-token");
 
-	@MockitoBean
-	private JwtUtils jwtUtils;
+        Users mockUser = new Users();
+        mockUser.setId(42L);
+        mockUser.setUname("testuser");
+        mockUser.setKodeMitra("MITRA001");
+        mockUser.setUrole(5L);
+        when(userRepository.findByUname("testuser")).thenReturn(Optional.of(mockUser));
 
-	@MockitoBean
-	private UserRepository userRepository;
+        LoginRequest req = new LoginRequest();
+        req.setUname("testuser");
+        req.setPass("testpass");
 
-	@Test
-	void loginSuccess_returns200JwtResponse() throws Exception {
-		// Given: LDAP returns success code "00"
-		LdapAuthResult successResult = new LdapAuthResult("00", "Success");
-		when(ldapUcsService.authLDAPNew("testuser", "testpass")).thenReturn(successResult);
-		when(jwtUtils.generateTokenFromUname("testuser")).thenReturn("mock-jwt-token");
+        // When
+        ResponseEntity<?> response = controller.login(req);
 
-		Users mockUser = new Users();
-		mockUser.setId(42L);
-		mockUser.setUname("testuser");
-		mockUser.setKodeMitra("MITRA001");
-		mockUser.setUrole(5L);
-		when(userRepository.findByUname("testuser")).thenReturn(Optional.of(mockUser));
+        // Then
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        JwtResponse body = (JwtResponse) response.getBody();
+        assertEquals("mock-jwt-token", body.getToken());
+        assertEquals(42L, body.getId());
+        assertEquals("testuser", body.getUname());
+        assertEquals("MITRA001", body.getMitKode());
+        assertEquals("ROLE_5", body.getUrole());
+    }
 
-		LoginRequest request = new LoginRequest();
-		request.setUname("testuser");
-		request.setPass("testpass");
+    @Test
+    void ldapNull_returns400FailedToConnect() {
+        // Given: LDAP service returns null (connection failure)
+        when(ldapUcsService.authLDAPNew(anyString(), anyString())).thenReturn(null);
 
-		// When & Then: POST /api/auth/dologin returns 200 with JwtResponse
-		mockMvc.perform(post("/api/auth/dologin")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(request)))
-				.andExpect(status().isOk())
-				.andExpect(content().string(containsString("mock-jwt-token")))
-				.andExpect(content().string(containsString("testuser")))
-				.andExpect(content().string(containsString("MITRA001")))
-				.andExpect(content().string(containsString("ROLE_5")));
-	}
+        LoginRequest req = new LoginRequest();
+        req.setUname("testuser");
+        req.setPass("testpass");
 
-	@Test
-	void ldapNull_returns400FailedToConnect() throws Exception {
-		// Given: LDAP service returns null (connection failure)
-		when(ldapUcsService.authLDAPNew(anyString(), anyString())).thenReturn(null);
+        // When
+        ResponseEntity<?> response = controller.login(req);
 
-		LoginRequest request = new LoginRequest();
-		request.setUname("testuser");
-		request.setPass("testpass");
+        // Then
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        MessageResponse body = (MessageResponse) response.getBody();
+        assertEquals("Failed to connect to LDAP service", body.getMessage());
+    }
 
-		// When & Then: POST /api/auth/dologin returns 400 with message
-		mockMvc.perform(post("/api/auth/dologin")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(request)))
-				.andExpect(status().isBadRequest())
-				.andExpect(content().string(containsString("Failed to connect to LDAP service")));
-	}
+    @Test
+    void badCredentials_returns400AuthenticationFailed() {
+        // Given: LDAP returns non-success code (e.g., "99")
+        LdapAuthResult failResult = new LdapAuthResult("99", "Invalid credentials - internal detail");
+        when(ldapUcsService.authLDAPNew(anyString(), anyString())).thenReturn(failResult);
 
-	@Test
-	void badCredentials_returns400AuthenticationFailed() throws Exception {
-		// Given: LDAP returns non-success code (e.g., "99" for invalid credentials)
-		LdapAuthResult failResult = new LdapAuthResult("99", "Invalid credentials - internal detail");
-		when(ldapUcsService.authLDAPNew(anyString(), anyString())).thenReturn(failResult);
+        LoginRequest req = new LoginRequest();
+        req.setUname("testuser");
+        req.setPass("wrongpass");
 
-		LoginRequest request = new LoginRequest();
-		request.setUname("testuser");
-		request.setPass("wrongpass");
+        // When
+        ResponseEntity<?> response = controller.login(req);
 
-		// When & Then: POST /api/auth/dologin returns 400 with GENERIC message (not raw description)
-		mockMvc.perform(post("/api/auth/dologin")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(request)))
-				.andExpect(status().isBadRequest())
-				.andExpect(content().string(containsString("Authentication failed")));
-	}
+        // Then: generic message, NOT raw responseDescription (OQ-FL-3)
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        MessageResponse body = (MessageResponse) response.getBody();
+        assertEquals("Authentication failed", body.getMessage());
+    }
 
-	@Test
-	void exception_returns401AuthenticationFailed() throws Exception {
-		// Given: LDAP service throws exception
-		when(ldapUcsService.authLDAPNew(anyString(), anyString()))
-				.thenThrow(new RuntimeException("LDAP connection error"));
+    @Test
+    void exception_returns401AuthenticationFailed() {
+        // Given: LDAP service throws exception
+        when(ldapUcsService.authLDAPNew(anyString(), anyString()))
+                .thenThrow(new RuntimeException("LDAP connection error"));
 
-		LoginRequest request = new LoginRequest();
-		request.setUname("testuser");
-		request.setPass("testpass");
+        LoginRequest req = new LoginRequest();
+        req.setUname("testuser");
+        req.setPass("testpass");
 
-		// When & Then: POST /api/auth/dologin returns 401 with generic message
-		mockMvc.perform(post("/api/auth/dologin")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(request)))
-				.andExpect(status().isUnauthorized())
-				.andExpect(content().string(containsString("Authentication failed")));
-	}
+        // When
+        ResponseEntity<?> response = controller.login(req);
+
+        // Then: 401 with generic message (§B-007)
+        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        MessageResponse body = (MessageResponse) response.getBody();
+        assertEquals("Authentication failed", body.getMessage());
+    }
 }
