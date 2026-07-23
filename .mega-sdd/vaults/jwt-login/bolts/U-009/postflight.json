@@ -1,0 +1,19 @@
+{
+  "unit": "U-009",
+  "status": "pass",
+  "grammar": "v1-bullet",
+  "rules": [
+    {
+      "rule": "FILE_PRESENCE src/test/java/com/coresystem/coresystembackend/AuthLoginIntegrationTest.java",
+      "type": "FILE_PRESENCE_RULE",
+      "pre_state": "absent",
+      "post_state": "present",
+      "verdict": "pass",
+      "evidence": "file exists, sha256 662dbb1cc3cab0711b1e58b7c7f3bcc29ad70fdfec315ad867635a2dd2e8911e"
+    }
+  ],
+  "test_result": "Tests run: 4, Failures: 0, Errors: 0 — BUILD SUCCESS (mvn test -Dtest=AuthLoginIntegrationTest)",
+  "deviation": "@SpringBootTest + manual MockMvc + @MockitoBean (Boot 4.1.1 removed @WebMvcTest/@AutoConfigureMockMvc; spring-security-test not on classpath). DataSource/JPA exclusion uses Boot 4.1.1 repackaged paths (org.springframework.boot.jdbc.autoconfigure / org.springframework.boot.hibernate.autoconfigure).",
+  "provenance_trailer": "n/a — test file (no mandatory trailer for tests)",
+  "code_commit": "454d69a"
+}

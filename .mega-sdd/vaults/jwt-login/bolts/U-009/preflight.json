@@ -1,0 +1,28 @@
+{
+  "unit": "U-009",
+  "grammar": "v1-bullet",
+  "snapshot_ts_iso": "2026-07-23T01:00:00Z",
+  "head": "be71efdfc5c0-43e9-a20e-ee3a86d6f893",
+  "rules": [
+    {
+      "rule": "FILE_PRESENCE src/test/java/com/coresystem/coresystembackend/AuthLoginIntegrationTest.java",
+      "type": "FILE_PRESENCE_RULE",
+      "pre_state": "absent",
+      "post_expectation": "present"
+    }
+  ],
+  "checks": {
+    "superpowers_bridge": "real install (superpowers 6.1.1); default executor = mega-sdd:bolt-implementer",
+    "unit_validity": "pass — frontmatter parses, task_type=create, target_files=1 create, acceptance_test has type:test, depends_on=[U-008] resolved",
+    "repo_state": "clean-of-src-changes",
+    "test_framework": "mvn 3.9.16; @MockitoBean available in spring-test-7.0.8; MockMvcBuilders available",
+    "boot_4_1_1_constraints": "@WebMvcTest removed from spring-boot-test-autoconfigure; @AutoConfigureMockMvc removed; spring-security-test not on classpath; must use @SpringBootTest + manual MockMvc + exclude DataSource"
+  },
+  "classpath_facts": {
+    "MockitoBean_package": "org.springframework.test.context.bean.override.mockito.MockitoBean",
+    "MockMvcBuilders_package": "org.springframework.test.web.servlet.setup.MockMvcBuilders",
+    "no_AutoConfigureMockMvc": true,
+    "no_WebMvcTest": true,
+    "no_spring_security_test": true
+  }
+}
