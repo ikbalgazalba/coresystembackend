@@ -1,5 +1,5 @@
 {
-  "ts": "2026-07-23T09:56:22.961984Z",
+  "ts": "2026-07-23T12:03:35.082438Z",
   "status": "FAIL",
   "validator": "validate-vault-binding-coverage.sh",
   "slice4_summary": {
@@ -12,10 +12,10 @@
   "slice5_summary": {
     "jwt-login": {
       "units_count": 9,
-      "units_without_bolt_report": 2
+      "units_without_bolt_report": 0
     }
   },
-  "issues_count": 2,
+  "issues_count": 1,
   "issues": [
     {
       "halt_type": "vault_binding_coverage_gap",
@@ -25,16 +25,6 @@
         "F-U-001"
       ],
       "binding_doc": ".mega-sdd/vaults/jwt-login/binding.md",
-      "severity": "advisory"
-    },
-    {
-      "halt_type": "units_bolts_partial_execution",
-      "bound_vault": "jwt-login",
-      "detail": "2 of 9 units lack bolt-report.md (partial execution)",
-      "units_without_bolt": [
-        "U-008",
-        "U-009"
-      ],
       "severity": "advisory"
     }
   ],

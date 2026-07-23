@@ -29,3 +29,14 @@
 {"ts":"2026-07-23T09:56:22Z","path":"src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java","tool":"Write","session":"c0efa85c-c5c0-43e9-a20e-ee3a86d6f893"}
 {"ts":"2026-07-23T09:56:22Z","path":"src/main/resources/application.yaml","tool":"Write","session":"c0efa85c-c5c0-43e9-a20e-ee3a86d6f893"}
 {"ts":"2026-07-23T09:56:22Z","path":"src/test/java/com/coresystem/coresystembackend/controller/AuthUserControllerTest.java","tool":"Write","session":"c0efa85c-c5c0-43e9-a20e-ee3a86d6f893"}
+{"ts":"2026-07-23T10:56:51Z","path":"src/test/java/com/coresystem/coresystembackend/controller/AuthUserControllerTest.java","tool":"Write","session":"c0efa85c-c5c0-43e9-a20e-ee3a86d6f893"}
+{"ts":"2026-07-23T10:58:29Z","path":"src/test/java/com/coresystem/coresystembackend/controller/AuthUserControllerTest.java","tool":"Write","session":"c0efa85c-c5c0-43e9-a20e-ee3a86d6f893"}
+{"ts":"2026-07-23T11:27:45Z","path":"src/test/java/com/coresystem/coresystembackend/AuthLoginIntegrationTest.java","tool":"Write","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T11:42:18Z","path":"src/test/java/com/coresystem/coresystembackend/AuthLoginIntegrationTest.java","tool":"Edit","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T11:45:53Z","path":"src/test/java/com/coresystem/coresystembackend/CoresystembackendApplicationTests.java","tool":"Edit","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T11:48:47Z","path":"src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java","tool":"Edit","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T11:48:55Z","path":"src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java","tool":"Edit","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T11:50:13Z","path":"src/test/java/com/coresystem/coresystembackend/CoresystembackendApplicationTests.java","tool":"Edit","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T11:51:53Z","path":"/home/ikbalgazalba/.claude/projects/-home-ikbalgazalba-AI-Project-coresystembackend/memory/mega-sdd-execute-bolts-progress.md","tool":"Write","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T12:02:30Z","path":"src/main/java/com/coresystem/coresystembackend/entity/Users.java","tool":"Edit","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T12:03:34Z","path":"src/main/java/com/coresystem/coresystembackend/entity/Users.java","tool":"Edit","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}

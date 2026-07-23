@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.coresystem.coresystembackend.config.SecurityConfigTest" time="0.31" tests="2" errors="0" skipped="0" failures="0" flakes="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.coresystem.coresystembackend.AuthLoginIntegrationTest" time="4.839" tests="4" errors="0" skipped="0" failures="0" flakes="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.jnu.encoding" value="UTF-8"/>
@@ -62,8 +62,10 @@
     <property name="java.class.version" value="65.0"/>
     <property name="LOGGED_APPLICATION_NAME" value="[coresystembackend] "/>
   </properties>
-  <testcase name="permitAllForAuthEndpoint" classname="com.coresystem.coresystembackend.config.SecurityConfigTest" time="0.038">
-    <system-out><![CDATA[
+  <testcase name="loginBadCredentials_returns400" classname="com.coresystem.coresystembackend.AuthLoginIntegrationTest" time="0.266">
+    <system-out><![CDATA[18:50:41.117 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.coresystem.coresystembackend.CoresystembackendApplication for test class com.coresystem.coresystembackend.AuthLoginIntegrationTest
+18:50:41.224 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.coresystem.coresystembackend.CoresystembackendApplication for test class com.coresystem.coresystembackend.AuthLoginIntegrationTest
+
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
 ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
@@ -73,20 +75,43 @@
 
  :: Spring Boot ::       (v4.1.1-SNAPSHOT)
 
-2026-07-23T18:50:46.027+07:00  INFO 244053 --- [coresystembackend] [           main] c.c.c.config.SecurityConfigTest          : Starting SecurityConfigTest using Java 21.0.11 with PID 244053 (started by ikbalgazalba in /home/ikbalgazalba/AI/Project/coresystembackend)
-2026-07-23T18:50:46.028+07:00  INFO 244053 --- [coresystembackend] [           main] c.c.c.config.SecurityConfigTest          : No active profile set, falling back to 1 default profile: "default"
-2026-07-23T18:50:46.114+07:00  INFO 244053 --- [coresystembackend] [           main] c.c.c.config.SecurityConfigTest          : Started SecurityConfigTest in 0.159 seconds (process running for 6.321)
-2026-07-23T18:50:46.119+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2026-07-23T18:50:46.120+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2026-07-23T18:50:46.134+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 14 ms
-2026-07-23T18:50:46.149+07:00  WARN 244053 --- [coresystembackend] [           main] o.s.web.servlet.PageNotFound             : No mapping for GET /api/auth/dologin
-2026-07-23T18:50:46.152+07:00  WARN 244053 --- [coresystembackend] [           main] o.s.web.servlet.PageNotFound             : No endpoint GET /api/auth/dologin.
+2026-07-23T18:50:41.730+07:00  INFO 244053 --- [coresystembackend] [           main] c.c.c.AuthLoginIntegrationTest           : Starting AuthLoginIntegrationTest using Java 21.0.11 with PID 244053 (started by ikbalgazalba in /home/ikbalgazalba/AI/Project/coresystembackend)
+2026-07-23T18:50:41.732+07:00  INFO 244053 --- [coresystembackend] [           main] c.c.c.AuthLoginIntegrationTest           : No active profile set, falling back to 1 default profile: "default"
+2026-07-23T18:50:44.213+07:00  WARN 244053 --- [coresystembackend] [           main] .s.a.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 5964a53f-600a-48ac-a986-98b10cdf9673
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-07-23T18:50:44.226+07:00  INFO 244053 --- [coresystembackend] [           main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-07-23T18:50:45.165+07:00  INFO 244053 --- [coresystembackend] [           main] c.c.c.AuthLoginIntegrationTest           : Started AuthLoginIntegrationTest in 3.866 seconds (process running for 5.372)
+2026-07-23T18:50:45.222+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-07-23T18:50:45.222+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-07-23T18:50:45.224+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+]]></system-out>
+    <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (/home/ikbalgazalba/.m2/repository/net/bytebuddy/byte-buddy-agent/1.18.11/byte-buddy-agent-1.18.11.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+  </testcase>
+  <testcase name="loginSuccess_returnsJwtResponse" classname="com.coresystem.coresystembackend.AuthLoginIntegrationTest" time="0.024">
+    <system-out><![CDATA[2026-07-23T18:50:45.465+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-07-23T18:50:45.466+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-07-23T18:50:45.468+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
 ]]></system-out>
   </testcase>
-  <testcase name="protectedPathRequiresAuth" classname="com.coresystem.coresystembackend.config.SecurityConfigTest" time="0.081">
-    <system-out><![CDATA[2026-07-23T18:50:46.160+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2026-07-23T18:50:46.161+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2026-07-23T18:50:46.169+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 8 ms
+  <testcase name="loginLdapNull_returns400FailedToConnect" classname="com.coresystem.coresystembackend.AuthLoginIntegrationTest" time="0.016">
+    <system-out><![CDATA[2026-07-23T18:50:45.494+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-07-23T18:50:45.494+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-07-23T18:50:45.497+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 3 ms
+]]></system-out>
+  </testcase>
+  <testcase name="loginException_returns401" classname="com.coresystem.coresystembackend.AuthLoginIntegrationTest" time="0.024">
+    <system-out><![CDATA[2026-07-23T18:50:45.513+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-07-23T18:50:45.514+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-07-23T18:50:45.516+07:00  INFO 244053 --- [coresystembackend] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 2 ms
 ]]></system-out>
   </testcase>
 </testsuite>

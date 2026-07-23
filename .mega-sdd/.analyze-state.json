@@ -1,6 +1,6 @@
 {
   "status": "FAIL",
-  "analyzed_at": "2026-07-23T09:50:33Z",
+  "analyzed_at": "2026-07-23T12:05:33Z",
   "boundaries": {
     "binding_units_handoff": {
       "status": "PASS",
@@ -13,7 +13,7 @@
       "detail": ""
     },
     "bolt_artifacts": {
-      "status": "PASS",
+      "status": "FAIL",
       "state_file": ".bolt-artifacts-state.json",
       "detail": ""
     },
@@ -125,7 +125,7 @@
     "ui_deferral (advisory)": {
       "status": "PASS",
       "state_file": ".ui-deferral-state.json",
-      "detail": "bolt_reports_scanned=7; units_with_ui_contract=0; deferral_count=0"
+      "detail": "bolt_reports_scanned=9; units_with_ui_contract=0; deferral_count=0"
     },
     "vault_flow_staging (advisory)": {
       "status": "PASS",
@@ -136,7 +136,7 @@
   "vault_consistency": [],
   "validators_run": 14,
   "validators_total": 26,
-  "validators_pass": 8,
-  "validators_fail": 2,
+  "validators_pass": 7,
+  "validators_fail": 3,
   "validators_skip": 10
 }
