@@ -40,3 +40,5 @@
 {"ts":"2026-07-23T11:51:53Z","path":"/home/ikbalgazalba/.claude/projects/-home-ikbalgazalba-AI-Project-coresystembackend/memory/mega-sdd-execute-bolts-progress.md","tool":"Write","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
 {"ts":"2026-07-23T12:02:30Z","path":"src/main/java/com/coresystem/coresystembackend/entity/Users.java","tool":"Edit","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
 {"ts":"2026-07-23T12:03:34Z","path":"src/main/java/com/coresystem/coresystembackend/entity/Users.java","tool":"Edit","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T12:30:15Z","path":"run-app.sh","tool":"Write","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}
+{"ts":"2026-07-23T12:34:18Z","path":"/home/ikbalgazalba/.claude/projects/-home-ikbalgazalba-AI-Project-coresystembackend/memory/mega-sdd-runtime-debug-keycloak-500.md","tool":"Write","session":"7891cd45-2198-4c35-bfcf-5a845fdac80d"}

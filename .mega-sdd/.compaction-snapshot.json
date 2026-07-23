@@ -1,13 +1,13 @@
 {
- "ts": "2026-07-22T11:26:04.455297Z",
+ "ts": "2026-07-23T12:44:24.813070Z",
  "trigger": "manual",
- "head": "0ef2a1f87f7e7d23f439c5a5b0079c8fdb05b56a",
+ "head": "66b64797decc5e9d8e2e8b1573a678e2d8b8419b",
  "phase": {
   "vault": "jwt-login",
   "units_total": 9,
-  "bolts_done": 6,
-  "last_bolt_unit": "U-003",
-  "guess": "executing bolts (6/9 done)"
+  "bolts_done": 9,
+  "last_bolt_unit": "U-009",
+  "guess": "bolts complete"
  },
  "pending_sync_open": 0
 }
