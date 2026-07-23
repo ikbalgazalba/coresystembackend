@@ -1,0 +1,39 @@
+{
+  "unit": "U-008",
+  "status": "pass",
+  "grammar": "v1-bullet",
+  "rules": [
+    {
+      "rule": "FILE_PRESENCE src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java",
+      "type": "FILE_PRESENCE_RULE",
+      "pre_state": "absent",
+      "post_state": "present",
+      "verdict": "pass",
+      "evidence": "file exists, sha256 98b5696c7e339804de1af06f72ef9141c0f072f392bbdf787be047278759c4c4"
+    },
+    {
+      "rule": "NAMING_RULE controller/*.java PascalCase",
+      "type": "NAMING_RULE",
+      "pre_state": "n/a (package absent)",
+      "post_state": "AuthUserController.java — PascalCase",
+      "verdict": "pass",
+      "evidence": "only controller file: AuthUserController.java (matches /^[A-Z][A-Za-z0-9]+\\.java$/)"
+    }
+  ],
+  "anti_patterns_verified": {
+    "no_field_Autowired": true,
+    "no_CrossOrigin": true,
+    "no_entity_in_response": true,
+    "no_hardcoded_jwtSecret": true,
+    "no_raw_responseDescription_echo": true,
+    "mitKode_urole_verbatim": true,
+    "constructor_injection": true,
+    "ddl_auto_none": true,
+    "jwtSecret_env_placeholder": true,
+    "datasource_env_placeholder": true
+  },
+  "test_result": "Tests run: 4, Failures: 0, Errors: 0 — BUILD SUCCESS (mvn test -Dtest=AuthUserControllerTest)",
+  "deviation": "Test approach: pure unit test (controller instantiated directly with mocks) instead of @WebMvcTest (Boot 4.1.1 removed it from spring-boot-test-autoconfigure; spring-security-test not on classpath). This is the simplest, most robust approach for this controller.",
+  "provenance_trailer": "present (confirmed in AuthUserController.java line 105)",
+  "code_commit": "6595b3be5e1f501d603ddd94bcb8e3baac4df9b5 + 6783558ccb8a97b2ad104024b30e7b38f5c4a432 (test rewrite)"
+}
