@@ -1,0 +1,33 @@
+# docker-compose.yml — run coresystembackend in Docker.
+# Secrets come from env_file (.env, gitignored) — NEVER baked into the image (HR-1, §D-002).
+# Trust store mounted as a read-only volume (HR-1, §B-006 — mounted, not bypassed).
+# SDD-PROVENANCE: U-004 | vault: .mega-sdd/vaults/api-platform | docker-compose (env_file + trust-store volume + actuator healthcheck)
+services:
+  app:
+    build: .
+    image: coresystembackend:latest
+    env_file: .env
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+      JAVA_OPTS: >-
+        -Djavax.net.ssl.trustStore=/opt/bankmega-truststore/bankmega-truststore.p12
+        -Djavax.net.ssl.trustStorePassword=${TRUSTSTORE_PASSWORD:-changeit}
+        -Djavax.net.ssl.trustStoreType=PKCS12
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${TRUSTSTORE_HOST_PATH:-/home/ikbalgazalba/.ssl-truststores/bankmega-truststore.p12}:/opt/bankmega-truststore/bankmega-truststore.p12:ro
+    healthcheck:
+      # Readiness probe via /actuator/health (real app-health, not just liveness).
+      # The U-003 runtime image is eclipse-temurin:21-jre on Ubuntu base, which DOES
+      # ship wget (verified: /usr/bin/wget, GNU Wget 1.25.0) — despite the earlier
+      # bolt-report caveat that assumed no curl/wget. So the probe hits the actuator
+      # health endpoint directly. (curl is absent; wget is the available client.)
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:${SERVER_PORT:-8080}/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+# No postgres service — env-only wiring to existing newmojf UAT DB at 10.95.1.43 (OQ-AP-4 ACCEPT env-only).
+# No resource limits (OQ-AP-6 fallback ACCEPT — no deploy.resources.limits).

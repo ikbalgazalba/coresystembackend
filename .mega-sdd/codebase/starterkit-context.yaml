@@ -1,66 +1,208 @@
 # starterkit-context.yaml
 # Produced by mega-sdd:scan-codebase deep-scan stage.
-# Repo is a Spring Initializr skeleton — NO business code exists yet, so all pattern
-# slices are `not_detected` (this is correct, not a gap). The pack-driven `patterns:`
-# block below is the authoritative convention source for NEW code (consumed by
-# generate-intent pack-aware vault + execute-bolts context enrichment).
-#
-# Downstream consumers: bind-codebase treats these as the starterkit baseline;
-# execute-bolts injects `patterns:` as the Codebase patterns dispatch line.
+# v3.1 schema. Repo is now FEATURE-BEARING (jwt-login vault landed): auth/authz/libs/reuse slices
+# carry real detections with citations; ui_ux stays not_detected (REST-only, no presentation layer).
+# The pack-driven `patterns:` block is the authoritative convention source consumed by
+# generate-intent (pack-aware vault) + execute-bolts (Codebase patterns dispatch line).
 
-framework:
-  name: spring
-  version: "4.1.1-SNAPSHOT (Boot 4.x)"
-  pack_path: references/framework-conventions/spring.md
-  confidence: high
+starterkit_context:
+  schema_version: "3.1"
+  generated_by: scan-codebase@2.16.0
+  generated_at: 2026-07-24T03:49:00Z
+  framework: spring-boot
+  framework_version: "4.1.1-SNAPSHOT (Boot 4.x, Spring Security 7.x)"
+  framework_pack: spring.md
+  partial: false
+  partial_slices: []
+  reused_slices: []   # full re-dispatch: skeleton-era cache was stale (context changed skeleton->feature-bearing)
 
-# Pattern slices — all not_detected because the skeleton has no implementation code.
-auth:
-  status: not_detected
-  reason: "No spring-boot-starter-security, no SecurityFilterChain, no UserDetailsService, no JWT code present."
-  _source: "scan-codebase §6 Pattern signatures + pom.xml dependency analysis"
+  auth:
+    status: detected
+    mechanism: jwt
+    auth_source: ldap
+    token:
+      lib: jjwt 0.12.6
+      signing_alg: HS512
+      _source:
+        - "src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:35-43 (signWith HS512)"
+        - "src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:31-33 (HMAC key from BASE64-decoded secret)"
+        - "manifest: io.jsonwebtoken:jjwt-api:0.12.6"
+    filter_chain:
+      rules:
+        - "/api/auth/** -> permitAll"
+        - "anyRequest -> authenticated"
+      session_policy: STATELESS
+      csrf: disabled
+      _source:
+        - "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:52-64"
+    bearer_filter:
+      present: false
+      class: null
+      _source:
+        - "absent — no OncePerRequestFilter detected"
+        - "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:52-64 (filterChain adds no custom filter before UsernamePasswordAuthenticationFilter)"
+        - "src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:54-64 (validateJwtToken exists but is never invoked by any filter in the chain)"
+    password_encoder: "delegating (PasswordEncoderFactories.createDelegatingPasswordEncoder, BCrypt default) — bean present but not exercised by the LDAP auth flow"
+    _source:
+      - "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:52-64 (filter chain)"
+      - "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:73-76 (delegating PasswordEncoder bean)"
+      - "src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:25-43 (HS512 JWT gen)"
+      - "src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:54-64 (validateJwtToken — never wired)"
+      - "src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java:111-131 (authLDAPNew — LDAP UCS verify)"
+      - "src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java:54-109 (POST /api/auth/dologin)"
 
-authz:
-  status: not_detected
-  reason: "No @EnableMethodSecurity, no @PreAuthorize/@Secured, no authorizeHttpRequests rules present."
-  _source: "scan-codebase §6 Pattern signatures"
+  authz:
+    status: detected
+    method_security:
+      enabled: false
+      annotations: []
+      _source: ["none found (grep @PreAuthorize/@Secured/@Roles/@EnableMethodSecurity across src/main/java returned NO MATCHES)"]
+    url_rules:
+      - path: "/api/auth/**"
+        access: permitAll
+        _source: ["src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:60"]
+      - path: anyRequest
+        access: authenticated
+        _source: ["src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:61"]
+    role_model:
+      encoding: "Users.urole field on entity; prefixed 'ROLE_' when embedded in JwtResponse payload. NOT wired into any access decision — no hasRole matcher in the filter chain, no GrantedAuthority/UserDetailsService. Role is emitted as a claim in the JWT response but not enforced as authorization."
+      _source: ["src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java:82", "src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java:73"]
+    entrypoints:
+      public: ["/api/auth/**"]
+      _source: ["src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:60"]
+    mechanism: SecurityFilterChain (filterChain @Bean using HttpSecurity.authorizeHttpRequests DSL; @EnableWebSecurity on SecurityConfig)
+    _source: ["src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:40", "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:52", "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:59-61", "src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java:82"]
 
-ui_ux:
-  status: not_detected
-  reason: "REST-only backend intent; no templates/ or static/ dirs, no Thymeleaf, no frontend assets."
-  _source: "scan-codebase §1 structure + §6 View/component pattern"
+  ui_ux:
+    status: not_detected
+    reason: "REST-only backend (API-only); no templates/, no static/, no Thymeleaf/Freemarker, no frontend assets. exemplar_selection: n/a."
+    _source: "scan-codebase §1 structure + §6 View/component pattern"
 
-libs:
-  status: not_detected
-  reason: "Only spring-boot-starter + spring-boot-starter-test declared. No utility/helper/service classes exist."
-  _source: "pom.xml + scan-codebase §2 Public interfaces"
+  libs:
+    - name: spring-boot-starter
+      version: 4.1.1-SNAPSHOT
+      category: web
+      usage_hint: "Application bootstrap (@SpringBootApplication + SpringApplication.run) providing the Spring Boot auto-configuration core that the other starters build on."
+      _source: ["src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java:4", "src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java:10"]
+    - name: spring-boot-starter-web
+      version: 4.1.1-SNAPSHOT
+      category: web
+      usage_hint: "Embedded servlet container + REST/MVC annotation model (@RestController, @PostMapping, @RequestMapping, @RequestBody) backing the /api/auth/dologin login endpoint."
+      _source: ["src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java:14", "src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java:38", "src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java:54"]
+    - name: spring-boot-starter-security
+      version: 4.1.1-SNAPSHOT
+      category: security
+      usage_hint: "SecurityFilterChain bean configuring stateless JWT posture — permitAll /api/auth/**, STATELESS sessions, CSRF disabled, delegating PasswordEncoder, explicit-origin CORS."
+      _source: ["src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:9", "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:53", "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:74"]
+    - name: spring-boot-starter-data-jpa
+      version: 4.1.1-SNAPSHOT
+      category: persistence
+      usage_hint: "JpaRepository<Users, Long> with derived findByUname; JPA/Hibernate ORM over the mojf_users table (ddl-auto=none, show-sql=false)."
+      _source: ["src/main/java/com/coresystem/coresystembackend/repository/UserRepository.java:8", "src/main/java/com/coresystem/coresystembackend/repository/UserRepository.java:10", "src/main/resources/application.yaml:13"]
+    - name: postgresql
+      version: "not_detected (runtime, version managed by Spring Boot BOM)"
+      category: persistence
+      usage_hint: "JDBC driver class org.postgresql.Driver declared as spring.datasource.driver-class-name to connect Spring Data JPA to the PostgreSQL datasource URL."
+      _source: ["src/main/resources/application.yaml:12"]
+    - name: jjwt-api
+      version: 0.12.6
+      category: auth
+      usage_hint: "JJWT 0.12.x builder/parser API — generate HS512-signed JWT (subject=uname), parse/verifySignedClaims, validate token (Jwts.builder, Jwts.parser, JwtException)."
+      _source: ["src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:11", "src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:12", "src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:41"]
+    - name: jjwt-impl
+      version: 0.12.6
+      category: auth
+      usage_hint: "Runtime implementation of jjwt-api (compile-scoped jjwt-api delegates here); declared runtime-only, transitively exercised by Jwts.builder/parser in JwtUtils."
+      _source: ["pom.xml:73", "src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:36"]
+    - name: jjwt-jackson
+      version: 0.12.6
+      category: auth
+      usage_hint: "Jackson serialization support bundled with jjwt (runtime scope); used internally by jjwt-impl for JSON claim marshaling."
+      _source: ["pom.xml:80", "src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:36"]
+    - name: spring-web RestClient
+      version: "4.1.1-SNAPSHOT (via spring-boot-starter-web)"
+      category: http-client
+      usage_hint: "Synchronous RestClient (Spring 7.x replacement for RestTemplate/HttpURLConnection) for OAuth2 password-grant token fetch + HMAC-SHA512-signed verify-password GET against the LDAP UCS API."
+      _source: ["src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java:20", "src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java:146", "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:14", "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java:108"]
+    - name: jackson-databind
+      version: "not_detected (transitive via spring-boot-starter-web)"
+      category: web
+      usage_hint: "ObjectMapper/JsonNode to parse LDAP UCS token + verify-password JSON responses (access_token, responseCode, responseDescription)."
+      _source: ["src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java:22", "src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java:23", "src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java:218"]
+    - name: spring-boot-starter-test
+      version: 4.1.1-SNAPSHOT
+      category: test
+      usage_hint: "JUnit 5 (Jupiter) + @SpringBootTest context-load smoke test and integration tests with manual MockMvc setup (Boot 4.1.1 ships no @WebMvcTest/@AutoConfigureMockMvc); scope=test."
+      _source: ["src/test/java/com/coresystem/coresystembackend/CoresystembackendApplicationTests.java:4", "src/test/java/com/coresystem/coresystembackend/CoresystembackendApplicationTests.java:17", "src/test/java/com/coresystem/coresystembackend/AuthLoginIntegrationTest.java:18"]
+    - name: jakarta.persistence-api
+      version: "not_detected (transitive via spring-boot-starter-data-jpa)"
+      category: orm
+      usage_hint: "JPA entity mapping annotations (@Entity, @Table(name=mojf_users), @Id, @GeneratedValue IDENTITY, @Column) on the Users entity bound to the legacy mojf_users table."
+      _source: ["src/main/java/com/coresystem/coresystembackend/entity/Users.java:6", "src/main/java/com/coresystem/coresystembackend/entity/Users.java:13", "src/main/java/com/coresystem/coresystembackend/entity/Users.java:14"]
 
-# Pack-driven patterns — authoritative conventions for NEW code (from spring.md pack).
-# These are NOT detections; they are the starterkit's intended conventions.
-patterns:
-  file_location:
-    controllers: "src/main/java/<pkg>/controller/"
-    services: "src/main/java/<pkg>/service/"
-    repositories: "src/main/java/<pkg>/repository/"
-    entities: "src/main/java/<pkg>/entity/"
-    dtos: "src/main/java/<pkg>/dto/"
-    config: "src/main/java/<pkg>/config/"
-    exception_handlers: "src/main/java/<pkg>/exception/"
-    security_config: "src/main/java/<pkg>/config/SecurityConfig.java"
-    application_properties: "src/main/resources/application.yaml"
-    tests: "src/test/java/<pkg>/"
-  naming:
-    class_case: PascalCase
-    method_case: camelCase
-    controller_suffix: "Controller"
-    service_suffix: "Service"
-    repository_suffix: "Repository"
-    entity: "PascalCase singular noun (@Entity + @Id)"
-    dto_suffix: "Dto | Request | Response"
-    config_suffix: "Config"
-    test_suffix: "Test"
-    db_column: snake_case
-    db_table: snake_case plural
+  # Pack-driven patterns (Step 10.5.2.5) — confirmed against codebase-map.md §1.
+  # Generic semantic categories; pack spring.md told WHERE, deep-scan confirmed in real repo.
+  patterns:
+    controller:
+      location: "src/main/java/com/coresystem/coresystembackend/controller/"
+      naming: "{Domain}Controller.java"
+      extension: ".java"
+      _source: ["src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java:40"]
+      extras: { base_annotation: "@RestController", route_annotation: "@RequestMapping + @PostMapping" }
+    data_model:
+      location: "src/main/java/com/coresystem/coresystembackend/entity/"
+      naming: "{Entity}.java"
+      extension: ".java"
+      _source: ["src/main/java/com/coresystem/coresystembackend/entity/Users.java:13-15"]
+      extras: { orm: "JPA (jakarta.persistence)", table_mapping: "@Table(name=snake_case)" }
+    request_validator:
+      location: null
+      naming: null
+      extension: null
+      _source: []
+      extras: { note: "No Bean Validation layer present; @Valid not used on @RequestBody LoginRequest" }
+    business_logic:
+      location: "src/main/java/com/coresystem/coresystembackend/service/"
+      naming: "{Domain}Service.java"
+      extension: ".java"
+      _source: ["src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java:47"]
+      extras: { stereotype: "@Service", injection: "constructor injection (RestClient + @Value LDAP config)" }
+    test:
+      location: "src/test/java/com/coresystem/coresystembackend/"
+      naming: "{Subject}Test.java | {Subject}IntegrationTest.java | {Subject}Tests.java"
+      extension: ".java"
+      framework: "JUnit 5 (Jupiter) via spring-boot-starter-test"
+      _source: ["src/test/java/com/coresystem/coresystembackend/JwtUtilsTest.java", "src/test/java/com/coresystem/coresystembackend/AuthLoginIntegrationTest.java", "src/test/java/com/coresystem/coresystembackend/CoresystembackendApplicationTests.java"]
+      extras: { slice_annotations: ["@SpringBootTest"], note: "Boot 4.1.1 ships no @WebMvcTest/@AutoConfigureMockMvc — manual MockMvc" }
+    schema_migration:
+      location: null
+      naming: null
+      extension: null
+      _source: []
+      extras: { note: "ddl-auto=none; schema pre-exists in newmojf PostgreSQL DB, Hibernate manages NO DDL, no Flyway/Liquibase" }
+    route:
+      location: "controller classes (decorator-based, no central routes file)"
+      style: decorator-based
+      api_prefix: "/api"
+      web_file: null
+      api_file: null
+      _source: ["src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java:39"]
+      extras: { annotation: "@RequestMapping(\"/api/auth\") + @PostMapping(\"/dologin\")" }
+    view:
+      location: null
+      naming: null
+      extension: null
+      exemplar_selection: "n/a"
+      _source: []
+      extras: { note: "API-only stack — no presentation layer" }
+    component:
+      location: null
+      naming: null
+      extension: null
+      _source: []
+      extras: { note: "API-only stack — no component layer" }
+
+  # Spring pack idioms (authoritative conventions for NEW code, from spring.md)
   idioms:
     - "Constructor injection over @Autowired field injection (omit @Autowired on single-ctor)"
     - "Layered: @RestController -> @Service -> @Repository"
@@ -70,24 +212,32 @@ patterns:
     - "@Transactional at service layer for multi-step writes"
     - "@RestControllerAdvice for global exception handling"
   security_idioms:
-    input_validation: "Bean Validation @Valid/@Validated on @RequestBody DTOs"
+    input_validation: "Bean Validation @Valid/@Validated on @RequestBody DTOs (NOT YET adopted in this repo)"
     password_hashing: "BCryptPasswordEncoder via PasswordEncoderFactories.createDelegatingPasswordEncoder()"
-    authn_point: "SecurityFilterChain bean + authorizeHttpRequests + @EnableMethodSecurity"
-    secrets: "Externalize via env vars / placeholders in application.yaml; never commit literals"
+    authn_point: "SecurityFilterChain bean + authorizeHttpRequests"
+    secrets: "Externalize via env vars / ${VAR} placeholders in application.yaml; never commit literals (constitution §D-002)"
   testing:
     runner: "./mvnw test"
     framework: "JUnit 5 (Jupiter)"
-    slice_annotations: ["@SpringBootTest", "@WebMvcTest", "@DataJpaTest", "@MockBean"]
-    http_layer: "MockMvc / TestRestTemplate"
+    slice_annotations: ["@SpringBootTest"]
+    http_layer: "MockMvc / TestRestTemplate (manual setup on Boot 4.1.1)"
     mocking: "Mockito (@Mock, @InjectMocks, @ExtendWith(MockitoExtension.class))"
   version_caveat: "Pack targets Boot 3.x; project is Boot 4.1.1-SNAPSHOT. MUST use jakarta.* (not javax.*) and Spring Security 7.x APIs. Pack structural idioms remain valid."
 
-reuse_index:
-  helpers: []
-  model_api: []
-  services: []
-  commands: []
-  reason: "Skeleton has no reusable code yet."
+  reuse_index:
+    path: .mega-sdd/codebase/reuse-index.yaml
+    counts: { helpers: 3, model_api: 3, services: 2, commands: 0 }
+    truncated: false
 
-partial: false
-partial_slices: []
+  cache_signatures:
+    schema: "2.0"
+    app_locks_digest: ba02f05eb68dc7dae56dd8acc5dedc898a19afd09c027e573cc7826de6e6846a
+    frontend_locks_digest: ba02f05eb68dc7dae56dd8acc5dedc898a19afd09c027e573cc7826de6e6846a
+    all_locks_digest: ba02f05eb68dc7dae56dd8acc5dedc898a19afd09c027e573cc7826de6e6846a
+    framework_pack_sha256: b15c4def6177183e
+    per_slice:
+      auth: { signature_sha256: "<app_locks_digest + spring.md §auth + lib-patterns absent>", stale: false }
+      authz: { signature_sha256: "<app_locks_digest + spring.md §authz + lib-patterns absent>", stale: false }
+      ui_ux: { signature_sha256: "<frontend_locks_digest + spring.md §ui + lib-patterns absent>", stale: false }
+      libs: { signature_sha256: "<all_locks_digest + spring.md §libs + lib-patterns absent>", stale: false }
+      reuse: { signature_sha256: "<sha256(src listing) + spring.md §Reuse>", stale: false }

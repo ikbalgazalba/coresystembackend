@@ -6,6 +6,11 @@
     "drop_count": 0,
     "advisory_count": 0,
     "vaults": {
+      "api-platform": {
+        "flows_checked": 0,
+        "flows_with_kb_source": 0,
+        "staging_drops": 0
+      },
       "jwt-login": {
         "flows_checked": 2,
         "flows_with_kb_source": 0,

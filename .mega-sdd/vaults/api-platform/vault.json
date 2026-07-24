@@ -1,0 +1,144 @@
+{
+  "vault_version": "1.2",
+  "generated_at": "2026-07-24T04:06:08Z",
+  "phase": 1,
+  "phase_total": 1,
+  "project_shape": "api-only",
+  "implementation_mode": "existing",
+  "mode_migrate_after": null,
+  "prd_status": "draft",
+  "output_mode": "compact",
+  "constitution_version": "1.1.1",
+  "constitution_hash": "243c371d17869bbe9edc616dd23510f3072f90f64d17ece4d75f3543845bc09c",
+  "source_documents": [
+    {"type": "seed-PRD", "path": "source/seed-PRD.md", "version": "draft", "date": "2026-07-24"},
+    {"type": "codebase-map", "path": ".mega-sdd/codebase/codebase-map.md", "version": "HEAD 0682bb5", "date": "2026-07-24"},
+    {"type": "starterkit-context", "path": ".mega-sdd/codebase/starterkit-context.yaml"},
+    {"type": "inherited-constitution", "path": ".mega-sdd/vaults/jwt-login/constitution.md", "version": "1.0.0"}
+  ],
+  "entities": [],
+  "documented_dtos": [
+    {"name": "LoginRequest", "fields": ["uname", "pass"], "role": "request body POST /api/auth/dologin", "doc": "03-data-model.md"},
+    {"name": "JwtResponse", "fields": ["token", "type", "id", "uname", "urole", "mitKode"], "role": "response body (success)", "doc": "03-data-model.md"},
+    {"name": "MessageResponse", "fields": ["message"], "role": "response body (error/info)", "doc": "03-data-model.md"}
+  ],
+  "flows": [
+    {"id": "F-S-001", "title": "Build container image (multi-stage)", "type": "system", "doc": "04-flows.md", "dod_count": 4},
+    {"id": "F-S-002", "title": "Run container via compose (env + trust store)", "type": "system", "doc": "04-flows.md", "dod_count": 5},
+    {"id": "F-S-003", "title": "Generate & serve OpenAPI docs", "type": "system", "doc": "04-flows.md", "dod_count": 3},
+    {"id": "F-S-004", "title": "Health probe (actuator)", "type": "system", "doc": "04-flows.md", "dod_count": 3},
+    {"id": "F-S-005", "title": "Profile selection (dev vs prod)", "type": "system", "doc": "04-flows.md", "dod_count": 3}
+  ],
+  "adrs": [
+    {"id": "ADR-AP-1", "title": "springdoc-openapi for OpenAPI 3 generation", "doc": "05-decisions.md", "status": "accepted"},
+    {"id": "ADR-AP-2", "title": "Multi-stage Dockerfile (builder JDK → runtime JRE)", "doc": "05-decisions.md", "status": "accepted"},
+    {"id": "ADR-AP-3", "title": "env_file + volume mount for secrets & trust store (NOT baked-in)", "doc": "05-decisions.md", "status": "accepted"},
+    {"id": "ADR-AP-4", "title": "Actuator health + two Spring profiles (dev/prod)", "doc": "05-decisions.md", "status": "accepted"},
+    {"id": "ADR-AP-5", "title": "Swagger UI path under permitAll (v1), prod gating deferred", "doc": "05-decisions.md", "status": "accepted"}
+  ],
+  "open_questions": [
+    {"tag": "OQ-AP-1", "priority": "P1", "doc": "00-index.md", "status": "open", "category": "tech", "resolver_owner": null, "resolution_mode": "recommend", "classification_confidence": "medium", "summary": "springdoc-openapi version compatible with Spring Boot 4.1.1-SNAPSHOT", "recommendation": null, "rationale": null, "scan_citations": [".mega-sdd/codebase/codebase-map.md §7 snapshot_repo"], "fallback_if_wrong": "blocking — request PO/architect to pin a Boot-4-compatible springdoc version"},
+    {"tag": "OQ-AP-2", "priority": "P2", "doc": "00-index.md", "status": "open", "category": "tech", "resolver_owner": null, "resolution_mode": "recommend", "classification_confidence": "medium", "summary": "Container port (default 8080 vs override) + SERVER_PORT wiring", "recommendation": null, "rationale": null, "scan_citations": [], "fallback_if_wrong": "default 8080"},
+    {"tag": "OQ-AP-3", "priority": "P1", "doc": "00-index.md", "status": "open", "category": "tech", "resolver_owner": null, "resolution_mode": "blocking", "classification_confidence": "low", "summary": "Trust store path inside container (mount target) + reconcile run-app.sh host logic", "recommendation": null, "rationale": null, "scan_citations": [".mega-sdd/codebase/codebase-map.md §6 (run-app.sh host path)"], "fallback_if_wrong": null},
+    {"tag": "OQ-AP-4", "priority": "P2", "doc": "00-index.md", "status": "open", "category": "tech", "resolver_owner": null, "resolution_mode": "recommend", "classification_confidence": "medium", "summary": "PostgreSQL in compose: real DB service vs env-only wiring to existing newmojf UAT", "recommendation": "env-only wiring to existing newmojf UAT (no postgres service in compose) — app already connects to 10.95.1.43 via SPRING_DATASOURCE_URL", "rationale": "codebase-map §4 + .env.example:7 show the app already wires to the existing UAT DB via env; a local postgres service is optional dev convenience, not a blocker", "scan_citations": [".mega-sdd/codebase/codebase-map.md §4 (datasource URL 10.95.1.43)", ".env.example:7"], "fallback_if_wrong": "env-only wiring to existing newmojf UAT (no postgres service in compose)"},
+    {"tag": "OQ-AP-5", "priority": "P2", "doc": "00-index.md", "status": "open", "category": "tech", "resolver_owner": null, "resolution_mode": "recommend", "classification_confidence": "high", "summary": "Swagger UI prod gating (disable in prod profile? security exposure of docs)", "recommendation": "disable Swagger UI in prod profile via springdoc.swagger-ui.enabled=false; keep spec at /v3/api-docs internal", "rationale": "LoginRequest.pass field is documented; reduce prod attack surface by hiding interactive UI while keeping the JSON spec for tooling", "scan_citations": [".mega-sdd/codebase/codebase-map.md §2 (LoginRequest.pass)"], "fallback_if_wrong": "blocking — confirm prod docs exposure policy with PO"},
+    {"tag": "OQ-AP-6", "priority": "P3", "doc": "00-index.md", "status": "open", "category": "tech", "resolver_owner": null, "resolution_mode": "recommend", "classification_confidence": "low", "summary": "JVM memory/CPU resource limits for the container", "recommendation": null, "rationale": null, "scan_citations": [], "fallback_if_wrong": "no limits (let JVM + container default)"},
+    {"tag": "OQ-AP-7", "priority": "P3", "doc": "00-index.md", "status": "open", "category": "business", "resolver_owner": null, "resolution_mode": "recommend", "classification_confidence": "low", "summary": "Success metrics / acceptance thresholds for containerized (quantitative)", "recommendation": "no quantitative threshold; functional DoD (Flows 1-5) only", "rationale": "brief is silent on metrics; the epic's Definition of Done (Flows 1-5) is functional, not quantitative — blocking was internally contradictory with P3", "scan_citations": [], "fallback_if_wrong": "no quantitative threshold; functional DoD (Flows 1-5) only"},
+    {"tag": "OQ-AP-8", "priority": "P3", "doc": "00-index.md", "status": "open", "category": "tech", "resolver_owner": null, "resolution_mode": "scan", "classification_confidence": "medium", "summary": "actuator endpoint exposure surface (health only vs full) given SecurityConfig permitAll rules", "recommendation": null, "rationale": null, "scan_citations": [".mega-sdd/codebase/codebase-map.md §6 (SecurityConfig rules)", ".mega-sdd/vaults/api-platform/02-architecture.md"], "fallback_if_wrong": "health only"},
+    {"tag": "OQ-AP-9", "priority": "P2", "doc": "binding.md", "status": "open", "category": "tech", "resolver_owner": null, "resolution_mode": "recommend", "classification_confidence": "medium", "summary": "CORS origins externalization — SecurityConfig.java:89 hardcodes localhost:3000/8080; container/prod MUST override via ${CORS_ALLOWED_ORIGINS} placeholder", "recommendation": "externalize CORS allowed origins to ${CORS_ALLOWED_ORIGINS} env placeholder in application-prod.yaml; keep localhost defaults in application-dev.yaml", "rationale": "container/prod browser clients hit CORS rejection from hardcoded localhost origins; profile-driven externalization is the 12-factor pattern", "scan_citations": ["SecurityConfig.java:89", ".mega-sdd/codebase/codebase-map.md §6"], "fallback_if_wrong": "blocking — confirm prod CORS origin policy with PO"}
+  ],
+  "open_questions_summary": {
+    "total": 9,
+    "by_priority": {"P1": 2, "P2": 4, "P3": 3},
+    "by_status": {"open": 9, "resolved": 0, "deferred": 0, "out_of_scope": 0}
+  },
+  "design_system_flags": {
+    "HAS_UI_COMPONENTS": false,
+    "HAS_TOKENS": false,
+    "HAS_A11Y": false,
+    "HAS_VOICE_BRAND": false
+  },
+  "hard_rules": ["HR-1", "HR-2", "HR-3", "HR-4", "HR-5", "HR-6", "HR-7", "HR-8"],
+  "target_files": {
+    "new": [
+      "src/main/java/com/coresystem/coresystembackend/config/OpenApiConfig.java",
+      "src/main/resources/application-dev.yaml",
+      "src/main/resources/application-prod.yaml",
+      "Dockerfile",
+      "docker-compose.yml",
+      ".dockerignore"
+    ],
+    "edit": [
+      "pom.xml",
+      "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java"
+    ]
+  },
+  "provenance": {
+    "generated_by": "mega-sdd:generate-intent@2.9.0",
+    "mode": "B (from-prompt, scan-aware)",
+    "scan_ref": ".mega-sdd/codebase/codebase-map.md @ 0682bb5",
+    "advisor": {
+      "model": "glm-5.2",
+      "status": "materialized",
+      "findings": {"high": 0, "medium": 4, "low": 3, "total": 7},
+      "materialized": [
+        "fabrication: 15→14 env vars (codebase-map §1 + 04-flows.md corrected)",
+        "misclassification: OQ-AP-4 blocking→recommend + fallback (env-only wiring)",
+        "misclassification: OQ-AP-7 blocking→recommend + fallback (functional DoD only)",
+        "coverage_gap: Auto-Classification Review criterion clarified (low-conf blocking only)",
+        "coverage_gap: CORS hardcoded-origins coupling acknowledged in 02-architecture",
+        "coverage_gap: 'surfaced as OQs' reworded to 'known codebase gap' in 00-index",
+        "coverage_gap: curl-on-JRE healthcheck caveat noted in 02-architecture + 04-flows"
+      ]
+    }
+  },
+  "changelog": [
+    {
+      "event": "generate-intent",
+      "ts": "2026-07-24T04:06:08Z",
+      "summary": "vault created (Mode B from-prompt, scan-aware); intent-advisor 7 findings materialized"
+    },
+    {
+      "event": "bind-codebase",
+      "ts": "2026-07-24T04:20:00Z",
+      "summary": "clean binding (0 CONFLICT, 7 CONFIRMED, 9→10 OQ); binding-advisor 3 low findings materialized (APB-001 jwtExpirationMs default, APB-002 column count 20→17, APB-003 CORS→HR-8+OQ-AP-9); bound/ produced",
+      "advisor": {"model": "glm-5.2", "findings": {"high": 0, "medium": 0, "low": 3, "total": 3}},
+      "conflict_count": 0,
+      "confirmed_count": 7,
+      "oq_count": 10,
+      "new_artifacts_verified_absent": ["OpenApiConfig.java", "Dockerfile", "docker-compose.yml", ".dockerignore", "application-dev.yaml", "application-prod.yaml", "springdoc-openapi dep", "actuator dep"]
+    },
+    {
+      "event": "units_generated",
+      "at": "2026-07-24T04:45:00Z",
+      "count": 5,
+      "units": ["U-001", "U-002", "U-003", "U-004", "U-005"],
+      "task_types": {"create": 4, "extend": 1},
+      "dependency_edges": [["U-004", "U-003"]],
+      "validation": {
+        "unit_spec": "PASS (hard_rule_unparseable resolved; 2 advisory hard_rule_trace_missing on U-001/U-002 DO_NOT_MODIFY — non-blocking)",
+        "handoff_binding_units": "PASS (0 drops, 0 conflicts, 26/26 OQs cited)",
+        "flow_coverage": "SKIP (no user-flow input-validation artifacts — system-flow epic)",
+        "sibling_consistency": "PASS (0 inconsistent, 0 missing relations)"
+      }
+    },
+    {
+      "event": "bolts_executed",
+      "at": "2026-07-24T14:02:00Z",
+      "count": 5,
+      "units": [
+        {"id": "U-001", "commit": "6ad3426", "status": "completed", "postflight": "pass", "test": "PASS (contextLoads via ./mvnw)"},
+        {"id": "U-002", "commit": "1d65f4c", "status": "completed", "postflight": "pass", "test": "PASS (SecurityConfigTest 2/2 + contextLoads)"},
+        {"id": "U-003", "commit": "8c6b06b", "status": "completed", "postflight": "pass", "test": "docker build NOT VERIFIED (Docker Hub auth outage + container→Maven Central bridge issue); host build SUCCESS proves build command + JAR name"},
+        {"id": "U-004", "commit": "0a3d772", "status": "completed", "postflight": "pass", "test": "PASS (docker compose config -q exit 0); manual compose up deferred to operator"},
+        {"id": "U-005", "commit": "f0b518b", "status": "completed", "postflight": "pass", "test": "PASS (contextLoads x3: no-profile/dev/prod)"}
+      ],
+      "oqs_resolved": ["OQ-AP-1 (springdoc 3.0.3)", "OQ-AP-2 (port 8080)", "OQ-AP-3 (trust-store /opt/bankmega-truststore/)", "OQ-AP-4 (env-only, no postgres)", "OQ-AP-5 (prod UI off)", "OQ-AP-6 (no limits)", "OQ-AP-8 (health-only)", "OQ-AP-9 (CORS externalized)"],
+      "oqs_open": ["OQ-AP-7 (success metrics — functional DoD fallback, P3)"],
+      "batch_suite": {"status": "green", "tests": 18, "failures": 0, "errors": 0, "artifact": "bolts/_batch-suite.json"},
+      "pre_existing_defect_fixed": "Maven wrapper .mvn/wrapper/ restored (was never committed; blocked ./mvnw + U-003 Dockerfile builder) — commit ce1e298",
+      "branch": "feat/api-platform-swagger-docker",
+      "environmental_caveats": "Docker build (U-003) + docker compose up (U-004) verifications deferred to network restoration; Docker Hub auth.docker.io outage + container(default bridge)→Maven Central networking issue during session"
+    }
+  ]
+}

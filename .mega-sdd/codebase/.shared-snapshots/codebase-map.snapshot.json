@@ -1,27 +1,17 @@
 {
-  "snapshot_version": 1,
-  "generated_by": "mega-sdd:scan-codebase",
-  "generated_at": "2026-07-22T00:00:00Z",
-  "repo_root": "/home/ikbalgazalba/AI/Project/coresystembackend",
+  "snapshot_schema": "1.0",
+  "source": ".mega-sdd/codebase/codebase-map.md",
+  "source_sha256": "d585b23aeb50c733677f226dcdd73172997daf3bbd1e3c3448be158a772aad3a",
+  "last_scanned_commit": "0682bb58c2755f8a6ef86566127a9147233d311e",
+  "captured_at": "2026-07-24T03:49:00Z",
   "engine": "tree-sitter",
   "precision_tier": "ast",
-  "framework": "spring",
-  "framework_version": "4.1.1-SNAPSHOT",
-  "files_tokenized": [
-    {
-      "path": "src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java",
-      "symbols": ["CoresystembackendApplication", "main"],
-      "kind": ["class", "method"]
-    },
-    {
-      "path": "src/test/java/com/coresystem/coresystembackend/CoresystembackendApplicationTests.java",
-      "symbols": ["CoresystembackendApplicationTests", "contextLoads"],
-      "kind": ["class", "method"]
-    }
-  ],
-  "public_interface_count": 2,
-  "route_count": 0,
-  "entity_count": 0,
-  "starterkit_context_present": true,
-  "note": "Skeleton repo. bind-codebase can skip re-tokenization of these 2 files; all vault claims will be NEW (no existing code to match against)."
+  "counts": {
+    "public_interfaces": 10,
+    "routes": 1,
+    "data_models": 1,
+    "frameworks": 1
+  },
+  "starterkit_context": ".mega-sdd/codebase/starterkit-context.yaml",
+  "reuse_index": ".mega-sdd/codebase/reuse-index.yaml"
 }

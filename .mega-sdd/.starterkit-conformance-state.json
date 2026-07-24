@@ -1,6 +1,27 @@
 {
-  "status": "SKIP",
-  "detail": "starterkit-context.yaml has no patterns: block",
+  "status": "PASS",
+  "patterns_loaded": [
+    "controller",
+    "data_model",
+    "request_validator",
+    "business_logic",
+    "test",
+    "schema_migration",
+    "route",
+    "view",
+    "component",
+    "per_slice"
+  ],
+  "units_checked": 14,
+  "violations_count": 0,
   "violations": [],
-  "checks": []
+  "checks": [
+    {
+      "check": "target_files_vs_patterns",
+      "units_checked": 14,
+      "target_files_checked": 14,
+      "violations": 0
+    }
+  ],
+  "summary": "all target_files conform to starterkit patterns (10 patterns checked)"
 }

@@ -1,0 +1,34 @@
+{
+  "unit": "U-001",
+  "status": "pass",
+  "rules": [
+    {
+      "rule": "DO NOT modify src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT modify src/main/java/com/coresystem/coresystembackend/dto/LoginRequest.java",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT modify src/main/java/com/coresystem/coresystembackend/dto/JwtResponse.java",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT modify src/main/java/com/coresystem/coresystembackend/dto/MessageResponse.java",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT modify src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java",
+      "verdict": "pass"
+    },
+    {
+      "rule": "file OpenApiConfig.java MUST exist after bolt",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT add new pom.xml dependencies (beyond springdoc)",
+      "verdict": "pass"
+    }
+  ]
+}

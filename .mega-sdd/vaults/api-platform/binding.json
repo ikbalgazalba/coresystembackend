@@ -1,0 +1,32 @@
+{
+  "binding_schema": "1.0",
+  "vault": ".mega-sdd/vaults/api-platform",
+  "codebase_map": ".mega-sdd/codebase/codebase-map.md",
+  "codebase_map_provenance": "snapshot-verified",
+  "head": "0682bb58c2755f8a6ef86566127a9147233d311e",
+  "bound_at": "2026-07-24T04:20:00Z",
+  "strict": false,
+  "constitution_hash": "243c371d17869bbe9edc616dd23510f3072f90f64d17ece4d75f3543845bc09c",
+  "claims_total": 16,
+  "confirmed": 7,
+  "conflict": 0,
+  "oq": 10,
+  "claims": [
+    {"id": "C-001", "verdict": "CONFIRMED", "state": "IMPLEMENTED", "anchor": "AuthUserController.java:54-55 + codebase-map §3", "confidence": "high", "field_diff": "exact match — POST /api/auth/dologin", "vault_source": "02-architecture.md §API documentation layer"},
+    {"id": "C-002", "verdict": "CONFIRMED", "state": "IMPLEMENTED", "anchor": "dto/*.java + codebase-map §2", "confidence": "high", "field_diff": "exact match — 3 DTOs, field-sets match", "vault_source": "02-architecture.md §API documentation layer"},
+    {"id": "C-003", "verdict": "CONFIRMED", "state": "IMPLEMENTED", "anchor": "entity/Users.java:13-15 + codebase-map §4", "confidence": "high", "field_diff": "exact match — mojf_users, 17 @Column fields (corrected from prior 20; advisor APB-002)", "vault_source": "03-data-model.md"},
+    {"id": "C-004", "verdict": "CONFIRMED", "state": "IMPLEMENTED", "anchor": "config/SecurityConfig.java:42 + codebase-map §2", "confidence": "high", "field_diff": "exact match; EDIT is additive", "vault_source": "02-architecture.md §Health / observability layer"},
+    {"id": "C-005", "verdict": "CONFIRMED", "state": "IMPLEMENTED", "anchor": "pom.xml + codebase-map §7", "confidence": "high", "field_diff": "exact match — Boot 4.1.1-SNAPSHOT, Java 21, Maven", "vault_source": "06-constraints.md Technical"},
+    {"id": "C-006", "verdict": "CONFIRMED", "state": "IMPLEMENTED", "anchor": "application.yaml + codebase-map §6", "confidence": "high", "field_diff": "match with caveat — secret ${VAR} placeholders no-default fail-fast; jwtExpirationMs:86400000 is a literal default (advisor APB-001)", "vault_source": "06-constraints.md Technical"},
+    {"id": "C-007", "verdict": "CONFIRMED", "state": "NEW", "anchor": "pom.xml (absent deps) + codebase-map §7", "confidence": "high", "field_diff": "deps absent — to be added", "vault_source": "02-architecture.md §Tech stack"},
+    {"id": "C-008", "verdict": "OQ", "state": "NEW", "anchor": "—", "confidence": "n/a", "field_diff": "n/a", "vault_source": "02-architecture.md §OpenApiConfig"},
+    {"id": "C-009", "verdict": "OQ", "state": "NEW", "anchor": "—", "confidence": "n/a", "field_diff": "n/a", "vault_source": "OQ-AP-1 (springdoc version)"},
+    {"id": "C-010", "verdict": "OQ", "state": "NEW", "anchor": "—", "confidence": "n/a", "field_diff": "n/a", "vault_source": "02-architecture.md §Dockerfile"},
+    {"id": "C-011", "verdict": "OQ", "state": "NEW", "anchor": "—", "confidence": "n/a", "field_diff": "n/a", "vault_source": "02-architecture.md §docker-compose.yml"},
+    {"id": "C-012", "verdict": "OQ", "state": "NEW", "anchor": "—", "confidence": "n/a", "field_diff": "n/a", "vault_source": "02-architecture.md §.dockerignore"},
+    {"id": "C-013", "verdict": "OQ", "state": "NEW", "anchor": "—", "confidence": "n/a", "field_diff": "n/a", "vault_source": "02-architecture.md §Profile config"},
+    {"id": "C-014", "verdict": "OQ", "state": "NEW", "anchor": "—", "confidence": "n/a", "field_diff": "n/a", "vault_source": "02-architecture.md §API contracts (doc paths)"},
+    {"id": "C-015", "verdict": "OQ", "state": "NEW", "anchor": "—", "confidence": "n/a", "field_diff": "n/a", "vault_source": "02-architecture.md §API contracts (health path)"},
+    {"id": "C-016", "verdict": "OQ", "state": "NEW", "anchor": "—", "confidence": "n/a", "field_diff": "n/a", "vault_source": "OQ-AP-3 (trust-store mount target)"}
+  ]
+}

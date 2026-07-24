@@ -1,7 +1,9 @@
 package com.coresystem.coresystembackend.config;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -42,6 +44,20 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
 
 	/**
+	 * Comma-separated list of allowed CORS origins, externalized to the
+	 * {@code coresystem.cors.allowed-origins} property (HR-8 — no hardcoded origin in prod).
+	 * The default keeps local dev / context-load tests working without the env var; U-005
+	 * overrides this per profile (dev/prod) so the production origin is never baked in.
+	 */
+	private final String corsAllowedOrigins;
+
+	public SecurityConfig(
+			@Value("${coresystem.cors.allowed-origins:http://localhost:3000,http://localhost:8080}")
+			String corsAllowedOrigins) {
+		this.corsAllowedOrigins = corsAllowedOrigins;
+	}
+
+	/**
 	 * Main request-filter chain. Defines the authorization rules, session policy, CSRF policy
 	 * and CORS integration for the whole application.
 	 *
@@ -58,6 +74,12 @@ public class SecurityConfig {
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/auth/**").permitAll()
+						// U-002 additive permits — placed BEFORE anyRequest().authenticated() (matcher
+						// order matters): actuator health probe + OpenAPI/Swagger docs reachable without
+						// auth so k8s/readiness probes and API docs render unauthenticated. Health-only
+						// exposure scope is enforced via management.endpoints.web.exposure.include (U-005).
+						.requestMatchers("/actuator/health/**").permitAll()
+						.requestMatchers("/v3/api-docs", "/swagger-ui.html", "/swagger-ui/**").permitAll()
 						.anyRequest().authenticated())
 				.cors(Customizer.withDefaults());
 		return http.build();
@@ -85,8 +107,16 @@ public class SecurityConfig {
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		// Explicit dev origins only — NOT "*" (OQ-AR-5 scopes the explicit-origin rule to ORIGINS).
-		configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:8080"));
+		// Allowed origins are externalized to ${coresystem.cors.allowed-origins} (HR-8) — comma
+		// separated, split here. Default fallback (localhost dev) is a non-secret dev convenience
+		// so the context-loads test passes without the env var; U-005 sets the real origin per
+		// profile. Explicit origins only — NOT "*" (OQ-AR-5 scopes the explicit-origin rule to
+		// ORIGINS).
+		configuration.setAllowedOrigins(
+				Arrays.stream(corsAllowedOrigins.split(","))
+						.map(String::trim)
+						.filter(s -> !s.isEmpty())
+						.toList());
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		// Headers are the only permitted wildcard (OQ-AR-5 scopes the rule to origins, not headers).
 		configuration.setAllowedHeaders(List.of("*"));
@@ -112,3 +142,4 @@ public class SecurityConfig {
 }
 
 // SDD-PROVENANCE: U-006 | vault: .mega-sdd/vaults/jwt-login | SecurityFilterChain bean (Spring Security 7.x); permitAll /api/auth/**, STATELESS, CSRF-disabled w/ comment, delegating PasswordEncoder, explicit-origin CORS
+// SDD-PROVENANCE: U-002 | vault: .mega-sdd/vaults/api-platform | actuator + additive SecurityConfig permitAll (health + doc paths) + CORS externalize ${coresystem.cors.allowed-origins}

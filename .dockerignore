@@ -1,0 +1,23 @@
+# .dockerignore — keep secrets + build noise out of the Docker build context (HR-1, §D-002).
+# SDD-PROVENANCE: U-004 | vault: .mega-sdd/vaults/api-platform
+#
+# Excluded: secrets (.env), build output (target/), VCS/IDE state, and host-only
+# launchers. KEPT on purpose: .env.example (template, not secret), pom.xml, mvnw,
+# mvnw.cmd, .mvn/wrapper/maven-wrapper.properties (needed by ./mvnw in the builder),
+# src/, Dockerfile.
+
+target/
+.git/
+.gitignore
+.mega-sdd/
+.idea/
+.vscode/
+*.log
+*.log.*
+node_modules/
+preview.webp
+run-app.sh
+docs/
+.env
+.mvn/wrapper/maven-wrapper.jar
+docker-compose.yml

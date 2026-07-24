@@ -1,0 +1,29 @@
+{
+  "unit": "U-001",
+  "grammar": "v1-bulleted",
+  "rules": {
+    "DO_NOT_modify_AuthUserController": {
+      "path": "src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java",
+      "exists": true
+    },
+    "DO_NOT_modify_LoginRequest": {
+      "path": "src/main/java/com/coresystem/coresystembackend/dto/LoginRequest.java",
+      "exists": true
+    },
+    "DO_NOT_modify_JwtResponse": {
+      "path": "src/main/java/com/coresystem/coresystembackend/dto/JwtResponse.java",
+      "exists": true
+    },
+    "DO_NOT_modify_MessageResponse": {
+      "path": "src/main/java/com/coresystem/coresystembackend/dto/MessageResponse.java",
+      "exists": true
+    },
+    "DO_NOT_modify_SecurityConfig": {
+      "path": "src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java",
+      "exists": true
+    },
+    "pom_deps_sha256": "a76e01cdbfd9814e",
+    "OpenApiConfig_absent_pre": true
+  },
+  "captured_at": "2026-07-24T04:55:00Z"
+}

@@ -30,12 +30,12 @@
     {
       "check": "interfaces_populated",
       "status": "PASS",
-      "detail": "\u00a72 has 2 interface rows"
+      "detail": "\u00a72 has 10 interface rows"
     },
     {
       "check": "interface_depth",
       "status": "PASS",
-      "detail": "precision_tier: ast with 2 signature-bearing \u00a72 row(s)"
+      "detail": "precision_tier: ast with 10 signature-bearing \u00a72 row(s)"
     }
   ],
   "issues": []

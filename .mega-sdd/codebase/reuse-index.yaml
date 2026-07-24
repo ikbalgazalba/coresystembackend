@@ -1,0 +1,43 @@
+# reuse-index.yaml
+# Produced by mega-sdd:scan-codebase deep-scan stage (reuse-extractor slice).
+# First-party reusable code catalog. Sibling artifact to starterkit-context.yaml (NOT merged into it).
+# Repo: jwt-login vault landed — feature-bearing Spring Boot backend.
+
+reuse_index:
+  helpers:
+    - name: JwtUtils.generateTokenFromUname
+      signature: public String generateTokenFromUname(String uname)
+      what_it_does: Mints an HS512-signed JWT with uname as subject and configurable expiration (coresystem.app.jwtExpirationMs).
+      _source: ["src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:35-43"]
+    - name: JwtUtils.getUserNameFromJwt
+      signature: public String getUserNameFromJwt(String token)
+      what_it_does: Parses a signed JWT and returns its subject (uname) after signature verification.
+      _source: ["src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:45-52"]
+    - name: JwtUtils.validateJwtToken
+      signature: public boolean validateJwtToken(String authToken)
+      what_it_does: Verifies JWT signature/claims, returning false (logged) on JwtException or empty-claims errors.
+      _source: ["src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java:54-64"]
+  model_api:
+    - name: UserRepository.findByUname
+      signature: Optional<Users> findByUname(String uname)
+      what_it_does: Derived Spring Data JPA lookup of a Users row by the uname column on mojf_users.
+      _source: ["src/main/java/com/coresystem/coresystembackend/repository/UserRepository.java:10-13"]
+    - name: UserRepository (JpaRepository<Users, Long>)
+      signature: "interface UserRepository extends JpaRepository<Users, Long>"
+      what_it_does: Exposes full CRUD + finder access to the mojf_users table via the Users entity.
+      _source: ["src/main/java/com/coresystem/coresystembackend/repository/UserRepository.java:10-13"]
+    - name: Users entity
+      signature: '@Entity @Table(name="mojf_users") class Users'
+      what_it_does: JPA mapping of mojf_users (uid_, uname, pass, nama_lengkap, kode_unit_kerja, cakupan, urole, kode_mitra, active, expired_days, kode_kelas_user, status_user, audit + last_login fields).
+      _source: ["src/main/java/com/coresystem/coresystembackend/entity/Users.java:15-156"]
+  services:
+    - name: LdapUcsService.authLDAPNew
+      signature: public LdapAuthResult authLDAPNew(String uname, String pass)
+      what_it_does: Orchestrates UCS LDAP auth — OAuth2 password-grant token fetch then verify-password call, returning {responseCode, responseDescription}; generic 401 on any internal failure.
+      _source: ["src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java:111-131"]
+    - name: LdapUcsService.LdapAuthResult
+      signature: public record LdapAuthResult(String responseCode, String responseDescription)
+      what_it_does: Carrier record mirroring the upstream UCS {responseCode, responseDescription} auth contract.
+      _source: ["src/main/java/com/coresystem/coresystembackend/service/LdapUcsService.java:96-97"]
+  commands: []
+  reason: "jwt-login slice: reusable JWT helper, Users/UserRepository data access, and LdapUcsService auth building block; DTOs are response/request carriers (not emitted as standalone reuse items)."

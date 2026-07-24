@@ -1,0 +1,11 @@
+{
+  "batch_suite_schema": "1.0",
+  "status": "green",
+  "run_at": "2026-07-24T14:02:00Z",
+  "head_sha": "0a3d772c7b7f9d1e4e4109da3c1021314c79e513",
+  "runner": "./mvnw test (JUnit 5 via spring-boot-starter-test)",
+  "totals": { "tests": 18, "failures": 0, "errors": 0, "skipped": 0 },
+  "units": ["U-001", "U-002", "U-003", "U-004", "U-005"],
+  "bypass_commits": [],
+  "notes": "Full suite green. Per-class: AuthLoginIntegrationTest 4, JwtUtilsTest 4, SecurityConfigTest 2, AuthUserControllerTest 4, CoresystembackendApplicationTests 1, LdapUcsServiceTest 3. No per-unit scope filter. Docker build (U-003) + docker compose up (U-004) verifications deferred to network restoration / operator (environmental)."
+}
