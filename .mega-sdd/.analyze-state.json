@@ -1,6 +1,6 @@
 {
   "status": "FAIL",
-  "analyzed_at": "2026-07-24T07:55:24Z",
+  "analyzed_at": "2026-07-24T08:09:07Z",
   "boundaries": {
     "binding_units_handoff": {
       "status": "PASS",
@@ -13,7 +13,7 @@
       "detail": ""
     },
     "bolt_artifacts": {
-      "status": "PASS",
+      "status": "FAIL",
       "state_file": ".bolt-artifacts-state.json",
       "detail": ""
     },
@@ -136,7 +136,7 @@
   "vault_consistency": [],
   "validators_run": 15,
   "validators_total": 26,
-  "validators_pass": 9,
-  "validators_fail": 2,
+  "validators_pass": 8,
+  "validators_fail": 3,
   "validators_skip": 9
 }

@@ -1,5 +1,5 @@
 {
-  "ts": "2026-07-24T07:55:04.956534Z",
+  "ts": "2026-07-24T08:16:02.161544Z",
   "status": "FAIL",
   "validator": "validate-vault-binding-coverage.sh",
   "slice4_summary": {

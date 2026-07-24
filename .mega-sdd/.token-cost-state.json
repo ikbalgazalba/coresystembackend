@@ -1,16 +1,16 @@
 {
   "status": "PASS",
   "have_telemetry": true,
-  "turns": 87,
+  "turns": 90,
   "subagent_turns": 37,
-  "raw_total": 27215927,
-  "cost_weighted_total": 8265015,
-  "overstatement_ratio": 3.29,
+  "raw_total": 28314490,
+  "cost_weighted_total": 8383368,
+  "overstatement_ratio": 3.38,
   "by_token_type": {
-    "input_tokens": 3932711,
+    "input_tokens": 3933805,
     "cache_creation_input_tokens": 0,
-    "cache_read_input_tokens": 22874240,
-    "output_tokens": 408976
+    "cache_read_input_tokens": 23970176,
+    "output_tokens": 410509
   },
   "weights": {
     "input_tokens": 1.0,
@@ -24,34 +24,34 @@
       "turns": 11,
       "raw": 8675748,
       "cost_weighted": 2027876,
-      "pct_cost": 24.5
+      "pct_cost": 24.2
     },
     {
       "skill": "Explore",
       "turns": 3,
       "raw": 2057109,
       "cost_weighted": 1449090,
-      "pct_cost": 17.5
+      "pct_cost": 17.3
     },
     {
       "skill": "mega-sdd:phase-advisor",
       "turns": 4,
       "raw": 3483318,
       "cost_weighted": 1248009,
-      "pct_cost": 15.1
+      "pct_cost": 14.9
+    },
+    {
+      "skill": "mega-sdd:execute-bolts",
+      "turns": 36,
+      "raw": 6533088,
+      "cost_weighted": 1043403,
+      "pct_cost": 12.4
     },
     {
       "skill": "mega-sdd:spec-reviewer",
       "turns": 7,
       "raw": 2374344,
       "cost_weighted": 935087,
-      "pct_cost": 11.3
-    },
-    {
-      "skill": "mega-sdd:execute-bolts",
-      "turns": 33,
-      "raw": 5434525,
-      "cost_weighted": 925051,
       "pct_cost": 11.2
     },
     {
@@ -66,7 +66,7 @@
       "turns": 11,
       "raw": 2089774,
       "cost_weighted": 401864,
-      "pct_cost": 4.9
+      "pct_cost": 4.8
     },
     {
       "skill": "mega-sdd:standards-reviewer",

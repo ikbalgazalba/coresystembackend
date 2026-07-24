@@ -79,7 +79,7 @@ public class SecurityConfig {
 						// auth so k8s/readiness probes and API docs render unauthenticated. Health-only
 						// exposure scope is enforced via management.endpoints.web.exposure.include (U-005).
 						.requestMatchers("/actuator/health/**").permitAll()
-						.requestMatchers("/v3/api-docs", "/swagger-ui.html", "/swagger-ui/**").permitAll()
+						.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
 						.anyRequest().authenticated())
 				.cors(Customizer.withDefaults());
 		return http.build();
