@@ -62,6 +62,13 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- API documentation: OpenAPI 3 spec + Swagger UI (OQ-AP-1 — springdoc v3.0.3 targets Spring Boot 4.x). -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>3.0.3</version>
+		</dependency>
+
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-api</artifactId>
