@@ -1,36 +1,34 @@
 # DRIFT-REPORT — jwt-login vault
 
-**Generated:** 2026-07-24
+**Generated:** 2026-07-24 (P2+P3 fixes applied)
 **VAULT_DIR:** `.mega-sdd/vaults/jwt-login`
 **CODE_DIR:** `/home/ikbalgazalba/AI/Project/coresystembackend`
 **DRIFT_SCOPE:** full
 **Vault Mode:** `implementation_mode: existing` (migrated from `new` 2026-07-23, v1.3)
-**Code HEAD:** `3fc32f5` (2026-07-24)
+**Code HEAD:** `3fc32f5` (2026-07-24); P2+P3 drift fixes in `bffab3c` + follow-up
 
 ---
 
 ## Executive Summary
 
-**DRIFT STATUS: LOW (cosmetic / doc-staleness only) — no functional drift.**
+**DRIFT STATUS: NONE (all findings closed).**
 
-The codebase is functionally aligned with the vault. Login is verified live (`orisys06` → HTTP 200 + JWT). All 17 OQs are resolved/deferred (0 open). `implementation_mode` is correctly `existing`.
+The codebase is functionally aligned with the vault and the vault docs now reflect the actual code. Login is verified live (`orisys06` → HTTP 200 + JWT). All 17 OQs are resolved/deferred (0 open). `implementation_mode` is correctly `existing`.
 
-The residual drift is **spec-body staleness**: the v1.3 OQ-resolution pass updated the OQ blocks + `vault.json` + `00-index.md` roll-up, but did NOT propagate the resolved decisions into the surrounding prose/DBML of `02-architecture.md` and `03-data-model.md`. So the OQ blocks say the right thing while the body text beside them still describes the pre-implementation design. There is also one filename regression introduced by commit `3fc32f5`.
+All P2 and P3 drift findings from the 2026-07-24 report have been closed via vault-doc edits + one `git mv` — **zero code changes**. The original drift was spec-body staleness (the v1.3 OQ-resolution pass updated OQ blocks + `vault.json` + `00-index.md` but not the surrounding prose/DBML) plus one filename regression. Both are now resolved.
 
-No code changes are required to close this drift — only vault-doc edits.
+### Findings at a glance (all CLOSED)
 
-### Findings at a glance
-
-| # | Category | Severity | One-line |
-|---|----------|----------|----------|
-| 1 | MIGRATION-READINESS (spec body stale) | P2 | `03-data-model.md` DBML + prose still say table `users`; code uses `mojf_users` |
-| 2 | MIGRATION-READINESS (spec body stale) | P2 | `02-architecture.md:40` says "Entity tabel `users`"; code = `mojf_users` |
-| 3 | MIGRATION-READINESS (spec body stale) | P2 | `02-architecture.md:103` says non-success echoes `responseDescription`; code returns generic message |
-| 4 | MIGRATION-READINESS (spec body stale) | P3 | `02-architecture.md:129` says OQ-DM-1 "tetap pending"; OQ-DM-1 is resolved |
-| 5 | CODE-ONLY / repo hygiene | P2 | Committed env template renamed `.env.example` → `.env copy.example` (commit 3fc32f5); breaks run recipe |
-| 6 | CODE-ONLY (documented gap) | P3 | `RestClient.Builder` bean in SecurityConfig not in U-006 spec |
-| 7 | NAME/SHAPE (cosmetic) | P3 | Controller method `login()` vs spec's `authenticateUserUCS()` |
-| 8 | CODE-ONLY (doc gap) | P3 | Diagnostic server-side logging in service/controller not reflected in spec |
+| # | Category | Severity | One-line | Status |
+|---|----------|----------|----------|--------|
+| 1 | MIGRATION-READINESS (spec body stale) | P2 | `03-data-model.md` DBML + prose said table `users`; code uses `mojf_users` | ✅ CLOSED (`bffab3c`) |
+| 2 | MIGRATION-READINESS (spec body stale) | P2 | `02-architecture.md:40` said "Entity tabel `users`"; code = `mojf_users` | ✅ CLOSED (`bffab3c`) |
+| 3 | MIGRATION-READINESS (spec body stale) | P2 | `02-architecture.md:103` said non-success echoes `responseDescription`; code returns generic | ✅ CLOSED (`bffab3c`) |
+| 4 | MIGRATION-READINESS (spec body stale) | P3 | `02-architecture.md:129` said OQ-DM-1 "tetap pending"; resolved | ✅ CLOSED (`bffab3c`) |
+| 5 | CODE-ONLY / repo hygiene | P2 | Env template renamed `.env.example` → `.env copy.example`; breaks run recipe | ✅ CLOSED (`bffab3c`, `git mv` back) |
+| 6 | CODE-ONLY (documented gap) | P3 | `RestClient.Builder` bean in SecurityConfig not in spec | ✅ CLOSED (02-architecture row updated) |
+| 7 | NAME/SHAPE (cosmetic) | P3 | Controller method `login()` vs spec's `authenticateUserUCS()` | ✅ CLOSED (U-008 spec synced to `login`) |
+| 8 | CODE-ONLY (doc gap) | P3 | F-U-001 success code marked `[INFERRED]`; verified live | ✅ CLOSED (04-flows DoD lifted to `[VERIFIED]`) |
 
 ---
 
@@ -208,17 +206,19 @@ All 17 OQs closed: **15 resolved + 2 deferred**, 0 open. No implicit-only resolu
 
 ## 7. Recommendations Summary
 
-| Priority | Finding | Action | Type |
-|----------|---------|--------|------|
-| **P2** | `.env copy.example` broken filename | `git mv ".env copy.example" .env.example` | repo hygiene (one command) |
-| **P2** | DBML + prose say `users`, code = `mojf_users` | Update `03-data-model.md` DBML + Note + `02-architecture.md:40,61` | vault-doc edit |
-| **P2** | Error body spec says `responseDescription`, code = generic | Update `02-architecture.md:103` | vault-doc edit |
-| P3 | Stale "OQ-DM-1 pending" in OQ-AR-2 block | Edit `02-architecture.md:129` | vault-doc edit |
-| P3 | F-U-001 DoD still `[INFERRED]` for success code | Lift to `[VERIFIED]` in `04-flows.md:44` | vault-doc edit |
-| P3 | `RestClient.Builder` bean undocumented | Note in U-006 / 02-architecture | vault-doc edit |
-| P3 | Method name `login` vs `authenticateUserUCS` | Update U-008 OR leave (cosmetic) | vault-doc edit |
+All recommendations below have been **APPLIED** (commits `bffab3c` for P2, this follow-up for P3). Zero code changes were required — the code was always the source of truth and correct; the vault docs caught up.
 
-**All P2/P3 items are vault-doc or repo-hygiene edits — zero code changes required.** The code is the source of truth and is correct; the vault docs need to catch up to it.
+| Priority | Finding | Action | Type | Status |
+|----------|---------|--------|------|--------|
+| P2 | `.env copy.example` broken filename | `git mv ".env copy.example" .env.example` | repo hygiene | ✅ DONE |
+| P2 | DBML + prose said `users`, code = `mojf_users` | Update `03-data-model.md` + `02-architecture.md` + `01-overview.md` + `04-flows.md` | vault-doc | ✅ DONE |
+| P2 | Error body spec said `responseDescription`, code = generic | Update `02-architecture.md:103` + `04-flows.md` DoD | vault-doc | ✅ DONE |
+| P3 | Stale "OQ-DM-1 pending" in OQ-AR-2 block | Edit `02-architecture.md:129` | vault-doc | ✅ DONE |
+| P3 | F-U-001 DoD `[INFERRED]` for success code | Lift to `[VERIFIED]` in `04-flows.md` | vault-doc | ✅ DONE |
+| P3 | `RestClient.Builder` bean undocumented | Note in `02-architecture.md` SecurityConfig row | vault-doc | ✅ DONE |
+| P3 | Method name `login` vs `authenticateUserUCS` | Update U-008 spec to `login` | vault-doc | ✅ DONE |
+
+**Remaining drift: NONE.** The only historical artifacts not edited are `bolts/U-008/{bolt-report,dispatch-prompt}.md` — these are immutable execution records (what was requested/delivered at bolt time), not live spec, so `authenticateUserUCS` there is correct history.
 
 ---
 

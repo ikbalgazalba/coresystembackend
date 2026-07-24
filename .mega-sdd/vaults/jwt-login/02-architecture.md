@@ -38,7 +38,7 @@ External clients ──── HTTPS ────► AuthUserController (POST /ap
 | `JwtUtils` | `generateTokenFromUname(uname)` + validate/parse; secret+exp dari config | `AuthUserController.java:128`; `application-test.properties:24-25` |
 | `UserRepository` | `JpaRepository<Users, Long>`, `findByUname(String)` lookup user terdaftar | `AuthUserController.java:130`; `mojf_users_Model.java` |
 | `Users` (entity) | Entity class `Users` yang memetakan tabel `mojf_users` (DB newmojf existing, OQ-DM-1 RESOLVED), adaptasi `mojf_users_Model` ke `jakarta.persistence` | `mojf_users_Model.java:12-50`; `Users.java:14` |
-| `SecurityConfig` | `SecurityFilterChain` bean 7.x — permitAll `/api/auth/**`, stateless, CSRF off, `PasswordEncoder` | `codebase-map.md §7`; spring.md pack |
+| `SecurityConfig` | `SecurityFilterChain` bean 7.x — permitAll `/api/auth/**`, stateless, CSRF off, `PasswordEncoder`, explicit-origin `CorsConfigurationSource`, **dan `RestClient.Builder` bean** (Boot 4.x removed the `RestClient.Builder` auto-config from the starter → disediakan eksplisit di sini untuk konsumsi `LdapUcsService` U-007 via constructor injection) | `config/SecurityConfig.java:52-110`; `codebase-map.md §7`; spring.md pack |
 | DTO `LoginRequest`/`JwtResponse`/`MessageResponse` | Request/response boundary objects | `AuthUserController.java:90,133,141,148` |
 
 **Intent**: Arsitektur berlapis standar Spring — `@RestController` → service/repository; controller hanya parsing + delegasi; business logic di service. Auth stateless via JWT.

@@ -24,11 +24,11 @@ flowchart TD
     L --> NullCheck{"respLdap != null?"}
     NullCheck -- "no" --> NullFail(["400 MessageResponse 'Failed to connect to LDAP service'"])
     NullCheck -- "yes" --> Code{"responseCode == '00' atau '01'?"}
-    %% ⚠️ CORRECTION v1.2 (OQ-FL-1): kode sukses "00"/"01" TIDAK TERVERIFIKASI di newmojf.
-    %% authLDAPNew return JSON mentah UCS saat sukses; kode sukses sebenarnya HARUS dikonfirmasi
-    %% dari endpoint UCS OpenAPI bankmega (mark [INFERRED] sampai integration-test).
+    %% v1.3 live verification (commit de3f828): kode sukses "00" TERVERIFIKASI via endpoint
+    %% UCS asli — responseCode="00" responseDescription="SUCCESS" → HTTP 200. Controller juga
+    %% terima "01" sebagai sukses (defensif), tapi endpoint UCS asli return "00".
     %% Failure codes verified: 502/503 (token), 401 (process).
-    Code -- "no" --> BadCred(["400 MessageResponse(responseDescription)"])
+    Code -- "no" --> BadCred(["400 MessageResponse(\"Authentication failed\")  %% generic, §B-007"])
     Code -- "yes" --> Jwt["JwtUtils.generateTokenFromUname(uname)"]
     Jwt --> Lookup["UserRepository.findByUname(uname) → Users"]
     Lookup --> Role["Maps urole → 'ROLE_<urole>'"]
@@ -38,10 +38,10 @@ flowchart TD
 
 **Definition of Done**:
 - [ ] `POST /api/auth/dologin` menerima JSON `{uname, pass}` dan mem-parsing ke `LoginRequest`.
-- [ ] Kredensial valid (LDAP `responseCode` "00"/"01") → response `200` dengan `JwtResponse` field verbatim newmojf: `token` (JWT non-empty), `type` ("Bearer "), `id`, `uname`, `mitKode` (nilai dari entity.kodeMitra), `urole` (nilai `ROLE_<urole>`). (Nama field final → OQ-AR-7.) ⚠️ **Koreksi v1.2 (OQ-FL-1)**: kode sukses "00"/"01" `[INFERRED]` — belum terverifikasi di newmojf; konfirmasi via integration-test ke endpoint UCS asli sebelum DoD dianggap terpenuhi.
+- [x] Kredensial valid (LDAP `responseCode` "00"/"01") → response `200` dengan `JwtResponse` field verbatim newmojf: `token` (JWT non-empty), `type` ("Bearer "), `id`, `uname`, `mitKode` (nilai dari entity.kodeMitra), `urole` (nilai `ROLE_<urole>`). (Nama field final → OQ-AR-7.) ✅ **v1.3 verified live (commit de3f828)**: kode sukses `"00"` TERVERIFIKASI via endpoint UCS asli — `responseCode="00"` `responseDescription="SUCCESS"` → HTTP 200 + JwtResponse (`{id:1561, mitKode:"001", urole:"ROLE_0"}`). Controller juga terima `"01"` defensif; endpoint asli return `"00"`. Bukan lagi `[INFERRED]`.
 - [ ] Token JWT diterbitkan dari `uname` dengan secret + expiration dari config (`jwtExpirationMs`).
 - [ ] `mitKode` dan `urole` di-response berasal dari data user di tabel `mojf_users` (lookup `findByUname`), bukan hardcoded.
-- [ ] Kredensial salah (LDAP `responseCode` bukan "00"/"01") → `400` `MessageResponse(responseDescription)`. ⚠️ `responseDescription` dari LDAP_UCS bisa berisi pesan error internal/raw exception (`e.getMessage()`) — risiko information leakage (lihat OQ-FL-3). ⚠️ **Koreksi v1.2 (OQ-FL-1)**: failure code terverifikasi `401`/`502`/`503`; sukses-contract `[INFERRED]`; B-007 → map ke generic "Invalid credentials", JANGAN echo `responseDescription` verbatim.
+- [x] Kredensial salah (LDAP `responseCode` bukan "00"/"01") → `400` `MessageResponse("Authentication failed")` (generic). ✅ **OQ-FL-3 RESOLVED v1.3**: `responseDescription` dari LDAP_UCS bisa berisi pesan error internal/raw exception (`e.getMessage()`) — JANGAN echo ke client (§B-007); map ke generic "Authentication failed", raw detail di-log server-side only. Failure codes verified: `401`/`502`/`503`.
 - [ ] LDAP tidak respons (`respLdap == null`) → `400` `MessageResponse("Failed to connect to LDAP service")`.
 - [ ] Exception saat generate JWT/lookup → `401` `MessageResponse("Authentication failed")`.
 - [ ] `/api/auth/**` permitAll di `SecurityConfig` (endpoint login tidak butuh token).
