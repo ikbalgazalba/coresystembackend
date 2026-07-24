@@ -1,6 +1,6 @@
 {
   "status": "FAIL",
-  "analyzed_at": "2026-07-24T04:36:56Z",
+  "analyzed_at": "2026-07-24T07:55:24Z",
   "boundaries": {
     "binding_units_handoff": {
       "status": "PASS",
@@ -125,7 +125,7 @@
     "ui_deferral (advisory)": {
       "status": "PASS",
       "state_file": ".ui-deferral-state.json",
-      "detail": "bolt_reports_scanned=9; units_with_ui_contract=0; deferral_count=0"
+      "detail": "bolt_reports_scanned=14; units_with_ui_contract=0; deferral_count=0"
     },
     "vault_flow_staging (advisory)": {
       "status": "PASS",
