@@ -1,2 +1,7 @@
+com/coresystem/coresystembackend/AuthLoginIntegrationTest.class
+com/coresystem/coresystembackend/AuthLoginIntegrationTest$TestConfig.class
+com/coresystem/coresystembackend/controller/AuthUserControllerTest.class
 com/coresystem/coresystembackend/config/SecurityConfigTest.class
+com/coresystem/coresystembackend/service/LdapUcsServiceTest.class
+com/coresystem/coresystembackend/security/JwtUtilsTest.class
 com/coresystem/coresystembackend/CoresystembackendApplicationTests.class

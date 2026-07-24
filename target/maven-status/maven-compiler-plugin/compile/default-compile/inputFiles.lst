@@ -1,4 +1,5 @@
 /home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java
+/home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/config/OpenApiConfig.java
 /home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/config/SecurityConfig.java
 /home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java
 /home/ikbalgazalba/AI/Project/coresystembackend/src/main/java/com/coresystem/coresystembackend/dto/JwtResponse.java

@@ -1,0 +1,14 @@
+# Dev profile — local development. Overrides ONLY profile-specific keys.
+# Base application.yaml (secret ${VAR} placeholders, fail-fast) is unchanged.
+# SDD-PROVENANCE: U-005 | vault: .mega-sdd/vaults/api-platform | Spring profile dev
+coresystem:
+  cors:
+    allowed-origins: http://localhost:3000,http://localhost:8080
+springdoc:
+  swagger-ui:
+    enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
