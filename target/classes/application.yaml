@@ -1,10 +1,14 @@
+# All secret/URL values are externalized to environment variables (§D-002).
+# There are NO defaults here on purpose: if an env var is unset the app fails
+# fast at startup (Could not resolve placeholder). Provide values via .env
+# (see .env.example, gitignored) or real environment config.
 spring:
   application:
     name: coresystembackend
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://10.95.1.43:5432/newmojf}
-    username: ${SPRING_DATASOURCE_USERNAME:newmojf}
-    password: ${SPRING_DATASOURCE_PASSWORD:P@ssw0rd}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -13,17 +17,19 @@ spring:
 
 coresystem:
   app:
-    jwtSecret: ${JWT_SECRET:dev-only-secret-change-me}
+    # No default — MUST be set via JWT_SECRET env var (§D-002).
+    # Base64-encoded, >=64 bytes for HS512 (jjwt WeakKeyException guard).
+    jwtSecret: ${JWT_SECRET}
     jwtExpirationMs: 86400000
   ldap:
-    urlToken: ${LDAP_URL_TOKEN:https://openapidev2.bankmega.local:15000/realms/quarkus/protocol/openid-connect/token}
-    urlVerifyPassword: ${LDAP_URL_VERIFY_PASSWORD:https://openapidev2.bankmega.local:15000/openapi/v1.0/ldap/verifypassword/}
-    clientId: ${LDAP_CLIENT_ID:ldapucs}
-    clientSecret: ${LDAP_CLIENT_SECRET:ewKESCVu83NrTFaFSyJLdcCEJMVAp9Bf}
-    username: ${LDAP_USERNAME:ldapcamel}
-    password: ${LDAP_PASSWORD:KeYcl0@kC4m3l}
-    partnerId: ${LDAP_PARTNER_ID:51529703-5006-4666-b03d-815ee1e2da8d}
-    channelId: ${LDAP_CHANNEL_ID:95221}
-    host: ${LDAP_HOST:openapidev2.bankmega.local}
-    aesKey: ${LDAP_AES_KEY:Q8zU$&R&P3DoQyff^R&AA*t$!EAZ%FD7}
-
+    # All values MUST be set via env var (§D-002). See .env.example.
+    urlToken: ${LDAP_URL_TOKEN}
+    urlVerifyPassword: ${LDAP_URL_VERIFY_PASSWORD}
+    clientId: ${LDAP_CLIENT_ID}
+    clientSecret: ${LDAP_CLIENT_SECRET}
+    username: ${LDAP_USERNAME}
+    password: ${LDAP_PASSWORD}
+    partnerId: ${LDAP_PARTNER_ID}
+    channelId: ${LDAP_CHANNEL_ID}
+    host: ${LDAP_HOST}
+    aesKey: ${LDAP_AES_KEY}
