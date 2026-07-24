@@ -32,7 +32,8 @@ Created `docker-compose.yml` (app service: build from U-003 Dockerfile, env_file
 ## Acceptance tests
 - `docker compose config -q` → exit 0 (valid syntax; no image pull, so Docker Hub auth flakiness not a factor).
 - `.dockerignore` excludes `.env`/`target/`/`.git/`/`.mega-sdd/`. Compose has env_file + `:ro` volume + no postgres. All structural checks PASS.
-- Manual `docker compose up -d --build && curl /actuator/health` — out of scope (operator-run; needs real .env secrets + network).
+- **`docker compose up -d` VERIFIED (post-network-restoration):** app boots cleanly — `HikariPool-1 - Start completed` (DB connected) + `Started CoresystembackendApplication in 9.254s`; container `Up (healthy)`, port 8080 published. `/actuator/health` → `{"status":"UP","groups":["liveness","readiness"]}`. `/v3/api-docs` → OpenAPI 3.1.0 spec with `/api/auth/dologin` + `LoginRequest` schema (U-001). `/swagger-ui.html` → HTTP 403 (intended prod gating, `springdoc.swagger-ui.enabled=false`, OQ-AP-5 ACCEPT; spec stays on at `/v3/api-docs`). `POST /api/auth/dologin` → HTTP 400 (endpoint reachable + processing dummy creds, not 404/403).
+- **First `compose up` at 07:17 crashed** with `SocketTimeoutException` to the DB — transient: the dev DB `tibsdbdev.bankmegadev.net:5432` was unreachable from the container at that moment; reachable on retry (DNS resolves to `10.190.9.55`, TCP 5432 open from both default-bridge + host-net). Re-running `compose up` succeeded. Root cause was NOT a code/config defect.
 
 ## Post-flight Hard rules
 All 7 PASS: both files exist; pom + Dockerfile untouched; HR-1 (env_file + volume, no baked secret); OQ-AP-4 (no postgres); .dockerignore exclusions.

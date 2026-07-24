@@ -8,9 +8,9 @@ target_files:
   - path: Dockerfile
     operation: create
 postflight: pass
-acceptance_test_result: PARTIAL — build command + JAR name PROVEN (host build SUCCESS); docker build NOT VERIFIED (environmental network block)
+acceptance_test_result: PASS — docker build SUCCESS + runtime-image verification + secret-scan (post-network-restoration)
 bolt_self_report:
-  confidence: 0.90
+  confidence: 0.96
   certain_decisions:
     - "multi-stage: eclipse-temurin:21-jdk builder + 21-jre runtime (HR-2)"
     - "RUN ./mvnw -B clean package -DskipTests (HR-2/§D-005 — committed wrapper, not host Maven)"
@@ -29,18 +29,16 @@ Created multi-stage `Dockerfile` (54 lines) per spec: `eclipse-temurin:21-jdk` b
 
 ## Acceptance tests
 - **Host build (proves build command + JAR name):** `./mvnw -B clean package -DskipTests` → BUILD SUCCESS (3.6s), produced `target/coresystembackend-0.0.1-SNAPSHOT.jar` — the exact filename the Dockerfile's `COPY --from=builder` references; spring-boot:repackage made it executable.
-- **`docker build`:** NOT VERIFIED — two independent environmental network blocks (not Dockerfile defects):
-  1. Docker Hub `auth.docker.io` intermittent gateway errors/timeouts (BuildKit must hit it for manifest resolution).
-  2. Container (default bridge) → Maven Central broken: `wget: Failed to fetch ... apache-maven-3.9.9-bin.tar.gz` at ~268s, while host reaches Maven Central fine (host build succeeded). Docker bridge networking issue (IPv6/MTU to CDN).
-  - Mitigations tried: retries, `--network=host` (blocked by Docker Hub auth at that moment), `docker build --check` (also hits Docker Hub). None altered the Dockerfile.
-- **Runtime-image verification (criterion 2/3):** not run — depends on a successful image build.
+- **`docker build` VERIFIED (post-network-restoration):** `docker build -t coresystembackend:u003-verify .` → BUILD SUCCESS (multi-stage: eclipse-temurin:21-jdk builder runs `./mvnw -B clean package -DskipTests`; 21-jre runtime copies JAR). First attempts hit Docker Hub `auth.docker.io` gateway timeouts (intermittent outage); succeeded on retry once BuildKit's internal retry + cached base images resolved.
+- **Runtime-image verification PASS:** `/app/app.jar` present (65MB executable); ABSENT: `src/`, `.mvn/`, `pom.xml`, `.env`, `mvnw`, `target/` (image is lean — no source/build-artifacts/secret). Runtime base = Ubuntu 26.04 + OpenJDK 21.0.11 **JRE** (not JDK — stage 2 correct); `mvn` absent (builder stage did not leak into runtime).
+- **Secret-scan PASS:** `docker history --no-trunc` shows no secret literal (no password/jwtSecret/LDAP_secret/datasource_password); image `ENV` only base-image defaults (PATH, JAVA_HOME, LANG) — zero app secrets baked (HR-1: secrets only from `env_file` at run, trust store only via volume mount).
 
 ## Post-flight Hard rules
 All 5 PASS (postflight.json): Dockerfile exists; pom unchanged; SecurityConfig unchanged; HR-1 (no baked secrets); HR-2 (runtime 21-jre + builder ./mvnw).
 
 ## Concerns
-- **docker build unverified** — environmental, not a defect. The Dockerfile is syntactically valid (BuildKit parsed it + began resolving FROM). High confidence it builds once network is restored. Suggested follow-up (U-004/re-run): `docker build -t coresystembackend:u003 .` then criterion-2/3 checks; if container→Maven-Central persists, use `--network=host` (host reaches Maven Central) — no Dockerfile change needed.
-- The `--network=host` / `--check` attempts were build-time diagnostics only; the committed Dockerfile is the spec-exact version.
+- **docker build** — resolved. `docker build` + runtime-image verification + secret-scan all PASS (post-network-restoration). The earlier in-session failures were Docker Hub `auth.docker.io` gateway timeouts (intermittent outage) + container(default bridge)→Maven Central networking — both environmental, neither a Dockerfile defect. Build succeeds on retry once auth resolves.
+- The runtime image base is Ubuntu 26.04 (eclipse-temurin:21-jre on Ubuntu), which ships `wget` — see U-004 healthcheck update (readiness probe via `wget /actuator/health`).
 
 ## Out of scope (verified untouched)
 compose/.dockerignore (U-004). profiles (U-005). SecurityConfig (U-002). springdoc (U-001).
