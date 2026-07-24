@@ -121,6 +121,24 @@
         "flow_coverage": "SKIP (no user-flow input-validation artifacts — system-flow epic)",
         "sibling_consistency": "PASS (0 inconsistent, 0 missing relations)"
       }
+    },
+    {
+      "event": "bolts_executed",
+      "at": "2026-07-24T14:02:00Z",
+      "count": 5,
+      "units": [
+        {"id": "U-001", "commit": "6ad3426", "status": "completed", "postflight": "pass", "test": "PASS (contextLoads via ./mvnw)"},
+        {"id": "U-002", "commit": "1d65f4c", "status": "completed", "postflight": "pass", "test": "PASS (SecurityConfigTest 2/2 + contextLoads)"},
+        {"id": "U-003", "commit": "8c6b06b", "status": "completed", "postflight": "pass", "test": "docker build NOT VERIFIED (Docker Hub auth outage + container→Maven Central bridge issue); host build SUCCESS proves build command + JAR name"},
+        {"id": "U-004", "commit": "0a3d772", "status": "completed", "postflight": "pass", "test": "PASS (docker compose config -q exit 0); manual compose up deferred to operator"},
+        {"id": "U-005", "commit": "f0b518b", "status": "completed", "postflight": "pass", "test": "PASS (contextLoads x3: no-profile/dev/prod)"}
+      ],
+      "oqs_resolved": ["OQ-AP-1 (springdoc 3.0.3)", "OQ-AP-2 (port 8080)", "OQ-AP-3 (trust-store /opt/bankmega-truststore/)", "OQ-AP-4 (env-only, no postgres)", "OQ-AP-5 (prod UI off)", "OQ-AP-6 (no limits)", "OQ-AP-8 (health-only)", "OQ-AP-9 (CORS externalized)"],
+      "oqs_open": ["OQ-AP-7 (success metrics — functional DoD fallback, P3)"],
+      "batch_suite": {"status": "green", "tests": 18, "failures": 0, "errors": 0, "artifact": "bolts/_batch-suite.json"},
+      "pre_existing_defect_fixed": "Maven wrapper .mvn/wrapper/ restored (was never committed; blocked ./mvnw + U-003 Dockerfile builder) — commit ce1e298",
+      "branch": "feat/api-platform-swagger-docker",
+      "environmental_caveats": "Docker build (U-003) + docker compose up (U-004) verifications deferred to network restoration; Docker Hub auth.docker.io outage + container(default bridge)→Maven Central networking issue during session"
     }
   ]
 }

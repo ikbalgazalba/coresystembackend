@@ -1,0 +1,34 @@
+{
+  "unit": "U-005",
+  "status": "pass",
+  "rules": [
+    {
+      "rule": "file application-dev.yaml MUST exist after bolt",
+      "verdict": "pass"
+    },
+    {
+      "rule": "file application-prod.yaml MUST exist after bolt",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT modify application.yaml",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT add new pom.xml dependencies",
+      "verdict": "pass"
+    },
+    {
+      "rule": "HR-4 base fail-fast preserved (application.yaml untouched)",
+      "verdict": "pass"
+    },
+    {
+      "rule": "OQ-AP-5 prod swagger-ui disabled",
+      "verdict": "pass"
+    },
+    {
+      "rule": "OQ-AP-8 health-only actuator exposure (both profiles)",
+      "verdict": "pass"
+    }
+  ]
+}

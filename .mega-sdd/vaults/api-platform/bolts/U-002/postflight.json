@@ -1,0 +1,38 @@
+{
+  "unit": "U-002",
+  "status": "pass",
+  "rules": [
+    {
+      "rule": "DO NOT modify src/main/java/com/coresystem/coresystembackend/controller/AuthUserController.java",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT modify src/main/java/com/coresystem/coresystembackend/security/JwtUtils.java",
+      "verdict": "pass"
+    },
+    {
+      "rule": "function filterChain MUST preserve signature",
+      "verdict": "pass"
+    },
+    {
+      "rule": "file SecurityConfig.java MUST exist after bolt",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT add new pom.xml dependencies (beyond actuator)",
+      "verdict": "pass"
+    },
+    {
+      "rule": "HR-5 additive (existing authz preserved)",
+      "verdict": "pass"
+    },
+    {
+      "rule": "HR-8 CORS externalized (no hardcoded origin in cors bean body)",
+      "verdict": "pass"
+    },
+    {
+      "rule": "new permitAll matchers (health + doc paths) present",
+      "verdict": "pass"
+    }
+  ]
+}

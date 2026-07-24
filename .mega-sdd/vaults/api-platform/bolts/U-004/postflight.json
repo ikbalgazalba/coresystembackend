@@ -1,0 +1,35 @@
+{
+  "unit": "U-004",
+  "status": "pass",
+  "rules": [
+    {
+      "rule": "file docker-compose.yml MUST exist after bolt",
+      "verdict": "pass"
+    },
+    {
+      "rule": "file .dockerignore MUST exist after bolt",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT add new pom.xml dependencies",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT modify Dockerfile",
+      "verdict": "pass"
+    },
+    {
+      "rule": "HR-1 env_file + trust-store volume mount (no baked secret)",
+      "verdict": "pass"
+    },
+    {
+      "rule": "OQ-AP-4 no postgres service (env-only)",
+      "verdict": "pass"
+    },
+    {
+      "rule": ".dockerignore excludes .env/target/.git/.mega-sdd",
+      "verdict": "pass"
+    }
+  ],
+  "compose_config": "PASS (docker compose config -q exit 0)"
+}

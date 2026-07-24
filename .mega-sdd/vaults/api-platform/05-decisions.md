@@ -64,3 +64,13 @@
 - `source/seed-PRD.md` §E, §G, §I
 - `.mega-sdd/codebase/codebase-map.md` §6, §7
 - `.mega-sdd/vaults/jwt-login/constitution.md` §B-006, §D-002
+
+## OQ-AP-1 resolution — springdoc-openapi version (RESOLVED 2026-07-24)
+
+**Decision:** use `springdoc-openapi-starter-webmvc-ui` **3.0.3**.
+
+**Evidence:** springdoc-openapi maintains two parallel release tracks — v2.x.x targets Spring Boot 3.5.x; **v3.x.x targets Spring Boot 4.x** (v3.0.0 "Upgrade to Spring Boot 4.0.0"; v3.0.3 targets Boot 4.0.5, released 2026-04-11). Source: github.com/springdoc/springdoc-openapi/releases.
+
+**Rationale:** this project pins Spring Boot 4.1.1-SNAPSHOT. The v3.x line is the only springdoc track targeting Boot 4; v3.0.3 is the latest v3 release (Boot 4.0.5). The 4.1.1-SNAPSHOT is one minor ahead of v3.0.3's targeted 4.0.5, but the v3 line is the correct Boot-4-compatible track (v2.x is Boot-3-only and will not resolve against Boot 4 starters).
+
+**Risk:** snapshot Boot may shift behavior; if v3.0.3 fails to resolve against 4.1.1-SNAPSHOT, fall back to the latest v3.0.x snapshot/milestone or pin Boot to 4.0.5. Recorded as the accepted recommendation; PO/architect may override.

@@ -1,0 +1,27 @@
+{
+  "unit": "U-003",
+  "status": "pass",
+  "rules": [
+    {
+      "rule": "file Dockerfile MUST exist after bolt",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT add new pom.xml dependencies",
+      "verdict": "pass"
+    },
+    {
+      "rule": "DO NOT modify SecurityConfig.java",
+      "verdict": "pass"
+    },
+    {
+      "rule": "HR-1 no secret/.env/trust-store baked into image",
+      "verdict": "pass"
+    },
+    {
+      "rule": "HR-2 runtime eclipse-temurin:21-jre + builder ./mvnw",
+      "verdict": "pass"
+    }
+  ],
+  "build_verification": "not_run \u2014 environmental network block (Docker Hub auth outage + container\u2192Maven Central bridge issue); host build proves build command + JAR name correct"
+}
