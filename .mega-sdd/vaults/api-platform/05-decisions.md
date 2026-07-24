@@ -88,3 +88,15 @@
 - `Dockerfile`: `EXPOSE 7001` + OQ-AP-2 comment + provenance trailer.
 
 **Risk:** low — port lives only in config + EXPOSE (no business code bound to 8080). Verified live: Tomcat `started on port 7001`, `/actuator/health` + `/v3/api-docs` + `/swagger-ui` + `/v3/api-docs/swagger-config` all 200/302 on :7001. `run-app.sh` (host non-container launcher) still uses Spring default 8080 — set `SERVER_PORT=7001` if host-run also needs 7001.
+
+## Build strategy — Option A: pre-built JAR (HR-2 deviation, 2026-07-24)
+
+**Decision:** the Dockerfile COPIES the host-built JAR (`target/coresystembackend-0.0.1-SNAPSHOT.jar`) instead of running `./mvnw` inside the builder stage.
+
+**Rationale:** in-container `./mvnw` requires the builder to download the Maven distribution + dependencies from Maven Central (`repo.maven.apache.org`). That download is unreliable from the Docker default bridge network in this environment (connection timeouts ~268s), breaking every image rebuild when source changes. The host build (`./mvnw clean package -DskipTests`) uses the host's `~/.m2` cache and is reliable (3-6s). Option A makes `docker build` network-independent + fast (seconds).
+
+**Prerequisite:** run `./mvnw clean package -DskipTests` on the host before `docker build`, so the JAR is fresh. `.dockerignore` re-includes `target/coresystembackend-0.0.1-SNAPSHOT.jar` (excludes the rest of `target/`).
+
+**Deviation from HR-2 (documented):** HR-2 mandates the builder use `./mvnw` (committed wrapper) INSIDE the container. Option A still uses the committed `./mvnw` wrapper, but the build runs on the HOST, not in-container. The runtime image contract is UNCHANGED (JRE only, no source/Maven, no secrets — HR-1 intact; `eclipse-temurin:21-jre` runtime). Revert to in-container `./mvnw` (with BuildKit `--mount=type=cache,target=/root/.m2` to seed the cache) when the container→Maven Central network path is reliable.
+
+**Risk:** image build is now host-dependent (JAR must be pre-built). Mitigated by: documenting the prerequisite in the Dockerfile header + this note; the build is reproducible as long as the host has `./mvnw` (committed wrapper) + the `.m2` cache.

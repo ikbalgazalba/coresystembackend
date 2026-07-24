@@ -10,31 +10,37 @@
 #     (plus -Djavax.net.ssl.trustStorePassword=...). No trust store is baked into
 #     this image — it is injected purely as a runtime volume + env (HR-1, §D-004).
 #
-#   - curl caveat: the eclipse-temurin:21-jre runtime image ships no curl/wget by
-#     default. This Dockerfile therefore ships NO HEALTHCHECK. The healthcheck
-#     mechanism (Java-based / CMD-SHELL probe, or installing curl) is U-004's
-#     decision via docker-compose.yml — do not assume curl exists here.
+# BUILD STRATEGY — pre-built JAR (Option A):
+#   The original Dockerfile ran `./mvnw` inside the builder stage, which requires
+#   the container to download the Maven distribution + dependencies from Maven
+#   Central on every source change. That download is unreliable from the default
+#   Docker bridge network in this environment (connection timeouts to
+#   repo.maven.apache.org). To make image builds reliable + network-independent,
+#   the JAR is now BUILT ON THE HOST first (`./mvnw clean package -DskipTests`,
+#   which uses the host's ~/.m2 cache) and this Dockerfile only COPIES the
+#   pre-built JAR. There is NO `./mvnw` step inside the container.
+#
+#   Prerequisite: run `./mvnw clean package -DskipTests` on the host before
+#   `docker build`, so target/coresystembackend-0.0.1-SNAPSHOT.jar is fresh.
+#
+#   DEVIATION from HR-2 (documented): HR-2 mandates "builder uses ./mvnw (the
+#   committed wrapper), NOT a host/installed Maven". This Dockerfile deviates —
+#   the host build uses the committed ./mvnw wrapper (still not a host-installed
+#   Maven), but the BUILD happens on the host, not inside the container. Recorded
+#   in 05-decisions.md (OQ-AP-2/build-strategy). Rationale: container→Maven
+#   Central networking is unreliable in this env; host build is reliable. The
+#   runtime image contract (JRE only, no source/Maven, no secrets — HR-1) is
+#   UNCHANGED. Revert to in-container ./mvnw when network is reliable.
 #
 # HR-1: no secret/.env/trust-store baked into the image (secrets come only from
 #       env_file at run; trust store only via volume mount).
-# HR-2: runtime stage is eclipse-temurin:21-jre (JRE only); builder uses ./mvnw
-#       (the committed wrapper), not a host-installed Maven.
 
-# ---------- Stage 1: builder (JDK + Maven wrapper) ----------
-# Needs network to repo.spring.io/snapshot (Spring Boot 4 parent) and Maven
-# Central (springdoc 3.0.3, actuator, etc.). This is expected.
+# ---------- Stage 1: builder (copies the host-built JAR) ----------
+# No Maven, no source compile, no network needed — the JAR is built on the host
+# with the committed ./mvnw wrapper (see BUILD STRATEGY above) before docker build.
 FROM eclipse-temurin:21-jdk AS builder
 WORKDIR /build
-
-# Layer-caching: least-frequently-changing files first.
-COPY pom.xml .
-COPY mvnw mvnw.cmd ./
-COPY .mvn .mvn
-COPY src src
-
-# Build the executable JAR using the committed wrapper. Tests run as a separate
-# gate (§D-005), so -DskipTests keeps the image build fast + reproducible.
-RUN chmod +x mvnw && ./mvnw -B clean package -DskipTests
+COPY target/coresystembackend-0.0.1-SNAPSHOT.jar app.jar
 
 # ---------- Stage 2: runtime (JRE only) ----------
 FROM eclipse-temurin:21-jre
@@ -42,7 +48,7 @@ WORKDIR /app
 
 # Only the built JAR is copied from the builder — no source, no Maven, no pom,
 # no .env, no trust store. Runtime image stays minimal.
-COPY --from=builder /build/target/coresystembackend-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /build/app.jar app.jar
 
 # OQ-AP-2: default 7001; overridable via SERVER_PORT env at run.
 EXPOSE 7001
@@ -51,4 +57,4 @@ EXPOSE 7001
 # trust-store flags (OQ-AP-3) via JAVA_OPTS at run. sh -c lets the env var expand.
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 
-# SDD-PROVENANCE: U-003 | vault: .mega-sdd/vaults/api-platform | multi-stage Dockerfile (eclipse-temurin:21-jdk builder + 21-jre runtime; ./mvnw per HR-2; EXPOSE 7001 OQ-AP-2; trust-store at /opt/bankmega-truststore/ OQ-AP-3)
+# SDD-PROVENANCE: U-003 | vault: .mega-sdd/vaults/api-platform | multi-stage Dockerfile (pre-built JAR copy — Option A; runtime eclipse-temurin:21-jre; EXPOSE 7001 OQ-AP-2; trust-store at /opt/bankmega-truststore/ OQ-AP-3). Deviation HR-2: build on host (./mvnw), not in-container — see 05-decisions.md.

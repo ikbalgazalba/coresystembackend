@@ -1,12 +1,17 @@
 # .dockerignore — keep secrets + build noise out of the Docker build context (HR-1, §D-002).
 # SDD-PROVENANCE: U-004 | vault: .mega-sdd/vaults/api-platform
 #
-# Excluded: secrets (.env), build output (target/), VCS/IDE state, and host-only
-# launchers. KEPT on purpose: .env.example (template, not secret), pom.xml, mvnw,
-# mvnw.cmd, .mvn/wrapper/maven-wrapper.properties (needed by ./mvnw in the builder),
-# src/, Dockerfile.
+# Build strategy: Option A (pre-built JAR). The Dockerfile COPIES the host-built
+# JAR from target/, so the JAR MUST be in the build context. Everything else
+# under target/ (class files, surefire reports, maven-status) is excluded.
+#
+# Excluded: secrets (.env), target/ build noise (EXCEPT the pre-built JAR),
+# VCS/IDE state, host-only launchers. KEPT: .env.example (template, not secret),
+# pom.xml, mvnw, mvnw.cmd, .mvn/, src/, Dockerfile, target/*.jar (pre-built).
 
-target/
+# Exclude all of target/ then re-include the pre-built JAR (Option A needs it).
+target/*
+!target/coresystembackend-0.0.1-SNAPSHOT.jar
 .git/
 .gitignore
 .mega-sdd/
