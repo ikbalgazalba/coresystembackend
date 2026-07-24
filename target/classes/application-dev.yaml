@@ -3,7 +3,7 @@
 # SDD-PROVENANCE: U-005 | vault: .mega-sdd/vaults/api-platform | Spring profile dev
 coresystem:
   cors:
-    allowed-origins: http://localhost:3000,http://localhost:8080
+    allowed-origins: http://localhost:3000,http://localhost:7001
 springdoc:
   swagger-ui:
     enabled: true
@@ -12,3 +12,5 @@ management:
     web:
       exposure:
         include: health
+server:
+  port: ${SERVER_PORT:7001}   # OQ-AP-2 — dev default 7001 (match prod)

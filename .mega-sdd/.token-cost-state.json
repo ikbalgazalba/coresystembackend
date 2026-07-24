@@ -1,16 +1,16 @@
 {
   "status": "PASS",
   "have_telemetry": true,
-  "turns": 95,
+  "turns": 97,
   "subagent_turns": 37,
-  "raw_total": 30275379,
-  "cost_weighted_total": 8608126,
-  "overstatement_ratio": 3.52,
+  "raw_total": 31090338,
+  "cost_weighted_total": 8699172,
+  "overstatement_ratio": 3.57,
   "by_token_type": {
-    "input_tokens": 3941917,
+    "input_tokens": 3942488,
     "cache_creation_input_tokens": 0,
-    "cache_read_input_tokens": 25918592,
-    "output_tokens": 414870
+    "cache_read_input_tokens": 26731136,
+    "output_tokens": 416714
   },
   "weights": {
     "input_tokens": 1.0,
@@ -24,35 +24,35 @@
       "turns": 11,
       "raw": 8675748,
       "cost_weighted": 2027876,
-      "pct_cost": 23.6
+      "pct_cost": 23.3
     },
     {
       "skill": "Explore",
       "turns": 3,
       "raw": 2057109,
       "cost_weighted": 1449090,
-      "pct_cost": 16.8
+      "pct_cost": 16.7
     },
     {
       "skill": "mega-sdd:execute-bolts",
-      "turns": 41,
-      "raw": 8493977,
-      "cost_weighted": 1268162,
-      "pct_cost": 14.7
+      "turns": 43,
+      "raw": 9308936,
+      "cost_weighted": 1359207,
+      "pct_cost": 15.6
     },
     {
       "skill": "mega-sdd:phase-advisor",
       "turns": 4,
       "raw": 3483318,
       "cost_weighted": 1248009,
-      "pct_cost": 14.5
+      "pct_cost": 14.3
     },
     {
       "skill": "mega-sdd:spec-reviewer",
       "turns": 7,
       "raw": 2374344,
       "cost_weighted": 935087,
-      "pct_cost": 10.9
+      "pct_cost": 10.7
     },
     {
       "skill": "mega-sdd:security-reviewer",
@@ -66,21 +66,21 @@
       "turns": 11,
       "raw": 2089774,
       "cost_weighted": 401864,
-      "pct_cost": 4.7
+      "pct_cost": 4.6
     },
     {
       "skill": "mega-sdd:standards-reviewer",
       "turns": 2,
       "raw": 716349,
       "cost_weighted": 351183,
-      "pct_cost": 4.1
+      "pct_cost": 4.0
     },
     {
       "skill": "mega-sdd:code-quality-reviewer",
       "turns": 2,
       "raw": 680945,
       "cost_weighted": 322816,
-      "pct_cost": 3.8
+      "pct_cost": 3.7
     },
     {
       "skill": "mega-sdd:resolve-oq",
