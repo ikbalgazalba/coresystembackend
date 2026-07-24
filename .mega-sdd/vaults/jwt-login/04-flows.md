@@ -40,7 +40,7 @@ flowchart TD
 - [ ] `POST /api/auth/dologin` menerima JSON `{uname, pass}` dan mem-parsing ke `LoginRequest`.
 - [ ] Kredensial valid (LDAP `responseCode` "00"/"01") → response `200` dengan `JwtResponse` field verbatim newmojf: `token` (JWT non-empty), `type` ("Bearer "), `id`, `uname`, `mitKode` (nilai dari entity.kodeMitra), `urole` (nilai `ROLE_<urole>`). (Nama field final → OQ-AR-7.) ⚠️ **Koreksi v1.2 (OQ-FL-1)**: kode sukses "00"/"01" `[INFERRED]` — belum terverifikasi di newmojf; konfirmasi via integration-test ke endpoint UCS asli sebelum DoD dianggap terpenuhi.
 - [ ] Token JWT diterbitkan dari `uname` dengan secret + expiration dari config (`jwtExpirationMs`).
-- [ ] `mitKode` dan `urole` di-response berasal dari data user di tabel `users` (lookup `findByUname`), bukan hardcoded.
+- [ ] `mitKode` dan `urole` di-response berasal dari data user di tabel `mojf_users` (lookup `findByUname`), bukan hardcoded.
 - [ ] Kredensial salah (LDAP `responseCode` bukan "00"/"01") → `400` `MessageResponse(responseDescription)`. ⚠️ `responseDescription` dari LDAP_UCS bisa berisi pesan error internal/raw exception (`e.getMessage()`) — risiko information leakage (lihat OQ-FL-3). ⚠️ **Koreksi v1.2 (OQ-FL-1)**: failure code terverifikasi `401`/`502`/`503`; sukses-contract `[INFERRED]`; B-007 → map ke generic "Invalid credentials", JANGAN echo `responseDescription` verbatim.
 - [ ] LDAP tidak respons (`respLdap == null`) → `400` `MessageResponse("Failed to connect to LDAP service")`.
 - [ ] Exception saat generate JWT/lookup → `401` `MessageResponse("Authentication failed")`.

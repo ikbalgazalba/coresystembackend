@@ -12,7 +12,7 @@ tags: ["vault/jwt-login", "doc/overview"]
 
 ## Product
 
-Fitur login berbasis JWT pada coresystembackend: satu endpoint `POST /api/auth/dologin` yang menerima username + password, mengautentikasi via LDAP UCS (pola `LDAP_UCS_Utils.authLDAPNew` dari newmojf), menerbitkan JWT dari uname, lalu lookup data user terdaftar dari tabel `users` dan mengembalikan `{token, id, uname, kodeMitra, role}`. `(seed-PRD §A; AuthUserController.java:89-150)`
+Fitur login berbasis JWT pada coresystembackend: satu endpoint `POST /api/auth/dologin` yang menerima username + password, mengautentikasi via LDAP UCS (pola `LDAP_UCS_Utils.authLDAPNew` dari newmojf), menerbitkan JWT dari uname, lalu lookup data user terdaftar dari tabel `mojf_users` dan mengembalikan `{token, id, uname, mitKode, urole}` (nama field DTO verbatim newmojf, OQ-AR-7). `(seed-PRD §A; AuthUserController.java:89-150)`
 
 ## Target users / personas
 
@@ -26,7 +26,7 @@ coresystembackend saat ini skeleton Spring Initializr tanpa layer HTTP/security 
 
 - Endpoint `POST /api/auth/dologin` menerima `{uname, pass}` dan mengembalikan `JwtResponse` field verbatim newmojf `{token, type="Bearer ", id, uname, mitKode, urole}` (nama field final → OQ-AR-7) untuk kredensial valid. `(seed-PRD §D; JwtResponse.java:5-10; AuthUserController.java:133-138)`
 - JWT diterbitkan dari uname; secret + expiration dibaca dari config (`jwtExpirationMs=86400000` → 24 jam). `(seed-PRD §D; application-test.properties:24-25)`
-- User terdaftar dibaca dari tabel `users` (struktur `mojf_users_Model`, diadaptasi ke `jakarta.persistence`). `(seed-PRD §D; mojf_users_Model.java)`
+- User terdaftar dibaca dari tabel `mojf_users` (DB newmojf existing; struktur `mojf_users_Model`, diadaptasi ke `jakarta.persistence`). `(seed-PRD §D; mojf_users_Model.java)`
 - Kredensial salah / LDAP gagal → respons 400 dengan `MessageResponse`. `(AuthUserController.java:144-148)`
 - Kebutuhan KPI/SLA lebih lanjut → `(unspecified)` (lihat OQ).
 

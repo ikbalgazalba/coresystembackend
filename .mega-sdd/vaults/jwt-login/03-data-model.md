@@ -8,12 +8,12 @@ tags: ["vault/jwt-login", "doc/data-model"]
 
 # 03 — Data Model
 
-> **TL;DR**: Satu entity `users` — adaptasi `mojf_users_Model` ke `jakarta.persistence` (Boot 4.x). · BE Dev / DBA · baca saat design entity/repo.
+> **TL;DR**: Satu entity `Users` (class) yang memetakan tabel `mojf_users` di DB newmojf existing — adaptasi `mojf_users_Model` ke `jakarta.persistence` (Boot 4.x). · BE Dev / DBA · baca saat design entity/repo.
 
 ## Entities (DBML)
 
 ```dbml
-Table users {
+Table mojf_users {
   id bigint [pk, increment, note: 'uid_ — @Id @GeneratedValue(IDENTITY)']
   uname varchar [note: 'username login — unique lookup key']
   pass varchar [note: 'password (LDAP auth; kolom disimpan sesuai pola newmojf)']
@@ -33,14 +33,14 @@ Table users {
   status_user bigint [note: 'status user']
 }
 
-Note: 'Adaptasi mojf_users_Model.java tabel mojf_users → jakarta.persistence (BUKAN javax). Nama tabel users (pack standard) vs mojf_users (referensi) → lihat OQ-DM-1. Field @Column name snake_case sesuai kolom DB newmojf.'
+Note: 'Adaptasi mojf_users_Model.java ke jakarta.persistence (BUKAN javax). Nama tabel = mojf_users (DB newmojf existing — OQ-DM-1 RESOLVED v1.3: pakai skema existing, BUKAN pack-standard users, agar lookup findByUname ke tabel existing berhasil). Field @Column name snake_case sesuai kolom DB newmojf. Class entity tetap `Users` (pack PascalCase).'
 ```
 
 > **Purpose**: Menyimpan data user terdaftar untuk lookup saat login (`findByUname`). Field `kode_mitra` dan `urole` dipakai di JwtResponse. `(mojf_users_Model.java:12-50; AuthUserController.java:130-138)`
 
 ## Constraints
 
-- **Uniqueness**: `users.uname` harus unik — dipakai sebagai lookup key login (`findByUname`). `(inferred from mojf_users_Model.java uname; AuthUserController.java:130)`
+- **Uniqueness**: `mojf_users.uname` harus unik — dipakai sebagai lookup key login (`findByUname`). `(inferred from mojf_users_Model.java uname; AuthUserController.java:130)`
 - **PK**: `id` bigint auto-increment (`@GeneratedValue IDENTITY`). `(mojf_users_Model.java:15-18)`
 - **Column mapping**: field Java camelCase → kolom DB snake_case eksplisit via `@Column(name=...)` (mis. `namaLengkap` → `nama_lengkap`, `kodeMitra` → `kode_mitra`). `(mojf_users_Model.java:19-50)`
 - **Audit**: `created_date/created_by`, `last_modified/modified_by`, `last_login` — kolom audit ada di referensi; update `last_login` saat login sukses = `(unspecified)` (opsional, lihat OQ-DM-2).
@@ -52,7 +52,7 @@ Note: 'Adaptasi mojf_users_Model.java tabel mojf_users → jakarta.persistence (
 - `@Entity` + `@Table` + `@Id` + `@GeneratedValue(strategy = IDENTITY)` + `@Column` mapping. `(spring.md §ERD additions)`
 - Paket `entity/` (pack), bukan `model/` (referensi newmojf). `(spring.md §File location standards)`
 - Namespace `jakarta.persistence.*` (Boot 4.x) — referensi newmojf `javax.persistence.*` HARUS diganti.
-- Tabel snake_case plural (`users`) per pack; referensi `mojf_users` → OQ-DM-1.
+- Nama tabel = `mojf_users` (DB newmojf existing, OQ-DM-1 RESOLVED v1.3); class entity = `Users` (pack PascalCase, nama class bebas dari nama tabel via `@Table(name="mojf_users")`).
 - Citations: `framework-conventions/spring.md §ERD additions`, `§Naming standards`, `codebase-map.md §7 version_caveat`
 
 ---
@@ -84,6 +84,6 @@ Note: 'Adaptasi mojf_users_Model.java tabel mojf_users → jakarta.persistence (
   - fallback_if_wrong: jika PO ingin audit login, tambahkan `@Transactional` write di service layer.
 - [x] **OQ-DM-3** [P3] [tech / recommend] [conf: medium]: strategi DDL — Hibernate `ddl-auto=none` (sesuai newmojf, skema dikelola eksternal) atau `update`/Flyway? → **Resolved v1.3** (2026-07-23, implementation-verified, commit 6595b3b U-008): VERIFIED — `application.yaml` `spring.jpa.hibernate.ddl-auto: none`. Sesuai cabang OQ-AR-2 (pakai DB newmojf existing): skema `mojf_users` dikelola eksternal/DBA, Hibernate tidak mengubah skema. Flyway tidak dipakai di v1 (skema existing sudah ada); jika future migrasi ke DB baru khusus coresystembackend, pertimbangkan Flyway.
   - recommendation: `spring.jpa.hibernate.ddl-auto=none` (skema dikelola DBA/eksternal, replikasi pola newmojf).
-  - rationale: newmojf pakai `ddl-auto=none` (application-test.properties:3); skema tabel `users` sudah ada di DB target. `none` mencegah Hibernate mengubah skema produksi.
+  - rationale: newmojf pakai `ddl-auto=none` (application-test.properties:3); skema tabel `mojf_users` sudah ada di DB target. `none` mencegah Hibernate mengubah skema produksi.
   - scan_citations: `application-test.properties:3` (`ddl-auto=none`), `framework-conventions/spring.md §Idioms`
   - fallback_if_wrong: jika DB baru khusus coresystembackend (OQ-AR-2), pertimbangkan Flyway untuk DDL terkontrol.
