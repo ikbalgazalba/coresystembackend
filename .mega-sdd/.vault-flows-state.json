@@ -1,1 +1,1 @@
-{"status": "PASS", "checked_file": ".mega-sdd/vaults/jwt-login/04-flows.md", "checks": [{"check": "vault_flow_mermaid_mandate", "status": "PASS", "detail": "2/2 flow entries carry a Mermaid diagram"}], "issues": [], "summary": "all 2 vault flow(s) are Mermaid; syntax checks pass"}
+{"status": "PASS", "checked_file": ".mega-sdd/vaults/api-platform/04-flows.md", "checks": [{"check": "vault_flow_entries", "status": "SKIP", "detail": "no F-<prefix>-NNN flow entries found"}], "issues": [], "summary": "no vault flow entries to check"}

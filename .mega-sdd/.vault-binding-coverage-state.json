@@ -1,8 +1,13 @@
 {
-  "ts": "2026-07-23T13:32:44.517778Z",
+  "ts": "2026-07-24T04:36:56.477292Z",
   "status": "FAIL",
   "validator": "validate-vault-binding-coverage.sh",
   "slice4_summary": {
+    "api-platform": {
+      "vault_sections_found": 0,
+      "orphaned_in_binding": 0,
+      "binding_doc": ".mega-sdd/vaults/api-platform/binding.md"
+    },
     "jwt-login": {
       "vault_sections_found": 2,
       "orphaned_in_binding": 1,
@@ -10,6 +15,10 @@
     }
   },
   "slice5_summary": {
+    "api-platform": {
+      "bolts_dir": "absent (pre-execution)",
+      "skipped": true
+    },
     "jwt-login": {
       "units_count": 9,
       "units_without_bolt_report": 0

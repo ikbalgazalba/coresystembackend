@@ -1,11 +1,11 @@
 {
   "status": "FAIL",
-  "analyzed_at": "2026-07-23T13:32:59Z",
+  "analyzed_at": "2026-07-24T04:36:56Z",
   "boundaries": {
     "binding_units_handoff": {
       "status": "PASS",
       "state_file": ".validation-blockers.json",
-      "detail": "binding_docs_checked=1; units_checked=9; oq_ids_in_binding=17; conflict_ids_in_binding=0"
+      "detail": "binding_docs_checked=2; units_checked=14; oq_ids_in_binding=26; conflict_ids_in_binding=0"
     },
     "unit_spec": {
       "status": "PASS",
@@ -55,12 +55,12 @@
     "vault_flows": {
       "status": "PASS",
       "state_file": ".vault-flows-state.json",
-      "detail": "all 2 vault flow(s) are Mermaid; syntax checks pass"
+      "detail": "no vault flow entries to check"
     },
     "starterkit_conformance": {
-      "status": "SKIP",
+      "status": "PASS",
       "state_file": ".starterkit-conformance-state.json",
-      "detail": ""
+      "detail": "all target_files conform to starterkit patterns (10 patterns checked)"
     },
     "kb_citations": {
       "status": "SKIP",
@@ -85,7 +85,7 @@
     "constitution_propagation": {
       "status": "FAIL",
       "state_file": ".constitution-propagation-state.json",
-      "detail": "binding_docs=1; binding_clauses=25; unit_clauses=23; units_checked=9"
+      "detail": "binding_docs=2; binding_clauses=29; unit_clauses=29; units_checked=14"
     },
     "codebase_map": {
       "status": "PASS",
@@ -130,13 +130,13 @@
     "vault_flow_staging (advisory)": {
       "status": "PASS",
       "state_file": ".vault-flow-staging-state.json",
-      "detail": "drop_count=0; advisory_count=0; vaults={'jwt-login': {'flows_checked': 2, 'flows_with_kb_source': 0, 'staging_drops': 0}}"
+      "detail": "drop_count=0; advisory_count=0; vaults={'api-platform': {'flows_checked': 0, 'flows_with_kb_source': 0, 'staging_drops': 0}, 'jwt-login': {'flows_checked': 2, 'flows_with_kb_source': 0, 'staging_drops': 0}}"
     }
   },
   "vault_consistency": [],
-  "validators_run": 14,
+  "validators_run": 15,
   "validators_total": 26,
-  "validators_pass": 8,
+  "validators_pass": 9,
   "validators_fail": 2,
-  "validators_skip": 10
+  "validators_skip": 9
 }

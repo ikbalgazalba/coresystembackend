@@ -1,130 +1,134 @@
 ---
 generated_by: mega-sdd:scan-codebase
-generated_at: 2026-07-22T06:35:00Z
-repo_root: /home/ikbalgazalba/AI/Project/coresystembackend
+generated_at: 2026-07-24T03:47:51Z
+repo_root: ./
 scan_depth: 8
-scan_includes: ["src/**", "pom.xml", "mvnw", "mvnw.cmd", "CLAUDE.md", "HELP.md"]
-scan_excludes: ["target/**", ".git/**", ".idea/**", ".mega-sdd/**", "*.iml", ".mvn/**", "node_modules/**", "build/**"]
-languages_detected: ["java", "yaml", "markdown"]
+scan_includes: ["src/main/java/**", "src/test/java/**", "src/main/resources/**", "pom.xml"]
+scan_excludes: ["node_modules/**", "vendor/**", "dist/**", "build/**", "target/**", ".next/**", ".gradle/**", "__pycache__/**", ".venv/**", "coverage/**", ".git/**", ".idea/**", ".vscode/**", ".mega-sdd/**", "*.log"]
+languages_detected: ["java"]
 package_managers: ["maven"]
-test_frameworks: ["junit5"]
+test_frameworks: ["junit (via spring-boot-starter-test)", "assertj (transitive via starter-test)"]
 engine: tree-sitter
 precision_tier: ast
 tree_sitter_version: "0.26.10"
 grammars_used: ["java"]
-last_scanned_commit: b27e8cbf5e2e8218ef42ca86be373479ea5c2d1e
-scan_mode: incremental-unchanged
-change_signal_note: "Healing (2026-07-22): prior Mode D sync (b27e8cb) completed scan+bind+reconcile but ECONNRESET struck before stamp was bumped and SYNC-REPORT was written. No source-code or manifest changes between 941e5b4 and HEAD (0 paths). Stamp bumped to HEAD; §1–§7 content byte-identical (carried forward)."
+last_scanned_commit: 0682bb58c2755f8a6ef86566127a9147233d311e
 ---
 
 # Codebase Map
 
-> Scanned repo is a Spring Initializr skeleton (greenfield-reachable scan). §2–§6 are
-> intentionally near-empty: there is no business code yet. §7 Framework is the critical
-> output — it drives pack-aware vault generation downstream. All empty sections are marked
-> "None detected" per anti-hallucination rail; nothing is invented.
+> Spring Boot 4.1.1-SNAPSHOT backend (Java 21, Maven). Single-module JWT-auth service with LDAP-UCS password verification, PostgreSQL (existing `newmojf` schema), and a stateless security stack. The repo is a **brownfield, feature-bearing app** (not the bare skeleton CLAUDE.md describes — that doc is stale relative to the `jwt-login` vault work already landed in source via `SDD-PROVENANCE` comments).
 
 ## 1. Top-level structure
 
 ```
-coresystembackend/
-├── .git/                          (git repo; HEAD = b27e8cb mega-sdd: resolve P1 OQs + Mode D sync)
-├── .mvn/                          (Maven wrapper support)
-├── CLAUDE.md                      (project instructions)
-├── HELP.md                        (Spring Initializr help)
-├── mvnw                           (Maven wrapper, unix)
-├── mvnw.cmd                       (Maven wrapper, windows)
-├── pom.xml                        (Maven manifest — Spring Boot 4.1.1-SNAPSHOT, Java 21)
-└── src/
-    ├── main/
-    │   ├── java/com/coresystem/coresystembackend/
-    │   │   └── CoresystembackendApplication.java   (@SpringBootApplication entry point)
-    │   └── resources/
-    │       └── application.yaml                   (only spring.application.name set)
-    └── test/
-        └── java/com/coresystem/coresystembackend/
-            └── CoresystembackendApplicationTests.java  (@SpringBootTest contextLoads smoke test)
+.
+├── pom.xml                          # Maven; spring-boot-starter-parent 4.1.1-SNAPSHOT, Java 21
+├── mvnw / mvnw.cmd                  # Maven wrapper (committed)
+├── run-app.sh                       # Bash launcher: loads .env, fail-fast env check, JVM trust-store flags
+├── .env.example                     # env-var contract (14 vars), values blank; .env gitignored
+├── .gitignore                       # ignores .env
+├── CLAUDE.md                        # (STALE: claims no -web / no HTTP layer; pom actually has starter-web + security + jpa)
+├── preview.webp                     # image asset (non-code)
+└── src
+    ├── main
+    │   ├── java/com/coresystem/coresystembackend
+    │   │   ├── CoresystembackendApplication.java   # @SpringBootApplication entry point
+    │   │   ├── config/SecurityConfig.java          # @Configuration: SecurityFilterChain, PasswordEncoder, CORS, RestClient.Builder
+    │   │   ├── controller/AuthUserController.java # @RestController @RequestMapping("/api/auth")
+    │   │   ├── dto/{JwtResponse,LoginRequest,MessageResponse}.java
+    │   │   ├── entity/Users.java                  # @Entity @Table(name="mojf_users")
+    │   │   ├── repository/UserRepository.java     # JpaRepository<Users,Long>
+    │   │   ├── security/JwtUtils.java             # @Component; jjwt 0.12.x HS512 token gen/validate
+    │   │   └── service/LdapUcsService.java        # @Service; RestClient-based LDAP UCS verify
+    │   └── resources/application.yaml             # env-placeholder config (§D-002, no hardcoded secrets)
+    └── test/java/com/coresystem/coresystembackend
+        ├── CoresystembackendApplicationTests.java           # @SpringBootTest contextLoads
+        ├── AuthLoginIntegrationTest.java                    # integration test
+        ├── config/SecurityConfigTest.java
+        ├── controller/AuthUserControllerTest.java
+        ├── security/JwtUtilsTest.java
+        └── service/LdapUcsServiceTest.java
 ```
+
+Package layout (conventional Spring layering): `config`, `controller`, `dto`, `entity`, `repository`, `security`, `service`. Single bounded context (`coresystembackend`); no multi-module Maven.
 
 ## 2. Public interfaces
 
 | File | Type | Symbol | Signature | Last_Scanned_Sha256 |
 |---|---|---|---|---|
-| `src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java:8` | class | `CoresystembackendApplication` | `@SpringBootApplication class CoresystembackendApplication` | 4c86b293e7626a9b3101242e812606385640c751f0e4fae33eded5500adef4cb |
-| `src/main/java/com/coresystem/coresystembackend/CoresystembackendApplication.java:10` | method | `CoresystembackendApplication.main` | `public static void main(String[] args)` → `SpringApplication.run(CoresystembackendApplication.class, args)` | 4c86b293e7626a9b3101242e812606385640c751f0e4fae33eded5500adef4cb |
-
-> No other public types (no controllers, services, repositories, entities, DTOs, config, or
-> security classes) exist yet. The `com.coresystem.coresystembackend` package contains only the
-> application bootstrap class.
+| `.../CoresystembackendApplication.java:7` | class | CoresystembackendApplication | `public static void main(String[] args)` (@SpringBootApplication) | 4c86b293e762 |
+| `.../config/SecurityConfig.java:42` | class (@Configuration) | SecurityConfig | `@Bean SecurityFilterChain filterChain(HttpSecurity)`, `@Bean PasswordEncoder passwordEncoder()`, `@Bean CorsConfigurationSource corsConfigurationSource()`, `@Bean RestClient.Builder restClientBuilder()` | bedc33471921 |
+| `.../controller/AuthUserController.java:40` | class (@RestController) | AuthUserController | ctor(`LdapUcsService, JwtUtils, UserRepository`); `ResponseEntity<?> login(@RequestBody LoginRequest)` | c3276c198694 |
+| `.../security/JwtUtils.java:17` | class (@Component) | JwtUtils | ctor(`@Value jwtSecret, @Value jwtExpirationMs`); `String generateTokenFromUname(String)`, `String getUserNameFromJwt(String)`, `boolean validateJwtToken(String)` | c45476bcd592 |
+| `.../service/LdapUcsService.java:47` | class (@Service) | LdapUcsService | ctor(`RestClient, ...LDAP config`); `LdapAuthResult authLDAPNew(String uname, String pass)`; nested `record LdapAuthResult(String responseCode, String responseDescription)` (line 96) | 725cb8a6d48e |
+| `.../entity/Users.java:15` | class (@Entity) | Users | JPA entity, 17 `@Column` fields + getters/setters | a50b57de64da |
+| `.../repository/UserRepository.java:10` | interface | UserRepository | `extends JpaRepository<Users, Long>`; derived `findByUname(String)` | 52aaa259a918 |
+| `.../dto/JwtResponse.java:4` | class (DTO) | JwtResponse | fields: token, type, id, uname, urole, mitKode (+ getters/setters) | cd414d4f91df |
+| `.../dto/LoginRequest.java:4` | class (DTO) | LoginRequest | fields: uname, pass (+ getters/setters) | 7e8a6bc05763 |
+| `.../dto/MessageResponse.java:4` | class (DTO) | MessageResponse | field: message (+ getter/setter) | cc9b67ecbd77 |
 
 ## 3. Routes / Endpoints
 
-None detected.
+| Method | Path | Handler |
+|---|---|---|
+| POST | `/api/auth/dologin` | `AuthUserController.login(LoginRequest): ResponseEntity<?>` (`AuthUserController.java:54-55`) |
 
-> `spring-boot-starter` (not `-web`) is the only starter — there is no embedded servlet
-> container / HTTP layer. No `@RestController`, `@Controller`, or `@*Mapping` annotations
-> present. Adding endpoints requires adding `spring-boot-starter-web` (expected next step).
+> Single endpoint. Class-level `@RequestMapping("/api/auth")` (line 39) + method `@PostMapping("/dologin")` (line 54). No other controllers. No actuator/health endpoint currently exposed (actuator not on classpath).
 
 ## 4. Data models / Schemas
 
-None detected.
+| Entity | File | Fields |
+|---|---|---|
+| `Users` (@Entity, @Table `mojf_users`) | `entity/Users.java:13-15` | 17 `@Column` fields: `uid_` (Long, @Id, IDENTITY), `uname`, `pass`, `nama_lengkap`, `kode_unit_kerja`, `cakupan` (Long), `urole` (Long), `created_date` (Date), `created_by`, `last_modified` (Date), `modified_by`, `last_login` (Date), `kode_mitra`, `active`, `expired_days`, `kode_kelas_user`, `status_user` (lines 16-50; all `@Column`-mapped to snake_case DB columns) |
 
-> No `@Entity`, `@Table`, `@Id`, or JPA repository interfaces exist. JPA is not yet on the
-> classpath (`spring-boot-starter-data-jpa` not declared). No database driver declared.
+DTOs (non-persistent): `LoginRequest{uname, pass}`, `JwtResponse{token, type, id, uname, urole, mitKode}`, `MessageResponse{message}`. JPA `ddl-auto: none` (application.yaml) — schema is pre-existing in the `newmojf` PostgreSQL DB; Hibernate does not manage DDL.
 
 ## 5. Naming conventions
 
-- **Case style:** PascalCase classes, camelCase methods/fields (inferred from the single
-  `CoresystembackendApplication` bootstrap class; insufficient sample for a strong convention
-  claim — the Spring pack's standards in §7 will be authoritative for new code).
-- **File suffix:** `Application.java` for entry point; test files end `Tests.java` (note:
-  Spring pack convention is `Test` suffix; existing smoke test uses `Tests` — pre-existing
-  Initializr default, will not be a conflict target).
-- **Test files:** `*Tests.java` (JUnit 5 Jupiter via `spring-boot-starter-test`).
-- **Package:** `com.coresystem.coresystembackend` (lowercase dot-separated).
+- **Case style (symbols):** PascalCase classes (`AuthUserController`, `JwtUtils`), camelCase methods/fields (`generateTokenFromUname`, `jwtSecret`).
+- **Case style (DB columns):** snake_case (`nama_lengkap`, `kode_unit_kerja`) via explicit `@Column(name=...)`.
+- **File naming:** one public class per file, filename = `<ClassName>.java`.
+- **Package layering:** `config` / `controller` / `dto` / `entity` / `repository` / `security` / `service` (conventional Spring tiers).
+- **Test files:** suffix `Test.java` (unit, e.g. `JwtUtilsTest`), `Tests.java` (smoke, `CoresystembackendApplicationTests`), `IntegrationTest.java` (integration, `AuthLoginIntegrationTest`). Test packages mirror main packages.
+- **SDD provenance convention:** source files carry `// SDD-PROVENANCE: U-NNN | vault: .mega-sdd/vaults/jwt-login | <summary>` trailing comments tying each artifact to its implementing unit.
 
 ## 6. Pattern signatures
 
-- **Auth pattern:** none (no security dependency, no `SecurityFilterChain`, no jwt/session
-  middleware present yet — `spring-boot-starter-security` not declared).
-- **Error handling:** none (no `@ControllerAdvice` / `@RestControllerAdvice` / global handler).
-- **State:** none (stateless skeleton; no session/store).
-- **View/component pattern:** none (REST/MVC layer absent — API-only intent inferred from
-  backend project name; no `templates/` or `static/` resource dirs).
-  - View dir: none
-  - View naming: none
-  - Exemplar selection: none
+- **Auth pattern:** JWT (stateless). `SecurityConfig.filterChain` sets `SessionCreationPolicy.STATELESS`, CSRF disabled (no session to forge), `/api/auth/**` `permitAll`, `anyRequest().authenticated()`. Token issued by `JwtUtils.generateTokenFromUname` (HS512, jjwt 0.12.x `signWith(Key)`). Password verification delegated to LDAP UCS (`LdapUcsService.authLDAPNew`), NOT local DB passwords. **No `OncePerRequestFilter`/JWT request filter present** — `/dologin` issues a token but no filter currently validates the bearer on subsequent requests (authz rule is `anyRequest().authenticated()` with no authentication source wired → potential gap, surfaces as OQ during binding).
+- **Error handling:** try-catch in controller (`AuthUserController.login`, returns `ResponseEntity` with `HttpStatus` codes). No `@ControllerAdvice` / `@ExceptionHandler`. Generic error message convention per constitution §B-007 (referenced in `LdapUcsService` provenance).
+- **State:** none (stateless REST API; no session, no cookies, no in-memory state container).
+- **External HTTP:** Spring 7.x `RestClient` (declarative builder pattern via `RestClient.Builder` bean) — NOT `RestTemplate`/`WebClient`. Spring Boot 4.x removed the auto-configured `RestClient.Builder`, so it is provided explicitly in `SecurityConfig`.
+- **Secrets:** fully externalized to env vars (constitution §D-002). `application.yaml` uses `${VAR}` placeholders with NO defaults (fail-fast on missing). `.env` (gitignored) + `.env.example` (contract) + `run-app.sh` (auto-load + fail-fast). Trust store is host-path-specific (`/home/ikbalgazalba/.ssl-truststores/bankmega-truststore.p12`) — **non-portable; relevant to containerization**.
+- **View/component pattern:** none (API-only stack, no presentation layer). `exemplar_selection: n/a`.
 
 ## 7. Framework
 
 ```yaml
 framework:
-  name: spring
-  version: "4.1.1-SNAPSHOT (Boot 4.x / Spring Framework 7.x / Jakarta EE 10)"
+  name: spring-boot
+  version: "4.1.1-SNAPSHOT"
   confidence: high
-  pack_path: references/framework-conventions/spring.md
-  detection_source: "pom.xml declares parent spring-boot-starter-parent 4.1.1-SNAPSHOT + dependency spring-boot-starter; spring-snapshots repository enabled (repo.spring.io/snapshot)"
-  pack_version_note: "Convention pack targets Spring Boot 3.x. Project is Boot 4.1.1-SNAPSHOT. Idioms carry over (SecurityFilterChain bean, constructor injection, DTOs at boundaries, jakarta.* namespace). Pack's WebSecurityConfigurerAdapter removal rule is already satisfied (none exists). NOTE: Boot 4.x mandates jakarta.persistence (NOT javax.persistence) and Spring Security 7.x — the pack's 3.x assumptions hold for structure but namespace/security-API versioning must be honored by downstream units."
+  pack_path: references/framework-conventions/spring.md      # registry: spring | full | ready — pack IS installed
+  detection_source: "pom.xml: spring-boot-starter-parent 4.1.1-SNAPSHOT + starters (web, security, data-jpa, test); java.version=21"
+  starters:
+    - spring-boot-starter
+    - spring-boot-starter-web
+    - spring-boot-starter-security
+    - spring-boot-starter-data-jpa
+    - spring-boot-starter-test (scope=test)
+  key_libraries:
+    - postgresql (runtime, JDBC driver)
+    - jjwt-api / jjwt-impl / jjwt-jackson 0.12.6 (JWT)
+  build_tool: maven (mvnw wrapper committed)
+  java_version: "21"
+  snapshot_repo: "repo.spring.io/snapshot (spring-snapshots) — builds require network; behavior may shift between snapshot resolutions"
+  spring_security_version_note: "Spring Security 7.x (boot 4.x) — component-based DSL (SecurityFilterChain @Bean), no WebSecurityConfigurerAdapter"
 ```
 
-### Starterkit facts (for pack-aware vault generation)
-
-- **Build tool:** Maven (wrapper committed — `mvnw`/`mvnw.cmd`; no local Maven install needed).
-- **Java:** 21 (`<java.version>21</java.version>`).
-- **Parent POM:** `spring-boot-starter-parent` `4.1.1-SNAPSHOT` (resolves from
-  `repo.spring.io/snapshot` — builds require network; behavior can shift between snapshots).
-- **Declared dependencies:** `spring-boot-starter` (core only, NO web container),
-  `spring-boot-starter-test` (test scope, JUnit 5 + Mockito + MockMvc).
-- **Missing starters the feature will need (to be added as units):**
-  `spring-boot-starter-web` (HTTP), `spring-boot-starter-security` (auth), 
-  `spring-boot-starter-data-jpa` (persistence), a JDBC driver (`postgresql`), and a JWT
-  library (`io.jsonwebtoken:jjwt-api/-impl/-jackson` triplet).
-- **Config:** `application.yaml` (YAML, not `.properties`) — only `spring.application.name:
-  coresystembackend` set. Spring profiles convention available (`application-{profile}.yml`).
-- **Entry point:** `com.coresystem.coresystembackend.CoresystembackendApplication` (standard
-  `@SpringBootApplication` + `SpringApplication.run`).
-- **Base package:** `com.coresystem.coresystembackend` — new packages nest under it:
-  `controller`, `service`, `repository`, `entity` (pack prefers `entity/`; newmojf reference
-  uses `model/` — pack standard `entity/` is the binding target unless an OQ overrides), 
-  `dto`, `config`, `security`, `exception`.
-```
+**Observations relevant to incoming vault (Swagger/OpenAPI + Docker):**
+- OpenAPI/Swagger dependency (`springdoc-openapi-*`) is **absent** from `pom.xml` — must be added.
+- No `actuator` on classpath — a health/readiness endpoint would need the starter for container probes.
+- No Docker artifacts (`Dockerfile`, `docker-compose.yml`, `.dockerignore`) exist.
+- `application.yaml` env-placeholder pattern is container-friendly (12-factor) but the host-specific trust-store path in `run-app.sh` is NOT portable into a container — likely an OQ for the Docker unit.
+- `.env` is gitignored and host-local; container env strategy must reconcile env-var injection (compose `environment:`/`env_file:` vs baked-in).
