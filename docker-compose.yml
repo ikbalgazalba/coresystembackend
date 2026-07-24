@@ -19,17 +19,12 @@ services:
     volumes:
       - ${TRUSTSTORE_HOST_PATH:-/home/ikbalgazalba/.ssl-truststores/bankmega-truststore.p12}:/opt/bankmega-truststore/bankmega-truststore.p12:ro
     healthcheck:
-      # HEALTHCHECK TRADE-OFF (documented honestly, not hidden):
-      # The U-003 runtime image is eclipse-temurin:21-jre, which ships NO curl/wget.
-      # The preferred readiness probe is `curl -sf http://localhost:8080/actuator/health`
-      # (or wget), but that requires curl/wget in the image. Since `java` is the only
-      # binary guaranteed present in the JRE image, this is a CMD-SHELL java probe that
-      # only proves the JVM process is ALIVE (liveness baseline) — NOT that the Spring
-      # app / actuator is ready to serve. `java -version` succeeding ≠ app health.
-      # FOLLOW-UP: once curl (or wget) is added to U-003's runtime stage, replace this
-      # probe with `curl -sf http://localhost:${SERVER_PORT:-8080}/actuator/health || exit 1`
-      # for a real readiness check. Until then this is a liveness-only signal.
-      test: ["CMD-SHELL", "java -version > /dev/null 2>&1 || exit 1"]
+      # Readiness probe via /actuator/health (real app-health, not just liveness).
+      # The U-003 runtime image is eclipse-temurin:21-jre on Ubuntu base, which DOES
+      # ship wget (verified: /usr/bin/wget, GNU Wget 1.25.0) — despite the earlier
+      # bolt-report caveat that assumed no curl/wget. So the probe hits the actuator
+      # health endpoint directly. (curl is absent; wget is the available client.)
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:${SERVER_PORT:-8080}/actuator/health || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 5
