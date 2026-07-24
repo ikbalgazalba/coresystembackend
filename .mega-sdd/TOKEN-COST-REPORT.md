@@ -1,26 +1,26 @@
 # Token cost report (cost-weighted)
 
-- **Raw tokens:** 29.5M (29,479,027)
-- **Cost-weighted:** 8.5M (8,519,774) cost-equivalent input tokens
-- **Overstatement:** raw is **3.46x** the real cost (cache_read bills 0.1x; output 5x). Judge spend by the cost-weighted number.
+- **Raw tokens:** 30.3M (30,275,379)
+- **Cost-weighted:** 8.6M (8,608,126) cost-equivalent input tokens
+- **Overstatement:** raw is **3.52x** the real cost (cache_read bills 0.1x; output 5x). Judge spend by the cost-weighted number.
 
 | Token type | weight | raw | cost-weighted |
 |---|---:|---:|---:|
-| input_tokens | x1.00 | 3,940,725 | 3,940,725 |
+| input_tokens | x1.00 | 3,941,917 | 3,941,917 |
 | cache_creation_input_tokens | x1.25 | 0 | 0 |
-| cache_read_input_tokens | x0.10 | 25,124,992 | 2,512,499 |
-| output_tokens | x5.00 | 413,310 | 2,066,550 |
+| cache_read_input_tokens | x0.10 | 25,918,592 | 2,591,859 |
+| output_tokens | x5.00 | 414,870 | 2,074,350 |
 
 ## By skill (cost-weighted, descending)
 
 | Skill | turns | raw | cost-weighted | % of cost |
 |---|---:|---:|---:|---:|
-| mega-sdd:bolt-implementer | 11 | 8,675,748 | 2,027,876 | 23.8% |
-| Explore | 3 | 2,057,109 | 1,449,090 | 17.0% |
-| mega-sdd:phase-advisor | 4 | 3,483,318 | 1,248,009 | 14.6% |
-| mega-sdd:execute-bolts | 39 | 7,697,625 | 1,179,810 | 13.8% |
-| mega-sdd:spec-reviewer | 7 | 2,374,344 | 935,087 | 11.0% |
-| mega-sdd:security-reviewer | 4 | 959,262 | 424,801 | 5.0% |
+| mega-sdd:bolt-implementer | 11 | 8,675,748 | 2,027,876 | 23.6% |
+| Explore | 3 | 2,057,109 | 1,449,090 | 16.8% |
+| mega-sdd:execute-bolts | 41 | 8,493,977 | 1,268,162 | 14.7% |
+| mega-sdd:phase-advisor | 4 | 3,483,318 | 1,248,009 | 14.5% |
+| mega-sdd:spec-reviewer | 7 | 2,374,344 | 935,087 | 10.9% |
+| mega-sdd:security-reviewer | 4 | 959,262 | 424,801 | 4.9% |
 | mega-sdd:detect-drift | 11 | 2,089,774 | 401,864 | 4.7% |
 | mega-sdd:standards-reviewer | 2 | 716,349 | 351,183 | 4.1% |
 | mega-sdd:code-quality-reviewer | 2 | 680,945 | 322,816 | 3.8% |

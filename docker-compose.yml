@@ -9,13 +9,13 @@ services:
     env_file: .env
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:8080}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:7001}
       JAVA_OPTS: >-
         -Djavax.net.ssl.trustStore=/opt/bankmega-truststore/bankmega-truststore.p12
         -Djavax.net.ssl.trustStorePassword=${TRUSTSTORE_PASSWORD:-changeit}
         -Djavax.net.ssl.trustStoreType=PKCS12
     ports:
-      - "8080:8080"
+      - "7001:7001"
     volumes:
       - ${TRUSTSTORE_HOST_PATH:-/home/ikbalgazalba/.ssl-truststores/bankmega-truststore.p12}:/opt/bankmega-truststore/bankmega-truststore.p12:ro
     healthcheck:
@@ -24,7 +24,7 @@ services:
       # ship wget (verified: /usr/bin/wget, GNU Wget 1.25.0) — despite the earlier
       # bolt-report caveat that assumed no curl/wget. So the probe hits the actuator
       # health endpoint directly. (curl is absent; wget is the available client.)
-      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:${SERVER_PORT:-8080}/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:${SERVER_PORT:-7001}/actuator/health || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 5

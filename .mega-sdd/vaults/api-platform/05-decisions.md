@@ -74,3 +74,17 @@
 **Rationale:** this project pins Spring Boot 4.1.1-SNAPSHOT. The v3.x line is the only springdoc track targeting Boot 4; v3.0.3 is the latest v3 release (Boot 4.0.5). The 4.1.1-SNAPSHOT is one minor ahead of v3.0.3's targeted 4.0.5, but the v3 line is the correct Boot-4-compatible track (v2.x is Boot-3-only and will not resolve against Boot 4 starters).
 
 **Risk:** snapshot Boot may shift behavior; if v3.0.3 fails to resolve against 4.1.1-SNAPSHOT, fall back to the latest v3.0.x snapshot/milestone or pin Boot to 4.0.5. Recorded as the accepted recommendation; PO/architect may override.
+
+## OQ-AP-2 resolution — container port 7001 (RESOLVED 2026-07-24)
+
+**Decision:** default app/container port changed from 8080 → **7001**.
+
+**Rationale:** operator preference to free 8080 for other uses; 7001 chosen (free on host, verified `ss -tlnp`). Spring Boot `server.port` remains env-driven (`${SERVER_PORT:7001}`) so it is overridable per environment — the change only shifts the DEFAULT, not the mechanism. Port 7001 is set in BOTH profiles (`application-prod.yaml` + `application-dev.yaml`) so dev runs (no explicit profile key) listen on 7001 too (previously dev fell back to Spring's 8080 default).
+
+**Files changed (8080 → 7001, 8 points):**
+- `docker-compose.yml`: ports `"7001:7001"`, healthcheck `${SERVER_PORT:-7001}`, CORS fallback origin.
+- `application-prod.yaml` + `application-dev.yaml`: `server.port: ${SERVER_PORT:7001}` + CORS default origin `localhost:7001`.
+- `SecurityConfig.java`: `@Value` CORS default `localhost:7001`.
+- `Dockerfile`: `EXPOSE 7001` + OQ-AP-2 comment + provenance trailer.
+
+**Risk:** low — port lives only in config + EXPOSE (no business code bound to 8080). Verified live: Tomcat `started on port 7001`, `/actuator/health` + `/v3/api-docs` + `/swagger-ui` + `/v3/api-docs/swagger-config` all 200/302 on :7001. `run-app.sh` (host non-container launcher) still uses Spring default 8080 — set `SERVER_PORT=7001` if host-run also needs 7001.

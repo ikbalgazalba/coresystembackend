@@ -1,8 +1,8 @@
 # Dockerfile — coresystembackend (api-platform vault, U-003)
 #
 # Decisions / OQ resolutions:
-#   - OQ-AP-2 (container port): default 8080 (Spring Boot default; application.yaml
-#     sets no server.port). EXPOSE 8080 below. Override at run via SERVER_PORT env.
+#   - OQ-AP-2 (container port): default 7001 (application-prod.yaml sets
+#     server.port=${SERVER_PORT:7001}). EXPOSE 7001 below. Override at run via SERVER_PORT env.
 #   - OQ-AP-3 (trust-store mount target inside container):
 #     /opt/bankmega-truststore/bankmega-truststore.p12
 #     The compose unit (U-004) bind-mounts the host trust store to this path and
@@ -44,11 +44,11 @@ WORKDIR /app
 # no .env, no trust store. Runtime image stays minimal.
 COPY --from=builder /build/target/coresystembackend-0.0.1-SNAPSHOT.jar app.jar
 
-# OQ-AP-2: default 8080; overridable via SERVER_PORT env at run.
-EXPOSE 8080
+# OQ-AP-2: default 7001; overridable via SERVER_PORT env at run.
+EXPOSE 7001
 
 # JAVA_OPTS is intentionally undefined in the image; compose (U-004) injects
 # trust-store flags (OQ-AP-3) via JAVA_OPTS at run. sh -c lets the env var expand.
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 
-# SDD-PROVENANCE: U-003 | vault: .mega-sdd/vaults/api-platform | multi-stage Dockerfile (eclipse-temurin:21-jdk builder + 21-jre runtime; ./mvnw per HR-2; EXPOSE 8080 OQ-AP-2; trust-store at /opt/bankmega-truststore/ OQ-AP-3)
+# SDD-PROVENANCE: U-003 | vault: .mega-sdd/vaults/api-platform | multi-stage Dockerfile (eclipse-temurin:21-jdk builder + 21-jre runtime; ./mvnw per HR-2; EXPOSE 7001 OQ-AP-2; trust-store at /opt/bankmega-truststore/ OQ-AP-3)

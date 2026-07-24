@@ -52,7 +52,7 @@ public class SecurityConfig {
 	private final String corsAllowedOrigins;
 
 	public SecurityConfig(
-			@Value("${coresystem.cors.allowed-origins:http://localhost:3000,http://localhost:8080}")
+			@Value("${coresystem.cors.allowed-origins:http://localhost:3000,http://localhost:7001}")
 			String corsAllowedOrigins) {
 		this.corsAllowedOrigins = corsAllowedOrigins;
 	}
