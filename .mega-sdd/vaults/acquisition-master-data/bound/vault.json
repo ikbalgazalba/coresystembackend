@@ -1,5 +1,5 @@
 {
-  "vault_version": "1.2",
+  "vault_version": "1.3.1",
   "generated_at": "2026-07-27T00:00:00Z",
   "phase": 1,
   "phase_total": 1,
@@ -9,8 +9,8 @@
   "prd_status": "draft",
   "output_mode": "compact",
   "mode": "existing",
-  "constitution_version": "1.3.0",
-  "constitution_hash": "1f1438660b39a0b10282b4e01aa5e31947efd58281d989a1bd202aa9c3be1ecd",
+  "constitution_version": "1.3.1",
+  "constitution_hash": "6704b85140e58339c8f3b42116d1d76a769679f686c9dcb31614287bb56a7a97",
   "parent_vault": "../acquisition/",
   "slice_scope": "module 07 (master-data) — full module",
   "source_documents": [
@@ -480,8 +480,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Masters FC_MSTAPP_MCF owned vs read-only per master + liveness linked-server (DDL ✅ 2026-07-22, sisa kepemilikan) — menentukan Tier C mana naik Tier A."
+      "status": "deferred",
+      "text": "Masters FC_MSTAPP_MCF owned vs read-only per master + liveness linked-server (DDL ✅ 2026-07-22, sisa kepemilikan) — menentukan Tier C mana naik Tier A.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA/ITEC ownership per-master + linked-server liveness"
     },
     {
       "tag": "OQ-EXTMASTERS-07",
@@ -490,8 +493,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "8 objek dirujuk code acquisition ABSEN dari dump (mis. ms_insurance_cover_type) — drop/pindah DB/ekspor parsial?"
+      "status": "deferred",
+      "text": "8 objek dirujuk code acquisition ABSEN dari dump (mis. ms_insurance_cover_type) — drop/pindah DB/ekspor parsial?",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA klarifikasi 8 objek absen dari dump"
     },
     {
       "tag": "OQ-DLRPTN-01",
@@ -500,8 +506,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Shape dealer live: MsDealer vs MsDealer1 vs MsDealerBackup20221227 — menentukan field census final DEALER."
+      "status": "resolved",
+      "text": "Shape dealer live: MsDealer vs MsDealer1 vs MsDealerBackup20221227 — menentukan field census final DEALER.",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "MsDealer = live (field census §3.2). MsDealer1/MsDealerBackup20221227 = ARTIFACT discard (data diarsip Prinsip 2). Field ekstra MsDealer1 (Phone2/Fax/EmailGroup/IsDefaultMokas) NOT dibawa."
     },
     {
       "tag": "OQ-REF-05",
@@ -510,8 +519,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "[SECURITY] MsBank.PasscodeBiBca live credential? + plaintext MINIAPI cred — aksi security independen rebuild (OQ-DLRPTN-05/OQ-EXTMASTERS-05)."
+      "status": "deferred",
+      "text": "[SECURITY] MsBank.PasscodeBiBca live credential? + plaintext MINIAPI cred — aksi security independen rebuild (OQ-DLRPTN-05/OQ-EXTMASTERS-05).",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu security review MsBank.PasscodeBiBca (aksi independen rebuild)"
     },
     {
       "tag": "OQ-CUSTMASTER-04",
@@ -520,8 +532,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Bagaimana ~27 lookup + dealer/bank masters di-maintain hari ini (no write path)? Sibling admin app? (OQ-DLRPTN-13)"
+      "status": "deferred",
+      "text": "Bagaimana ~27 lookup + dealer/bank masters di-maintain hari ini (no write path)? Sibling admin app? (OQ-DLRPTN-13)",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu konfirmasi stakeholder bagaimana ~27 lookup + master di-maintain (sibling admin app?)"
     },
     {
       "tag": "OQ-BE07-01",
@@ -530,8 +545,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Scope final maker-checker (BR-BE07-05) + siapa checker per resource (Kepala Cabang? HO role?) — sign-off bisnis/COBS."
+      "status": "resolved",
+      "text": "Scope final maker-checker (BR-BE07-05) + siapa checker per resource (Kepala Cabang? HO role?) — sign-off bisnis/COBS.",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Checker = Kepala Cabang for ALL maker-checker resources (cabang-scope, consistent D-10). credit_id minting stays BE (ADR-08/OQ-GT-02 LOCKED — FE only requests/displays). BR-BE07-05 scope final."
     },
     {
       "tag": "OQ-BE07-02",
@@ -540,8 +558,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Mekanisme & frekuensi sync HR → mst_employee_mirror (batch/CDC/API); field resign real-time cukup utk auto-deactivate (BR-BE07-27)?"
+      "status": "deferred",
+      "text": "Mekanisme & frekuensi sync HR → mst_employee_mirror (batch/CDC/API); field resign real-time cukup utk auto-deactivate (BR-BE07-27)?",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu HR system capability assessment + ITEC D-11 topologi (mechanism batch/CDC/API undecided)"
     },
     {
       "tag": "OQ-BE07-03",
@@ -550,8 +571,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Role HO (master-data checker HO, Compliance/AML, Area/Regional Head di PIC picker) — expand enum D-10? governance?"
+      "status": "deferred",
+      "text": "Role HO (master-data checker HO, Compliance/AML, Area/Regional Head di PIC picker) — expand enum D-10? governance?",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu governance decision role HO + stakeholder sign-off; mst_role TIDAK dibuat selama D-10 tertutup (D-MD-04)"
     },
     {
       "tag": "OQ-MASTERDATA-02",
@@ -560,8 +584,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "TER-KOREKSI SEBAGIAN 2026-07-22: backend legacy validasi V1-V3/V7-V8 di SP; celah nyata V4 (NIK tanpa guard) + V6 (kontiguitas level). Cleansing import wajib + profil prod (OQ-MIG-05). [NOTE: parent umbrella erroneously lists as fully RESOLVED; BE-07 §11 qualifies partial — sub-vault OPEN is correct]"
+      "status": "deferred",
+      "text": "TER-KOREKSI SEBAGIAN 2026-07-22: backend legacy validasi V1-V3/V7-V8 di SP; celah nyata V4 (NIK tanpa guard) + V6 (kontiguitas level). Cleansing import wajib + profil prod (OQ-MIG-05). [NOTE: parent umbrella erroneously lists as fully RESOLVED; BE-07 §11 qualifies partial — sub-vault OPEN is correct]",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "runtime validation V4/V6 RESOLVED (U-008 BR-BE07-15..17); cleansing import profil data prod = OQ-MIG-05"
     },
     {
       "tag": "OQ-ARCH-STACK",
@@ -570,8 +597,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Framework BE (USULAN Spring Boot), transport, topologi — ITEC D-11. Java LOCKED D-12."
+      "status": "deferred",
+      "text": "Framework BE (USULAN Spring Boot), transport, topologi — ITEC D-11. Java LOCKED D-12.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu deliverable ITEC D-11 (framework/transport/topologi). Java LOCKED D-12."
     },
     {
       "tag": "OQ-AC-PROVENANCE",
@@ -581,8 +611,11 @@
       "classification_confidence": "high",
       "scan_query": "find .mega-sdd/knowledge-base/ dir + cited files (10-domains, 50-integrations/external-masters, 30-data-model/reference-entities, 60-frontend/66)",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "KB .mega-sdd/knowledge-base/ tidak ada di disk (inherited umbrella) padahal BE-07 sitasi sebagai sumber otoritatif."
+      "status": "deferred",
+      "text": "KB .mega-sdd/knowledge-base/ tidak ada di disk (inherited umbrella) padahal BE-07 sitasi sebagai sumber otoritatif.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu restore/move KB atau ubah sitasi PRD. Tidak block unit generation."
     },
     {
       "tag": "OQ-MEET-02",
@@ -591,8 +624,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Owner master loan — inherited umbrella (bukan 07 langsung, tapi 07 sediakan lookup)."
+      "status": "deferred",
+      "text": "Owner master loan — inherited umbrella (bukan 07 langsung, tapi 07 sediakan lookup).",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "inherited umbrella — owner master loan menunggu ITEC D-11. 07 sediakan lookup."
     },
     {
       "tag": "OQ-MASTERDATA-03",
@@ -613,8 +649,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Deactivate-only (no hard delete) = kebutuhan audit disengaja? Upgrade BR-BE07-03 ke LOCKED?"
+      "status": "resolved",
+      "text": "Deactivate-only (no hard delete) = kebutuhan audit disengaja? Upgrade BR-BE07-03 ke LOCKED?",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "LOCKED — deactivate-only = kebutuhan audit disengaja; BR-BE07-03 upgrade ke [LOCKED] (preservasi historis routing)."
     },
     {
       "tag": "OQ-DLRPTN-04",
@@ -623,8 +662,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Makna type approval-reason '1'|'2'|'3'|'9' + apakah '9' diekspos."
+      "status": "resolved",
+      "text": "Makna type approval-reason '1'|'2'|'3'|'9' + apakah '9' diekspos.",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Expose semua type 1/2/3/9 (no hardcode subset; endpoint read accepts filter type eksplisit, NOT hide 9). Makna semantik TBD tapi data verbatim dibawa."
     },
     {
       "tag": "OQ-BE07-04",
@@ -633,8 +675,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Scope user: single-branch atau multi-branch (branch_scope list)?"
+      "status": "resolved",
+      "text": "Scope user: single-branch atau multi-branch (branch_scope list)?",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Multi-branch: branch_scope = list (mendukung Kepala Cabang/Compliance cover >1 cabang). mst_user_branch_scope child table relevan."
     },
     {
       "tag": "OQ-BE07-05",
@@ -643,8 +688,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Model akses menu: role-based murni vs position-based legacy vs hybrid; USER_MENU_GRANT_SPECIAL dipertahankan? (risiko backdoor D-09)."
+      "status": "resolved",
+      "text": "Model akses menu: role-based murni vs position-based legacy vs hybrid; USER_MENU_GRANT_SPECIAL dipertahankan? (risiko backdoor D-09).",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Role-based + special grant retained WITH governance: cfg_menu_user_grant_special DIBANGUN (U-004) dengan granted_reason wajib + audit append-only + TIDAK boleh setara super-user D-09."
     },
     {
       "tag": "OQ-DLRPTN-02",
@@ -725,8 +773,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "PUBLIC_HOLIDAY boleh hard-delete (USULAN E33) atau deactivate-only demi audit kalkulasi due-date historis?"
+      "status": "resolved",
+      "text": "PUBLIC_HOLIDAY boleh hard-delete (USULAN E33) atau deactivate-only demi audit kalkulasi due-date historis?",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Deactivate-only (no hard-delete) — PUBLIC_HOLIDAY ikut BR-BE07-03 LOCKED; E33 DELETE dropped, PATCH is_active."
     },
     {
       "tag": "OQ-DLRPTN-06",
@@ -767,9 +818,9 @@
       "P3": 5
     },
     "by_status": {
-      "open": 27,
-      "resolved": 1,
-      "deferred": 0,
+      "open": 10,
+      "resolved": 8,
+      "deferred": 10,
       "out_of_scope": 0
     },
     "by_category": {
@@ -799,6 +850,11 @@
       "version": "1.3.0",
       "date": "2026-07-27",
       "change": "generate-units: 12 units (U-001..U-012) all task_type=create (greenfield module 07). DAG no cycles. 4 waves topo order. OQ propagation Step 12.5.g PASS (all P1 OQ in binding_refs). Maker-checker U-009 load-bearing foundation (6 dependents)."
+    },
+    {
+      "version": "1.3.1",
+      "date": "2026-07-27",
+      "change": "resolve-oq round 1 (P1 triage): OQ-BE07-01 RESOLVED (Checker=Kepala Cabang all resources, credit_id minting stays BE); OQ-BE07-02 DEFERRED (HR/ITEC); OQ-BE07-03 DEFERRED (governance/stakeholder). BR-BE07-05 scope final. Constitution §I-002 + 06-constraints updated. | Batch 2: OQ-DLRPTN-01 RESOLVED (MsDealer live, backup ARTIFACT); OQ-MASTERDATA-02 DEFERRED (OQ-MIG-05); OQ-BE07-04 RESOLVED (multi-branch); OQ-BE07-05 RESOLVED (role-based + special grant governance). 03-data-model/06-constraints updated. | Batch 3: OQ-BE07-06 RESOLVED (deactivate-only no delete); OQ-DLRPTN-04 RESOLVED (expose all types); OQ-MASTERDATA-01 RESOLVED (BR-BE07-03 LOCKED). External defer: OQ-EXTMASTERS-01/07, OQ-ARCH-STACK, OQ-AC-PROVENANCE, OQ-MEET-02, OQ-REF-05, OQ-CUSTMASTER-04."
     }
   ],
   "advisor": {

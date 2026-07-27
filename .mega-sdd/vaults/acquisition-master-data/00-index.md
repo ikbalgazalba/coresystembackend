@@ -52,23 +52,23 @@ Vault ini adalah **sub-slice fokus** modul 07 (master-data) dari vault umbrella 
 
 | OQ-ID | Priority | Category | Resolution mode | Summary |
 |---|---|---|---|---|
-| OQ-EXTMASTERS-01 | P1 | business | blocking | Masters `FC_MSTAPP_MCF` owned vs read-only per master + liveness linked-server (DDL ✅ 2026-07-22, sisa kepemilikan) — menentukan Tier C mana naik Tier A |
-| OQ-EXTMASTERS-07 | P1 | business | blocking | 8 objek dirujuk code acquisition ABSEN dari dump (mis. `ms_insurance_cover_type`) — drop/pindah DB/ekspor parsial? |
-| OQ-DLRPTN-01 | P1 | business | blocking | Shape dealer live: `MsDealer` vs `MsDealer1` vs `MsDealerBackup20221227` — menentukan field census final DEALER |
-| OQ-REF-05 / OQ-DLRPTN-05 / OQ-EXTMASTERS-05 | P1 | business | blocking | `[SECURITY]` `MsBank.PasscodeBiBca` live credential? + plaintext MINIAPI cred — aksi security independen rebuild |
-| OQ-CUSTMASTER-04 / OQ-DLRPTN-13 | P1 | business | blocking | Bagaimana ~27 lookup + dealer/bank masters di-maintain hari ini (no write path)? Sibling admin app? |
-| OQ-BE07-01 | P1 | business | blocking | Scope final maker-checker (BR-BE07-05) + siapa checker per resource (Kepala Cabang? HO role?) — sign-off bisnis/COBS |
-| OQ-BE07-02 | P1 | business | blocking | Mekanisme & frekuensi sync HR → `EMPLOYEE_MIRROR` (batch/CDC/API); field resign real-time cukup utk auto-deactivate? |
-| OQ-BE07-03 | P1 | business | blocking | Role HO (master-data checker HO, Compliance/AML, Area/Regional Head di PIC picker) — expand enum D-10? governance? |
-| OQ-MASTERDATA-02 | P1 | business | blocking | TER-KOREKSI 2026-07-22: backend legacy validasi V1-V3/V7-V8 di SP; celah nyata V4 (NIK tanpa guard) + V6 (kontiguitas level). Cleansing import wajib + profil prod (OQ-MIG-05) |
-| OQ-ARCH-STACK | P1 | business | blocking | Framework BE (USULAN Spring Boot), transport, topologi — ITEC D-11. Java LOCKED D-12 |
-| OQ-AC-PROVENANCE | P1 | tech | scan | KB `.mega-sdd/knowledge-base/` tidak ada di disk (inherited umbrella) |
-| OQ-MEET-02 | P1 | business | blocking | Owner master loan — inherited umbrella (bukan 07 langsung, tapi 07 sediakan lookup) |
+| OQ-EXTMASTERS-01 | P1 | business | blocking | Masters `FC_MSTAPP_MCF` owned vs read-only per master + liveness linked-server. **Deferred (v1.3.1)**: menunggu DBA/ITEC ownership per-master + linked-server liveness (DDL dump ✅ 2026-07-22, sisa kepemilikan). |
+| OQ-EXTMASTERS-07 | P1 | business | blocking | 8 objek dirujuk code acquisition ABSEN dari dump (mis. `ms_insurance_cover_type`). **Deferred (v1.3.1)**: menunggu DBA klarifikasi 8 objek absen. |
+| OQ-DLRPTN-01 | P1 | business | blocking | ~~Shape dealer live: `MsDealer` vs `MsDealer1` vs `MsDealerBackup20221227`~~ **✅ RESOLVED v1.3.1** → `MsDealer` = live (field census §3.2 pakai ini); `MsDealer1`/`MsDealerBackup20221227` = `[ARTIFACT — discard]` (data diarsip Prinsip 2). Field ekstra MsDealer1 (Phone2/Fax/EmailGroup/IsDefaultMokas) TIDAK dibawa. |
+| OQ-REF-05 / OQ-DLRPTN-05 / OQ-EXTMASTERS-05 | P1 | business | blocking | `[SECURITY]` `MsBank.PasscodeBiBca` live credential? + plaintext MINIAPI cred. **Deferred (v1.3.1)**: menunggu security review (aksi independen rebuild). |
+| OQ-CUSTMASTER-04 / OQ-DLRPTN-13 | P1 | business | blocking | Bagaimana ~27 lookup + dealer/bank masters di-maintain hari ini (no write path)? **Deferred (v1.3.1)**: menunggu konfirmasi stakeholder (sibling admin app?). |
+| OQ-BE07-01 | P1 | business | blocking | ~~Scope final maker-checker (BR-BE07-05) + siapa checker per resource~~ **✅ RESOLVED v1.3.1** → Checker = **Kepala Cabang** untuk SEMUA resource maker-checker (cabang-scope, konsisten D-10). `credit_id` minting tetap BE (ADR-08/OQ-GT-02 LOCKED, FE hanya minta/menampilkan). Lihat §RESOLVED. |
+| OQ-BE07-02 | P1 | business | blocking | Mekanisme & frekuensi sync HR → `EMPLOYEE_MIRROR` (batch/CDC/API); field resign real-time cukup utk auto-deactivate? **Deferred (v1.3.1)**: menunggu HR system capability assessment + ITEC D-11 topologi. |
+| OQ-BE07-03 | P1 | business | blocking | Role HO (master-data checker HO, Compliance/AML, Area/Regional Head di PIC picker) — expand enum D-10? governance? **Deferred (v1.3.1)**: menunggu governance decision role HO + stakeholder sign-off. mst_role TIDAK dibuat selama D-10 tertutup (D-MD-04). |
+| OQ-MASTERDATA-02 | P1 | business | blocking | TER-KOREKSI 2026-07-22: backend legacy validasi V1-V3/V7-V8 di SP; celah nyata V4 (NIK tanpa guard) + V6 (kontiguitas level). **Deferred (v1.3.1)**: runtime validation RESOLVED (U-008 BR-BE07-15..17 server-side); cleansing import = OQ-MIG-05 (profil data prod). |
+| OQ-ARCH-STACK | P1 | business | blocking | Framework BE (USULAN Spring Boot), transport, topologi. **Deferred (v1.3.1)**: menunggu deliverable ITEC D-11. Java LOCKED D-12. |
+| OQ-AC-PROVENANCE | P1 | tech | scan | KB `.mega-sdd/knowledge-base/` tidak ada di disk (inherited umbrella). **Deferred (v1.3.1)**: menunggu restore/move KB atau ubah sitasi PRD. Tidak block unit generation (units pakai PRD). |
+| OQ-MEET-02 | P1 | business | blocking | Owner master loan — inherited umbrella. **Deferred (v1.3.1)**: menunggu ITEC D-11. 07 sediakan lookup saja. |
 | OQ-MASTERDATA-03 | P2 | business | blocking | Apa konsumsi nyata konfigurasi TransTypeHierarchy (router komite `ms_hierarchy_transaction` vs ladder CA `ms_approval_scheme`)? |
-| OQ-MASTERDATA-01 | P2 | business | blocking | Deactivate-only (no hard delete) = kebutuhan audit disengaja? Upgrade BR-BE07-03 ke LOCKED? |
-| OQ-DLRPTN-04 | P2 | business | blocking | Makna type approval-reason `'1'\|'2'\|'3'\|'9'` + apakah `'9'` diekspos |
-| OQ-BE07-04 | P2 | business | blocking | Scope user: single-branch atau multi-branch (`branch_scope` list)? |
-| OQ-BE07-05 | P2 | business | blocking | Model akses menu: role-based murni vs position-based legacy vs hybrid; `USER_MENU_GRANT_SPECIAL` dipertahankan? (risiko backdoor D-09) |
+| OQ-MASTERDATA-01 | P2 | business | blocking | ~~Deactivate-only (no hard delete) = kebutuhan audit disengaja?~~ **✅ RESOLVED v1.3.1** → **LOCKED** — deactivate-only = kebutuhan audit disengaja; BR-BE07-03 upgrade ke `[LOCKED]` (preservasi historis routing). |
+| OQ-DLRPTN-04 | P2 | business | blocking | ~~Makna type approval-reason `'1'\|'2'\|'3'\|'9'` + apakah `'9'` diekspos~~ **✅ RESOLVED v1.3.1** → **Expose semua type** (no hardcode subset; endpoint read menerima filter `type` eksplisit, TIDAK menyembunyikan '9'). Makna semantik TBD tapi data verbatim dibawa. |
+| OQ-BE07-04 | P2 | business | blocking | ~~Scope user: single-branch atau multi-branch~~ **✅ RESOLVED v1.3.1** → **Multi-branch** (`branch_scope` = list; mendukung Kepala Cabang/Compliance cover >1 cabang). `mst_user_branch_scope` child table relevan. |
+| OQ-BE07-05 | P2 | business | blocking | ~~Model akses menu; `USER_MENU_GRANT_SPECIAL` dipertahankan?~~ **✅ RESOLVED v1.3.1** → **Role-based + special grant retained WITH governance** (`granted_reason` wajib + audit append-only + TIDAK boleh setara super-user D-09). `cfg_menu_user_grant_special` DIBANGUN (U-004) dengan governance ketat. |
 | OQ-DLRPTN-02 | P2 | tech | scan | `ms_credit_source` genuinely lokal atau artefak export? |
 | OQ-DLRPTN-07 | P2 | business | blocking | Sumber otoritatif BPKB location: lokal vs union linked-server `MsLokasiBPKB`? |
 | OQ-CUSTMASTER-02 / OQ-CUSTMASTER-07 | P2 | business | blocking | Lookup "reference type" dipakai apa? Set applicant-type hanya `P`/`C`? |
@@ -76,12 +76,23 @@ Vault ini adalah **sub-slice fokus** modul 07 (master-data) dari vault umbrella 
 | OQ-REF-01 | P2 | business | blocking | Nilai `application_type_id` di-parse sistem eksternal (Passnet/GL)? LOCKED vs INTENT |
 | OQ-EXTMASTERS-08 | P2 | tech | scan | `MsPublicHoliday` di DUA database (`FC_ACQ_MCF` & `FC_MSTAPP_MCF`) — copy mana otoritatif? |
 | OQ-DLRPTN-10 / OQ-DLRPTN-11 | P3 | business | blocking | Arti kode legal entity `PT='2'/'3'` + enum `Dt2Type` kota/kabupaten |
-| OQ-BE07-06 | P3 | business | blocking | `PUBLIC_HOLIDAY` boleh hard-delete (USULAN E33) atau deactivate-only? |
+| OQ-BE07-06 | P3 | business | blocking | ~~`PUBLIC_HOLIDAY` boleh hard-delete (USULAN E33) atau deactivate-only?~~ **✅ RESOLVED v1.3.1** → **Deactivate-only (no hard-delete)** — ikut BR-BE07-03 LOCKED; E33 DELETE di-drop, PATCH `is_active`. |
 | OQ-DLRPTN-06 / OQ-DLRPTN-12 / OQ-DLRPTN-15 | P3 | business | blocking | `MsInsuranceByDealerR2/R4` hidup/orphan; insurance source shape |
 | OQ-DLRPTN-08 / OQ-DLRPTN-09 | P3 | business | blocking | `sp_get_branch_exception` stub mati/unfinished; payment-point branch-scoping? |
 | OQ-MASTERDATA-07 | P3 | business | blocking | Layar Dukcapil/Fidusia/`/CRUD` demo masih reachable dari menu live? |
 
 **✅ RESOLVED (jangan di-blokir):** OQ-REF-04 (dump `FC_MSTAPP_MCF` ✅ 2026-07-22, 310 tabel+112 SP+2 UDF) · OQ-PRODASSET-05 (V1-V9 verified dari body SP; celah V4+V6) · OQ-GT-02 (`credit_id` format — inherited umbrella, consumer 01) · OQ-MASTERDATA-03 ✅ (admin surface menulis LANGSUNG ke `ms_hierarchy_transaction` → target tunggal `cfg_hierarchy_matrix`, no separate `cfg_approval_hierarchy_level`).
+
+**✅ RESOLVED v1.3.1 (resolve-oq round 1, 2026-07-27):**
+- **OQ-BE07-01** → Checker = **Kepala Cabang** untuk SEMUA resource maker-checker (DEALER_BANK_REFERENCE, BLACKLIST_OVERRIDE, GL_TRANSACTION_TYPE_LINK, GENERAL_PARAMETER, MENU.trans_type_id_prefix, TRANSACTION_TYPE/APPROVAL_HIERARCHY_LEVEL, dealer legal identity, NUMBER_FORMAT CREDIT_ID). Cabang-scope, konsisten D-10. `credit_id` minting tetap BE (ADR-08/OQ-GT-02 LOCKED — FE hanya minta/menampilkan, bukan minting). BR-BE07-05 scope final = Kepala Cabang.
+- **OQ-DLRPTN-01** → `MsDealer` = live (field census §3.2 pakai ini); `MsDealer1`/`MsDealerBackup20221227` = `[ARTIFACT — discard]` (data diarsip Prinsip 2). Field ekstra MsDealer1 (Phone2/Fax/EmailGroup/IsDefaultMokas) TIDAK dibawa.
+- **OQ-BE07-04** → **Multi-branch** (`branch_scope` = list; mendukung Kepala Cabang/Compliance cover >1 cabang). `mst_user_branch_scope` child table relevan.
+- **OQ-BE07-05** → **Role-based + special grant retained WITH governance** (`granted_reason` wajib + audit append-only + TIDAK boleh setara super-user D-09). `cfg_menu_user_grant_special` DIBANGUN (U-004) dengan governance ketat.
+
+**⏳ DEFERRED v1.3.1 (menunggu eksternal):**
+- **OQ-BE07-02** → Defer ke HR/ITEC: mekanisme sync (batch/CDC/API) bergantung HR system capability + topologi ITEC D-11. Sync job stub di U-002 tetap `TBD: OQ-BE07-02` sampai resolved.
+- **OQ-BE07-03** → Defer ke governance/stakeholder: perluasan role HO = keputusan org governance. mst_role table TIDAK dibuat selama D-10 tertutup (D-MD-04). Bila OQ-BE07-01 nanti perlu HO checker (tidak — sudah Kepala Cabang all), baru bahas.
+- **OQ-MASTERDATA-02** → Defer ke migrasi (OQ-MIG-05): runtime validation V4/V6 RESOLVED (U-008 BR-BE07-15..17 server-side); cleansing import profil data prod = OQ-MIG-05.
 
 ## Sources
 
