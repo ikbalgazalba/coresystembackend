@@ -794,6 +794,11 @@
       "version": "1.3.0",
       "date": "2026-07-27",
       "change": "bind-codebase: CLEAN binding (conflict==0). 19 claims all NEW (greenfield module 07 in brownfield repo). codebase-map 0682bb58 ast. --no-kb (KB absent OQ-AC-PROVENANCE). framework pack spring.md loaded (6 hard rules promoted). Project constitution gate skipped (no .mega-sdd/constitution.md). Coexistence note: mst_user(07) vs Users/mojf_users(jwt-login) distinct, not CONFLICT. bound/ produced. validate-binding-json.sh PASS."
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-07-27",
+      "change": "generate-units: 12 units (U-001..U-012) all task_type=create (greenfield module 07). DAG no cycles. 4 waves topo order. OQ propagation Step 12.5.g PASS (all P1 OQ in binding_refs). Maker-checker U-009 load-bearing foundation (6 dependents)."
     }
   ],
   "advisor": {
@@ -818,5 +823,10 @@
     "claims": 19,
     "new": 19,
     "verified_at": "2026-07-27T00:00:00Z"
+  },
+  "units_state": {
+    "count": 12,
+    "all_create": true,
+    "generated_at": "2026-07-27T00:00:00Z"
   }
 }
