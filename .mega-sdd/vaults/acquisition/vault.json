@@ -1,0 +1,1024 @@
+{
+  "vault_version": "1.2",
+  "generated_at": "2026-07-27T00:00:00Z",
+  "phase": 1,
+  "phase_total": 1,
+  "project_shape": "api-only",
+  "implementation_mode": "existing",
+  "mode_migrate_after": null,
+  "prd_status": "draft",
+  "output_mode": "compact",
+  "mode": "existing",
+  "constitution_version": "1.2.0",
+  "constitution_hash": "23c1f8f9281af492d4275226996c50882a5a106f4e2a6f336a7e49c29a168790",
+  "source_documents": [
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-00-OVERVIEW.md",
+      "version": "2.1",
+      "date": "2026-07-22",
+      "sha256": "0aaf1e37a545604f4803b864769f0e35b1409ab1a1cb8098b385ccd1c11d5811"
+    },
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-01-intake-cas.md",
+      "version": "2.1",
+      "date": "2026-07-14",
+      "sha256": "35242109f6183978590672589f228cebd031dd594d5648b2d5c6460984473f45"
+    },
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-02-credit-analysis.md",
+      "version": "2.1",
+      "date": "2026-07-14",
+      "sha256": "3de6426820a143621c84319dc479cf15154c95c1fcc6a07f7c060637ac5bf483"
+    },
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-03-approval-committee.md",
+      "version": "2.1",
+      "date": "2026-07-22",
+      "sha256": "7e1c9b32d85911dbc921309694566ac502b78387d1a59a0e55b973230e3d0a9d"
+    },
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-04-contract-cm-po.md",
+      "version": "2.1",
+      "date": "2026-07-14",
+      "sha256": "46a37b9ada4f84373789f83ec160e4a3999c5afef06b4e2f0f614e75d0bf115b"
+    },
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-05-npp-legalization.md",
+      "version": "2.1",
+      "date": "2026-07-14",
+      "sha256": "282c7654fb8cb9331436c8c9ba6358b90302421ba259ef7146206fa8a5dc5f90"
+    },
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-06-vertel-verification.md",
+      "version": "2.1",
+      "date": "2026-07-14",
+      "sha256": "8dbebd94860fbc77a5fa5ad77a8f4760ab078e7ebfee38ba440f3a2e838c54ed"
+    },
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-07-master-data-menus.md",
+      "version": "2.1",
+      "date": "2026-07-22",
+      "sha256": "6e3b8b503ce148fcf3226a736d8e19978150cd71c79a5581d23882b62d28a6e3"
+    },
+    {
+      "type": "companion",
+      "path": "docs/ARCHITECTURE-PROPOSAL.md",
+      "version": "2026-07-14",
+      "date": "2026-07-14"
+    },
+    {
+      "type": "companion",
+      "path": "docs/DB-CONVENTIONS.md",
+      "version": "2026-07-14",
+      "date": "2026-07-14"
+    },
+    {
+      "type": "companion",
+      "path": "docs/DATA-MIGRATION-PLAN.md",
+      "version": "2026-07-14",
+      "date": "2026-07-14"
+    }
+  ],
+  "entities": [
+    {
+      "name": "trx_application",
+      "purpose": "Spine intake — CREDIT_APPLICATION; business key credit_id (STEP 8 mint)",
+      "doc": "03-data-model.md",
+      "module": "01-intake-cas"
+    },
+    {
+      "name": "trx_application_related_person",
+      "purpose": "Typed related-person roles (spouse/guarantor/reference) + strict validation",
+      "doc": "03-data-model.md",
+      "module": "01-intake-cas"
+    },
+    {
+      "name": "trx_application_aml_answer",
+      "purpose": "AML/APU-PPT entry-time answers (regulatory LOCKED)",
+      "doc": "03-data-model.md",
+      "module": "01-intake-cas"
+    },
+    {
+      "name": "map_moofi_fincore",
+      "purpose": "Bridge STEP 8 MOOFI→FINCORE; idempotency by moofi_reference_id",
+      "doc": "03-data-model.md",
+      "module": "01-intake-cas"
+    },
+    {
+      "name": "trx_credit_analysis",
+      "purpose": "Spine CA STEP 11; consolidates 3 legacy status cols",
+      "doc": "03-data-model.md",
+      "module": "02-credit-analysis"
+    },
+    {
+      "name": "trx_rac_screening",
+      "purpose": "RAC risk-gating async; idempotency application_id+decision_id",
+      "doc": "03-data-model.md",
+      "module": "02-credit-analysis"
+    },
+    {
+      "name": "trx_slik_request",
+      "purpose": "SLIK/OJK direct-check microflow",
+      "doc": "03-data-model.md",
+      "module": "02-credit-analysis"
+    },
+    {
+      "name": "trx_approval_step",
+      "purpose": "Committee chain ledger STEP 12; status enum",
+      "doc": "03-data-model.md",
+      "module": "03-approval-committee"
+    },
+    {
+      "name": "log_approval_history",
+      "purpose": "Audit maker-checker append-only (authoritative, independent of Flowable)",
+      "doc": "03-data-model.md",
+      "module": "03-approval-committee"
+    },
+    {
+      "name": "cfg_hierarchy_matrix",
+      "purpose": "Committee routing config (trans_type_id+level+OP+risk); shared admin BE-07",
+      "doc": "03-data-model.md",
+      "module": "03-approval-committee"
+    },
+    {
+      "name": "trx_credit_memo",
+      "purpose": "Spine CM; normalizes tr_CM 124 cols; OP/ULI/LCR frozen STEP 12",
+      "doc": "03-data-model.md",
+      "module": "04-contract-cm-po"
+    },
+    {
+      "name": "trx_purchase_order",
+      "purpose": "PO mint; po_number non-NULL at mint; exactly one per approval",
+      "doc": "03-data-model.md",
+      "module": "04-contract-cm-po"
+    },
+    {
+      "name": "trx_credit_memo_insurance_vehicle",
+      "purpose": "Vehicle insurance sub-record; locked_at/locked_by at MemoApproved",
+      "doc": "03-data-model.md",
+      "module": "04-contract-cm-po"
+    },
+    {
+      "name": "trx_agreement",
+      "purpose": "Spine FINANCING_AGREEMENT; agreement_no+passnet_id LOCKED; status pending|validated|active|held",
+      "doc": "03-data-model.md",
+      "module": "05-npp-legalization"
+    },
+    {
+      "name": "trx_ar_card",
+      "purpose": "AR Card (D-06); financial sums LOCKED zero-diff",
+      "doc": "03-data-model.md",
+      "module": "05-npp-legalization"
+    },
+    {
+      "name": "trx_master_loan",
+      "purpose": "Master loan (D-05 NEW); owner OPEN OQ-MEET-02",
+      "doc": "03-data-model.md",
+      "module": "05-npp-legalization"
+    },
+    {
+      "name": "mst_customer",
+      "purpose": "CUSTOMER; authoritative write 05; NIK 16 LOCKED; dedup-at-intake target",
+      "doc": "03-data-model.md",
+      "module": "05-npp-legalization"
+    },
+    {
+      "name": "out_event",
+      "purpose": "Transactional outbox (ADR-04); REBUILD; AgreementActivated/PassnetRegistration/JournalRequested",
+      "doc": "03-data-model.md",
+      "module": "05-npp-legalization"
+    },
+    {
+      "name": "trx_customer_verification",
+      "purpose": "Vertel STEP 14; canonical (CFVerifikasiKonsumen mati); credit_id LOCKED",
+      "doc": "03-data-model.md",
+      "module": "06-vertel-verification"
+    },
+    {
+      "name": "mst_user",
+      "purpose": "User provisioning (REBUILD no legacy RBAC); rejects SUPER_USER",
+      "doc": "03-data-model.md",
+      "module": "07-master-data-menus"
+    },
+    {
+      "name": "mst_dealer",
+      "purpose": "Dealer master; KTP/NPWP zero-diff; D-08 SoW",
+      "doc": "03-data-model.md",
+      "module": "07-master-data-menus"
+    },
+    {
+      "name": "mst_dealer_bank_reference",
+      "purpose": "Dealer bank ref; payout LOCKED zero-diff; maker-checker WAJIB",
+      "doc": "03-data-model.md",
+      "module": "07-master-data-menus"
+    },
+    {
+      "name": "cfg_number_format",
+      "purpose": "credit_id numbering config; CREDIT_ID code_type LOCKED; consumer BE-01",
+      "doc": "03-data-model.md",
+      "module": "07-master-data-menus"
+    },
+    {
+      "name": "map_transaction_type_gl",
+      "purpose": "GL crosswalk CoA LOCKED zero-diff; maker-checker; no delete",
+      "doc": "03-data-model.md",
+      "module": "07-master-data-menus"
+    }
+  ],
+  "documented_dtos": [],
+  "flows": [
+    {
+      "id": "F-S-001",
+      "title": "Alur 16-STEP acquisition (end-to-end spine)",
+      "type": "system",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-00 §4"
+      ],
+      "dod_count": 10
+    },
+    {
+      "id": "F-S-002",
+      "title": "STEP 8 MOOFI→FINCORE sync (ingestion idempotent)",
+      "type": "system",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-01 §5.5"
+      ],
+      "dod_count": 2
+    },
+    {
+      "id": "F-S-003",
+      "title": "STEP 15 aktivasi atomik (sequence kritis)",
+      "type": "system",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-05 §5.3"
+      ],
+      "dod_count": 5
+    },
+    {
+      "id": "F-U-001",
+      "title": "STEP 9 RFA & Pengecekan Cabang",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-01 §7"
+      ],
+      "dod_count": 3,
+      "workflow": true,
+      "operator_surface": [
+        "worklist",
+        "decision",
+        "state-labels",
+        "audit-timeline"
+      ]
+    },
+    {
+      "id": "F-U-002",
+      "title": "STEP 12 Committee approval (maker-checker hierarki)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-03 §5"
+      ],
+      "dod_count": 4,
+      "workflow": true,
+      "operator_surface": [
+        "worklist",
+        "decision",
+        "state-labels",
+        "audit-timeline"
+      ]
+    },
+    {
+      "id": "F-U-003",
+      "title": "STEP 14 Vertel (maker-checker verifikasi telepon)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-06 §5"
+      ],
+      "dod_count": 6,
+      "workflow": true,
+      "operator_surface": [
+        "worklist",
+        "decision",
+        "state-labels",
+        "audit-timeline"
+      ]
+    },
+    {
+      "id": "F-U-004",
+      "title": "STEP 13 PO minting + cetak + email + Open CM",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-04 §5"
+      ],
+      "dod_count": 5
+    },
+    {
+      "id": "F-U-005",
+      "title": "STEP 15 NPP draft + RFA + decision (aktivasi)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-05 §5"
+      ],
+      "dod_count": 6,
+      "workflow": true,
+      "operator_surface": [
+        "worklist",
+        "decision",
+        "state-labels",
+        "audit-timeline"
+      ]
+    },
+    {
+      "id": "F-U-006",
+      "title": "Master data management (D-08 maker-checker envelope)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-07 §5"
+      ],
+      "dod_count": 5,
+      "workflow": true,
+      "operator_surface": [
+        "worklist",
+        "decision",
+        "state-labels",
+        "audit-timeline"
+      ]
+    }
+  ],
+  "adrs": [
+    {
+      "id": "ADR-01",
+      "title": "Modular Monolith, bukan microservices penuh",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-02",
+      "title": "Business logic 100% application layer; zero stored procedure",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-03",
+      "title": "Satu DB PostgreSQL, satu schema + prefix kelas + ownership registry",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-04",
+      "title": "Transactional Outbox untuk semua efek eksternal + idempotency per flow",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-05",
+      "title": "Anti-Corruption Layer untuk 10 integrasi eksternal",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-06",
+      "title": "State-machine engine tunggal config-driven per produk",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-07",
+      "title": "RBAC 5 peran + maker-checker, server-side authoritative",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-08",
+      "title": "Kontrak MOOFI→FINCORE (STEP 8) sync idempotent + credit_id minting",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-09",
+      "title": "Downstream PULL via read-API + event feed",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-10",
+      "title": "Next.js App Router + BFF-lite (FE context)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-11",
+      "title": "Observability & audit first-class",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-12",
+      "title": "Testing & quality gates (Modulith slice + ACL contract + PBT + ArchUnit + BPMN)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-13",
+      "title": "Flowable embedded untuk approval/human-task",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-14",
+      "title": "Standarisasi schema via DB-CONVENTIONS.md",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-15",
+      "title": "Migrasi simulation-first dengan reconciliation gate",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    }
+  ],
+  "hard_rules": [
+    {
+      "id": "constitution-B-010",
+      "rule": "Regulated gates (AML/blacklist, SLIK, DSR, verification, chassis/BAST) = FAIL-CLOSED; dependency gagal/throw = BLOCK",
+      "source": "constitution §B-010; OQ-REG-06 RESOLVED; BE-00 §7.3"
+    },
+    {
+      "id": "constitution-B-011",
+      "rule": "No-self-approval enforced dua lapis (Flowable task + Java service guard, 403 SELF_APPROVAL_BLOCKED)",
+      "source": "constitution §B-011; D-01 S11; ADR-07/13"
+    },
+    {
+      "id": "constitution-B-012",
+      "rule": "Super-user DIHAPUS; no role/grant/bypass setara; audit override historis survive migrasi",
+      "source": "constitution §B-012; D-09"
+    },
+    {
+      "id": "constitution-B-013",
+      "rule": "Branch pick re-verify server-side terhadap authorized-branch list",
+      "source": "constitution §B-013; OQ-SHELL-02"
+    },
+    {
+      "id": "constitution-C-006",
+      "rule": "Cross-module via event/outbox atau API publik; NO direct repo/tabel access; NO cross-module JOIN write path; ref via credit_id",
+      "source": "constitution §C-006; ADR-03"
+    },
+    {
+      "id": "constitution-C-008",
+      "rule": "PO minting owned 04 (exactly one per approval, trigger MemoApproved); JANGAN mint dari credit-analyst",
+      "source": "constitution §C-008; D-01 S13; fix GOTCHA-8"
+    },
+    {
+      "id": "constitution-H-002",
+      "rule": "credit_id = business key LOCKED format branch(5)+YY+MM+SEQ(5); mint-once idempotent; generator tunggal",
+      "source": "constitution §H-002; OQ-GT-02 RESOLVED; ADR-08"
+    },
+    {
+      "id": "constitution-H-003",
+      "rule": "trans_type_id = external-FK LOCKED char-for-char; composition owned ONLY 02; ladder AA00000001 distinct",
+      "source": "constitution §H-003; BE-02/BE-03"
+    },
+    {
+      "id": "constitution-H-005",
+      "rule": "NPP activation STEP 15 atomik (agreement+PK+jurnal+AR Card+master loan+upsert customer+outbox in one tx; error=ROLLBACK)",
+      "source": "constitution §H-005; D-01 S15"
+    },
+    {
+      "id": "rule-fail-closed-gates",
+      "rule": "Semua regulated gate fail-closed (OQ-REG-06 RESOLVED)",
+      "source": "06-constraints.md; BE-00 §7.3"
+    },
+    {
+      "id": "rule-po-non-null",
+      "rule": "po_number assigned non-NULL at mint (fix GOTCHA-6); exactly one PO per approval",
+      "source": "03-data-model.md; BE-04 §3.6"
+    },
+    {
+      "id": "rule-log-approval-history-authoritative",
+      "rule": "log_approval_history append-only audit otoritatif regulatori, independent dari Flowable ACT_*",
+      "source": "06-constraints.md; ADR-13; DB-CONVENTIONS §8"
+    },
+    {
+      "id": "rule-no-cross-db-dml",
+      "rule": "No cross-DB/cross-company linked-server DML; integrasi via ACL app-tier (ADR-05)",
+      "source": "06-constraints.md; BE-00 §8.2"
+    },
+    {
+      "id": "rule-no-sp",
+      "rule": "Zero stored procedure; logic 100% application layer (ADR-02)",
+      "source": "05-decisions.md ADR-02"
+    },
+    {
+      "id": "rule-schema-conventions",
+      "rule": "Schema WAJIB DB-CONVENTIONS (prefix kelas, singular, PK id identity + business key, declared FK, audit cols, satu status)",
+      "source": "03-data-model.md; ADR-14"
+    }
+  ],
+  "target_files": [],
+  "provenance": {
+    "source_prd_count": 8,
+    "companion_docs": [
+      "ARCHITECTURE-PROPOSAL.md",
+      "DB-CONVENTIONS.md",
+      "DATA-MIGRATION-PLAN.md"
+    ],
+    "kb_cited_but_absent": true,
+    "kb_caveat": "BE-00/ARCHITECTURE-PROPOSAL cite .mega-sdd/knowledge-base/ as authoritative technical source but KB dir does not exist on disk at generation time; see OQ-AC-PROVENANCE",
+    "multi_prd": {
+      "sibling_vaults": [
+        "jwt-login",
+        "api-platform"
+      ],
+      "route": "new-epic",
+      "constitution_extends": "api-platform v1.1.1"
+    },
+    "oq_id_strategy": "PRD OQ-IDs preserved verbatim as stable tags (OQ-GT-*, OQ-MEET-*, OQ-CRSCORE-*, OQ-CMPO-*, OQ-NPP-*, OQ-EXTMASTERS-*, OQ-GAP-*, OQ-MIG-*, OQ-RAC-*, OQ-SLIK-*, OQ-DLRPTN-*, OQ-CUSTMASTER-*, OQ-PRODASSET-*, OQ-AC-*, OQ-ASM-*, OQ-VERIF-*, OQ-VTL-*, OQ-NPPVTL-*, OQ-CAUI-*, OQ-CASFE-*, OQ-CMPOFE-*, OQ-BE07-*, OQ-MASTERDATA-*, OQ-DUKCAPIL-*, OQ-NEOSCORE-*, OQ-PEFINDO-*, OQ-DISB-*, OQ-COLL-*, OQ-REF-*, OQ-CORE-*, OQ-DATA-*, OQ-REG-*, OQ-ACQCAS-*, OQ-MCP-*, OQ-SHELL-*, OQ-ARCH-STACK, OQ-PASSNET-*, OQ-DOKU-*, OQ-NOTIF-*)"
+  },
+  "open_questions": [
+    {
+      "tag": "OQ-AC-PROVENANCE",
+      "priority": "P1",
+      "category": "tech",
+      "resolution_mode": "scan",
+      "classification_confidence": "high",
+      "scan_query": "find .mega-sdd/knowledge-base/ dir + cited files (_ACQUISITION-GROUND-TRUTH.md, gap-entities.md, 60-frontend/, 99-rebuild-architecture/)",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "KB .mega-sdd/knowledge-base/ tidak ada di disk padahal BE-00/ARCHITECTURE-PROPOSAL sitasi sebagai sumber otoritatif teknis — restore/move atau ubah sitasi?"
+    },
+    {
+      "tag": "OQ-ARCH-STACK",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Framework BE (USULAN Spring Boot), transport, topologi infra — menunggu deliverable ITEC D-11. Java LOCKED D-12."
+    },
+    {
+      "tag": "OQ-MEET-06",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Matrix step per-product MACF (D-07); mem-block annex per-product, BUKAN PRD payung."
+    },
+    {
+      "tag": "OQ-MEET-02",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Owner master loan (D-05): acquisition vs servicing? menunggu ITEC D-11."
+    },
+    {
+      "tag": "OQ-EXTMASTERS-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Masters FC_MSTAPP_MCF owned vs read-only + liveness linked-server (DDL dump ✅ 2026-07-22, sisa kepemilikan)."
+    },
+    {
+      "tag": "OQ-EXTMASTERS-07",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "8 objek dirujuk code acquisition ABSEN dari dump FC_MSTAPP_MCF."
+    },
+    {
+      "tag": "OQ-REG-02",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Intake-only AML screening = signed-off control design atau second screening di CA never built?"
+    },
+    {
+      "tag": "OQ-GAP-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Channel Pooling Order/OMA masih produksi?"
+    },
+    {
+      "tag": "OQ-GAP-02",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Siapa penulis tr_ia_history lokal (writer tak ditemukan)?"
+    },
+    {
+      "tag": "OQ-GAP-03",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Bypass SLIK: kondisi/otoritas + audit OJK compliance (regulatori)."
+    },
+    {
+      "tag": "OQ-GAP-04",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "tr_general_deviation: makna param_2/param_4/writer path."
+    },
+    {
+      "tag": "OQ-MIG-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Strategi cutover: Skenario A (drain-di-legacy) vs B (in-flight per status); sebelum Phase 3."
+    },
+    {
+      "tag": "OQ-MIG-05",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Gate profiling data prod atas semua klaim DISCARD/dead."
+    },
+    {
+      "tag": "OQ-CMPOFE-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Auto print+email at approve (motor-only legacy): intentional atau gap?"
+    },
+    {
+      "tag": "OQ-CMPOFE-02",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Print button gate field: status_ca vs status_cm — mana authoritative?"
+    },
+    {
+      "tag": "OQ-DOKU-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Siapa mengisi DOKU response fields (write-back SP tanpa caller)?"
+    },
+    {
+      "tag": "OQ-DISB-05",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Apa penentu eligibility kontrak masuk batch Dealer Payment? (OQ-RPT-06) — distinct from OQ-NPP-03 (PULL, RESOLVED)."
+    },
+    {
+      "tag": "OQ-NPP-13",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "sp_get_history_npp baca tr_hierarchy_approval_transaction saat agreement_status='A' — dead code/archival?"
+    },
+    {
+      "tag": "OQ-PASSNET-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Siapa drain tr_synchronize_to_passnet (is_sync='0') + write-back; scope Passnet (OQ-NPP-02/OQ-PASSNET-02)."
+    },
+    {
+      "tag": "OQ-SHELL-02",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Branch pick login stage-2 tidak re-verify server-side; rebuild re-verify (USULAN)."
+    },
+    {
+      "tag": "OQ-REF-05",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "[SECURITY] MsBank.PasscodeBiBca kredensial live? review sebelum migrasi (OQ-DLRPTN-05/OQ-EXTMASTERS-05)."
+    },
+    {
+      "tag": "OQ-DLRPTN-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "MsDealer vs MsDealer1 vs MsDealerBackup20221227 — mana live?"
+    },
+    {
+      "tag": "OQ-DLRPTN-13",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Bagaimana ~27 applicant lookups + dealer/bank masters di-maintain (no write path)? (OQ-CUSTMASTER-04)"
+    },
+    {
+      "tag": "OQ-BE07-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Maker-checker scope + who is checker per resource (Kepala Cabang? HO role?) (OQ-BE07-02 HR sync, OQ-BE07-03 HO roles)."
+    },
+    {
+      "tag": "OQ-CRSCORE-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Mana 3 write-target 5C-note authoritative? NEEDS TELEMETRY/stakeholder (OQ-OVERVIEW-01)."
+    },
+    {
+      "tag": "OQ-CRSCORE-10",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Actor-of-record & time-ordering credit analyst; sequential vs per-product."
+    },
+    {
+      "tag": "OQ-RAC-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Di mana sp_insert_rac_processing* jalan; scheduler sp_agent_rac_to_cm_bulk (OQ-RAC-02)."
+    },
+    {
+      "tag": "OQ-SLIK-05",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Freshness 30-hari SLIK hard-block atau informational?"
+    },
+    {
+      "tag": "OQ-PRD01-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "NIK dedup lock semantics (link-only vs block 2nd in-flight draft); duality lock MOOFI vs FINCORE emitter (OQ-PRD01-02)."
+    },
+    {
+      "tag": "OQ-CORE-03",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Arti bisnis OP/ULI/LCR (GL-reconciled? dua arti OP) (OQ-CMPO-02)."
+    },
+    {
+      "tag": "OQ-ASM-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Semantik non-Level-0 Reject + correction actor (ladder, BUKAN committee) (OQ-ASM-02)."
+    },
+    {
+      "tag": "OQ-VTL-05",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Gate consistency E11 vertel: sync in-transaction vs read-model (ITEC D-11)."
+    },
+    {
+      "tag": "OQ-DUKCAPIL-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Mekanisme request Dukcapil + populate replica."
+    },
+    {
+      "tag": "OQ-VERIF-02",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "spNewZoomInsertSurvey_2w external caller live/dead?"
+    },
+    {
+      "tag": "OQ-MEET-01",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Email blast dealer (D-03) — trigger point, template, failure policy."
+    },
+    {
+      "tag": "OQ-MEET-03",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "AR Card & jurnal (D-06) — GL account mapping + posting rules source of truth."
+    },
+    {
+      "tag": "OQ-MEET-04",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Instant-Approval lane eligibility per product/plafond."
+    },
+    {
+      "tag": "OQ-MEET-05",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Expiry verifikasi 30-hari — auto-cancel vs re-verify + clock start."
+    },
+    {
+      "tag": "OQ-GT-03",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Open CM STEP 13 return-target Step 1–12 granularity."
+    },
+    {
+      "tag": "OQ-CMPO-11",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "Nama/kontrak committee event correction/reject (03→04 pre-mint)."
+    },
+    {
+      "tag": "OQ-EXTMASTERS-08",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "MsPublicHoliday di DUA database — copy mana otoritatif?"
+    },
+    {
+      "tag": "OQ-GAP-11",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "open",
+      "text": "PII retention DOKU logs (UU PDP)."
+    }
+  ],
+  "open_questions_summary": {
+    "total": 42,
+    "by_priority": {
+      "P1": 34,
+      "P2": 8,
+      "P3": 0
+    },
+    "by_status": {
+      "open": 42,
+      "resolved": 0,
+      "deferred": 0,
+      "out_of_scope": 0
+    },
+    "by_category": {
+      "business": 41,
+      "tech": 1
+    },
+    "note": "Roll-up subset paling memblokir dari 247+ OQ PRD. Tag PRD dipreserve. OQ-AC-01 & OQ-NPP-03 REMOVED from open (RESOLVED per PRD §11.1 — OQ-AC-01 rebuild closure eksplisit jadi hard rule; OQ-NPP-03 PULL confirmed); OQ-DISB-05 ADDED (genuinely open, distinct from OQ-NPP-03). Roll-up lengkap di register asli BE-0x §11 + BE-00 §11.1; OQ-AC-PROVENANCE baru (vault-level, KB absent). RESOLVED OQ lain (OQ-REG-06, OQ-GT-01/02, OQ-BE03-02/04, OQ-NPP-14, OQ-CMPO-01, OQ-COLL-01, OQ-MCP-01, OQ-AC-02, OQ-ACQCAS-01/02, OQ-PRODASSET-06, OQ-CRSCORE-11, OQ-VTL-06, OQ-DATA-02/05, OQ-REF-04, OQ-MASTERDATA-02, OQ-PRODASSET-05, dst.) TIDAK dimasukkan sebagai blocker."
+  },
+  "design_system_flags": {
+    "HAS_UI_COMPONENTS": false,
+    "HAS_TOKENS": false,
+    "HAS_A11Y": false,
+    "HAS_VOICE_BRAND": false
+  },
+  "changelog": [
+    {
+      "version": "1.2.0",
+      "date": "2026-07-27",
+      "change": "Initial generation — Mode A generate-intent, multi-PRD new-epic (acquisition over jwt-login + api-platform). Source BE-00..07 v2.1. Constitution extends api-platform v1.1.1 (§A–§G inherited + §H acquisition). OQ-IDs PRD preserved as stable tags."
+    }
+  ],
+  "advisor": {
+    "model": "mega-sdd:phase-advisor",
+    "ran_at": "2026-07-27T00:00:00Z",
+    "findings": {
+      "high": 2,
+      "medium": 2,
+      "low": 1
+    },
+    "materialized": [
+      "ACQ-ADV-001 OQ-AC-01 removed from open (RESOLVED, now hard rule)",
+      "ACQ-ADV-002 OQ-NPP-03 removed (RESOLVED); OQ-DISB-05 added as distinct open",
+      "ACQ-ADV-003 GOTCHA-12/13/15 added to 06-constraints list",
+      "ACQ-ADV-004 ADR IDs renamed D-0xx→ADR-0x (collision with meeting D-01..D-12)",
+      "ACQ-ADV-005 30-day windows bullet expanded in 04-flows F-S-001 DoD"
+    ]
+  }
+}
