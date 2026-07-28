@@ -14,7 +14,7 @@ management:
       exposure:
         include: health,info
 server:
-  port: ${SERVER_PORT:8080}
+  port: ${SERVER_PORT:7001}
 spring:
   jpa:
     hibernate:

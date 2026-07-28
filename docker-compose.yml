@@ -5,11 +5,11 @@ services:
     image: coresystembackend:latest
     env_file: .env.docker
     ports:
-      - "8080:8080"
+      - "7001:7001"
     volumes:
       - /home/ikbalgazalba/.ssl-truststores/bankmega-truststore.p12:/opt/bankmega-truststore/bankmega-truststore.p12:ro
     healthcheck:
-      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:8080/actuator/health || exit 1"]
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://localhost:7001/actuator/health || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 5
