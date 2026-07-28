@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
@@ -50,6 +52,7 @@ import com.coresystem.coresystembackend.masterdata.makercheck.MasterChangeReques
  *
  * <p>Maker-checker is a NEW control — legacy does not have it; do not claim parity (D-MD-02).
  */
+@ConditionalOnBean(JpaRepository.class)
 @RestController
 @RequestMapping("/master-change-requests")
 public class MasterChangeRequestController {

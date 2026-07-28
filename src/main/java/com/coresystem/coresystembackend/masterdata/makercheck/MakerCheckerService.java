@@ -2,6 +2,8 @@ package com.coresystem.coresystembackend.masterdata.makercheck;
 
 import java.time.Instant;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,7 @@ import com.coresystem.coresystembackend.masterdata.makercheck.MasterChangeReques
  * rather than as separate files to keep the maker-checker module's surface within the unit's
  * target files. The controller maps each to its HTTP status.
  */
+@ConditionalOnBean(JpaRepository.class)
 @Service
 public class MakerCheckerService {
 

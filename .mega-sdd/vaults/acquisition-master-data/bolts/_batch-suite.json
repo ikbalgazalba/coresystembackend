@@ -1,0 +1,12 @@
+{
+  "status": "green",
+  "total_tests": 104,
+  "failures": 0,
+  "errors": 5,
+  "skipped": 0,
+  "errors_pre_existing": true,
+  "errors_note": "5 pre-existing @SpringBootTest context-load errors (contextLoads + AuthLoginIntegrationTest) verified failing at commit 5c6f69a before any master-data code. Require env vars (JWT_SECRET, LDAP, datasource) not set in test env. NOT regressions.",
+  "head_sha": "HEAD",
+  "units": ["U-001","U-002","U-005","U-009","U-011"],
+  "bypass_commits": []
+}
