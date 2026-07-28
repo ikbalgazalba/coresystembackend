@@ -94,6 +94,12 @@
 			<version>0.12.6</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Jakarta JSON API — required by dealer service/controller (U-006) for JsonObjectBuilder. -->
+		<dependency>
+			<groupId>jakarta.json</groupId>
+			<artifactId>jakarta.json-api</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
