@@ -61,7 +61,7 @@ import com.coresystem.coresystembackend.masterdata.transtype.TransactionTypeServ
  */
 @ConditionalOnBean(JpaRepository.class)
 @RestController
-@RequestMapping
+@RequestMapping("/transaction-types")
 public class TransactionTypeController {
 
 	private final TransactionTypeService service;

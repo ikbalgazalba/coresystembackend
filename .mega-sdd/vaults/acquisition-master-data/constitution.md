@@ -56,3 +56,5 @@
 - **I-007**: `transaction_type_code` + `trans_type_id_prefix` = external-FK `[LOCKED]` char-for-char (BR-PRODASSET-7/14) — mutasi prefix → maker-checker + warning transaction-type ter-impact; `mapping` disimpan eksplisit (bukan derive `substring`). `BE-07 §6 BR-BE07-14/18`.
 - **I-008**: Lookup fail = error eksplisit (BR-BE07-22) — `503 LOOKUP_SOURCE_UNAVAILABLE`/`404`, BUKAN sukses-kosong (fix EC1/EC12/fuel silent-success). "employee resigned", "not found", "source error" = tiga sinyal berbeda. `BE-07 §6`.
 - **I-009**: `cfg_number_format` + DB sequence (D-MD-05) — counter `last_number` TIDAK dimigrasi (pola manual-increment `[ARTIFACT]` do-not-replicate race); sequence DB per scope di-seed ≥ max legacy saat cutover. `CREDIT_ID` code_type change → maker-checker (salah format memutus keunikan nasional `credit_id`, OQ-GT-02 ✅). Consumer BE-01. `BE-07 §3.4`.
+
+- **I-010 (drift-fix F-004)**: JPA-dependent master-data beans (services + controllers yang inject `JpaRepository`) WAJIB `@ConditionalOnBean(JpaRepository.class)` — agar skip saat JPA autoconfig excluded (pre-existing contextLoads/AuthLogin tests). `05-decisions.md D-MD-06, commit 684ba1c`.

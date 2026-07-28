@@ -57,7 +57,7 @@ import com.coresystem.coresystembackend.masterdata.user.EmployeeMirror;
  */
 @ConditionalOnBean(JpaRepository.class)
 @RestController
-@RequestMapping
+@RequestMapping("/hierarchy-matrix")
 public class HierarchyMatrixController {
 
 	private final HierarchyMatrixService service;

@@ -74,3 +74,9 @@ Approval human-task layer dijalankan Flowable. **Implikasi 07**: 07 miliki **def
 - **OQ-BE07-01/03** [P1] — maker-checker scope + checker role; HO roles (expand enum D-10 → `mst_role`?)
 - **OQ-EXTMASTERS-01** [P1] — Tier C ownership (menentukan tiering final D-MD-01)
 - Lengkap di `00-index.md` roll-up
+
+### D-MD-06 — @ConditionalOnBean(JpaRepository.class) on JPA-dependent master-data beans (drift-fix F-004)
+- **Keputusan**: Semua JPA-dependent master-data beans (services + controllers yang inject JpaRepository) diberi `@ConditionalOnBean(JpaRepository.class)` agar skip saat JPA autoconfig excluded (pre-existing contextLoads/AuthLogin tests exclude DataSource+Hibernate).
+- **Konteks**: commit `684ba1c` — pre-existing jwt-login tests (`contextLoads`, `AuthLoginIntegrationTest`) exclude JPA autoconfiguration; tanpa conditional, MakerCheckerService/Controller injection fails context-load.
+- **Konsekuensi**: (+) no context-load regression; (−) beans hanya aktif saat JPA live (runtime normal). Test focused-context tetap perlu `@MockitoBean` utk repos.
+- **Sumber**: drift-fix F-004, commit `684ba1c`.
