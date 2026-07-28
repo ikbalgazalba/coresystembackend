@@ -1,16 +1,45 @@
-# Dev profile — local development. Overrides ONLY profile-specific keys.
-# Base application.yaml (secret ${VAR} placeholders, fail-fast) is unchanged.
-# SDD-PROVENANCE: U-005 | vault: .mega-sdd/vaults/api-platform | Spring profile dev
+# Dev profile — real PostgreSQL (tibsdbdev), no auth for API testing.
+# Usage: ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:postgresql://tibsdbdev.bankmegadev.net:5432/coresystem
+    username: postgres
+    password: P@ssw0rd
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
 coresystem:
-  cors:
-    allowed-origins: http://localhost:3000,http://localhost:7001
+  app:
+    jwtSecret: dGVzdC1qd3Qtc2VjcmV0LWZvci1sb2NhbC1kZXZlbG9wbWVudC1vbmx5LWRvLW5vdC11c2UtaW4tcHJvZHVjdGlvbi1iYXNlNjQ=
+    jwtExpirationMs: 86400000
+  ldap:
+    urlToken: http://localhost:9999/token
+    urlVerifyPassword: http://localhost:9999/verify
+    clientId: test-client
+    clientSecret: test-secret
+    username: test-user
+    password: test-pass
+    partnerId: test-partner
+    channelId: test-channel
+    host: localhost
+    aesKey: test-aes-key-1234567890123456
+
 springdoc:
   swagger-ui:
     enabled: true
+    path: /swagger-ui.html
+
 management:
   endpoints:
     web:
       exposure:
-        include: health
-server:
-  port: ${SERVER_PORT:7001}   # OQ-AP-2 — dev default 7001 (match prod)
+        include: health,info

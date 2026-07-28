@@ -4,6 +4,8 @@ import java.time.Instant;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 
 /**
  * Shared audit base for every master-data entity (DB-CONVENTIONS §4).
@@ -78,6 +80,27 @@ public abstract class AuditableEntity {
 
 	public void setUpdatedBy(String updatedBy) {
 		this.updatedBy = updatedBy;
+	}
+
+	@PrePersist
+	protected void onCreate() {
+		if (createdAt == null) {
+			createdAt = Instant.now();
+		}
+		if (updatedAt == null) {
+			updatedAt = createdAt;
+		}
+		if (createdBy == null) {
+			createdBy = "SYSTEM";
+		}
+		if (updatedBy == null) {
+			updatedBy = createdBy;
+		}
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		updatedAt = Instant.now();
 	}
 
 }

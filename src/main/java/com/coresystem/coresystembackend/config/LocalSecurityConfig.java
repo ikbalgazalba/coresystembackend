@@ -7,8 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Local dev security — permits ALL requests (no JWT/auth needed for API testing).
- * Also provides RestClient.Builder (normally in SecurityConfig, which is disabled under local).
+ * Local/dev security — permitAll for API testing.
  * Only active under profile=local. NEVER use in production.
  */
 @Configuration
@@ -27,4 +26,4 @@ public class LocalSecurityConfig {
         return org.springframework.web.client.RestClient.builder();
     }
 }
-// SDD-PROVENANCE: local-dev | vault: .mega-sdd/vaults/acquisition-master-data | LocalSecurityConfig — permitAll + RestClient.Builder for local profile API testing only
+// SDD-PROVENANCE: local-dev | vault: .mega-sdd/vaults/acquisition-master-data | LocalSecurityConfig — permitAll + RestClient.Builder for local profile
