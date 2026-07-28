@@ -64,22 +64,22 @@ Vault ini adalah **sub-slice fokus** modul 07 (master-data) dari vault umbrella 
 | OQ-ARCH-STACK | P1 | business | blocking | Framework BE (USULAN Spring Boot), transport, topologi. **Deferred (v1.3.1)**: menunggu deliverable ITEC D-11. Java LOCKED D-12. |
 | OQ-AC-PROVENANCE | P1 | tech | scan | KB `.mega-sdd/knowledge-base/` tidak ada di disk (inherited umbrella). **Deferred (v1.3.1)**: menunggu restore/move KB atau ubah sitasi PRD. Tidak block unit generation (units pakai PRD). |
 | OQ-MEET-02 | P1 | business | blocking | Owner master loan — inherited umbrella. **Deferred (v1.3.1)**: menunggu ITEC D-11. 07 sediakan lookup saja. |
-| OQ-MASTERDATA-03 | P2 | business | blocking | Apa konsumsi nyata konfigurasi TransTypeHierarchy (router komite `ms_hierarchy_transaction` vs ladder CA `ms_approval_scheme`)? |
+| OQ-MASTERDATA-03 | P2 | business | blocking | Apa konsumsi nyata konfigurasi TransTypeHierarchy? **✅ RESOLVED (2026-07-22)** — single source `cfg_hierarchy_matrix` (admin write + 03 walk tabel sama). |
 | OQ-MASTERDATA-01 | P2 | business | blocking | ~~Deactivate-only (no hard delete) = kebutuhan audit disengaja?~~ **✅ RESOLVED v1.3.1** → **LOCKED** — deactivate-only = kebutuhan audit disengaja; BR-BE07-03 upgrade ke `[LOCKED]` (preservasi historis routing). |
 | OQ-DLRPTN-04 | P2 | business | blocking | ~~Makna type approval-reason `'1'\|'2'\|'3'\|'9'` + apakah `'9'` diekspos~~ **✅ RESOLVED v1.3.1** → **Expose semua type** (no hardcode subset; endpoint read menerima filter `type` eksplisit, TIDAK menyembunyikan '9'). Makna semantik TBD tapi data verbatim dibawa. |
 | OQ-BE07-04 | P2 | business | blocking | ~~Scope user: single-branch atau multi-branch~~ **✅ RESOLVED v1.3.1** → **Multi-branch** (`branch_scope` = list; mendukung Kepala Cabang/Compliance cover >1 cabang). `mst_user_branch_scope` child table relevan. |
 | OQ-BE07-05 | P2 | business | blocking | ~~Model akses menu; `USER_MENU_GRANT_SPECIAL` dipertahankan?~~ **✅ RESOLVED v1.3.1** → **Role-based + special grant retained WITH governance** (`granted_reason` wajib + audit append-only + TIDAK boleh setara super-user D-09). `cfg_menu_user_grant_special` DIBANGUN (U-004) dengan governance ketat. |
-| OQ-DLRPTN-02 | P2 | tech | scan | `ms_credit_source` genuinely lokal atau artefak export? |
-| OQ-DLRPTN-07 | P2 | business | blocking | Sumber otoritatif BPKB location: lokal vs union linked-server `MsLokasiBPKB`? |
-| OQ-CUSTMASTER-02 / OQ-CUSTMASTER-07 | P2 | business | blocking | Lookup "reference type" dipakai apa? Set applicant-type hanya `P`/`C`? |
-| OQ-PRODASSET-01 / OQ-PRODASSET-03 | P2 | business | blocking | Katalog asset otoritatif (asset-* vs item-brand-*)? Endpoint product list legacy = stub — sumber UI? |
-| OQ-REF-01 | P2 | business | blocking | Nilai `application_type_id` di-parse sistem eksternal (Passnet/GL)? LOCKED vs INTENT |
-| OQ-EXTMASTERS-08 | P2 | tech | scan | `MsPublicHoliday` di DUA database (`FC_ACQ_MCF` & `FC_MSTAPP_MCF`) — copy mana otoritatif? |
-| OQ-DLRPTN-10 / OQ-DLRPTN-11 | P3 | business | blocking | Arti kode legal entity `PT='2'/'3'` + enum `Dt2Type` kota/kabupaten |
+| OQ-DLRPTN-02 | P2 | tech | scan | **✅ RESOLVED v1.3.2** → ms_credit_source = LOKAL acquisition (Tier A, BR-CREDITSRC-1); migrasi bareng acquisition, BUKAN masters-service. `ms_credit_source` genuinely lokal atau artefak export? |
+| OQ-DLRPTN-07 | P2 | business | blocking | Sumber otoritatif BPKB location: lokal vs union linked-server `MsLokasiBPKB`? **Deferred (v1.3.2)**: menunggu DBA sumber otoritatif BPKB location (domain kolateral). |
+| OQ-CUSTMASTER-02 / OQ-CUSTMASTER-07 | P2 | business | blocking | Lookup "reference type" dipakai apa? Set applicant-type hanya `P`/`C`? **Deferred (v1.3.2)**: menunggu stakeholder/data makna lookup reference type. |
+| OQ-PRODASSET-01 / OQ-PRODASSET-03 | P2 | business | blocking | Katalog asset otoritatif (asset-* vs item-brand-*)? Endpoint product list legacy = stub — sumber UI? **Deferred (v1.3.2)**: menunggu keputusan desain katalog asset + sumber UI product list. |
+| OQ-REF-01 | P2 | business | blocking | Nilai `application_type_id` di-parse sistem eksternal (Passnet/GL)? LOCKED vs INTENT **Deferred (v1.3.2)**: menunggu stakeholder/eksternal application_type_id Passnet/GL contract. |
+| OQ-EXTMASTERS-08 | P2 | tech | scan | **✅ RESOLVED v1.3.2** → FC_ACQ_MCF otoritatif untuk mst_public_holiday (LOKAL, DDL terverifikasi); copy FC_MSTAPP_MCF = secondary/ignore. `MsPublicHoliday` di DUA database (`FC_ACQ_MCF` & `FC_MSTAPP_MCF`) — copy mana otoritatif? |
+| OQ-DLRPTN-10 / OQ-DLRPTN-11 | P3 | business | blocking | Arti kode legal entity `PT='2'/'3'` + enum `Dt2Type` kota/kabupaten. **✅ RESOLVED v1.3.2** → Kode PT=2/3 verbatim `[LOCKED]` (external-FK company master); Dt2Type = enum eksplisit (kota/kabupaten). |
 | OQ-BE07-06 | P3 | business | blocking | ~~`PUBLIC_HOLIDAY` boleh hard-delete (USULAN E33) atau deactivate-only?~~ **✅ RESOLVED v1.3.1** → **Deactivate-only (no hard-delete)** — ikut BR-BE07-03 LOCKED; E33 DELETE di-drop, PATCH `is_active`. |
-| OQ-DLRPTN-06 / OQ-DLRPTN-12 / OQ-DLRPTN-15 | P3 | business | blocking | `MsInsuranceByDealerR2/R4` hidup/orphan; insurance source shape |
-| OQ-DLRPTN-08 / OQ-DLRPTN-09 | P3 | business | blocking | `sp_get_branch_exception` stub mati/unfinished; payment-point branch-scoping? |
-| OQ-MASTERDATA-07 | P3 | business | blocking | Layar Dukcapil/Fidusia/`/CRUD` demo masih reachable dari menu live? |
+| OQ-DLRPTN-06 / OQ-DLRPTN-12 / OQ-DLRPTN-15 | P3 | business | blocking | `MsInsuranceByDealerR2/R4` hidup/orphan; insurance source shape. **Deferred (v1.3.2)**: menunggu DBA/profiling (downstream insurance, bukan 07). |
+| OQ-DLRPTN-08 / OQ-DLRPTN-09 | P3 | business | blocking | `sp_get_branch_exception` stub mati/unfinished; payment-point branch-scoping? **Deferred (v1.3.2)**: menunggu DBA/code archaeology stub payment-point minor. |
+| OQ-MASTERDATA-07 | P3 | business | blocking | **✅ RESOLVED v1.3.2** → /CRUD demo + layar Dukcapil/Fidusia = [ARTIFACT] discard; menu migrasi bersih (reject entri mati + register). Layar Dukcapil/Fidusia/`/CRUD` demo masih reachable dari menu live? |
 
 **✅ RESOLVED (jangan di-blokir):** OQ-REF-04 (dump `FC_MSTAPP_MCF` ✅ 2026-07-22, 310 tabel+112 SP+2 UDF) · OQ-PRODASSET-05 (V1-V9 verified dari body SP; celah V4+V6) · OQ-GT-02 (`credit_id` format — inherited umbrella, consumer 01) · OQ-MASTERDATA-03 ✅ (admin surface menulis LANGSUNG ke `ms_hierarchy_transaction` → target tunggal `cfg_hierarchy_matrix`, no separate `cfg_approval_hierarchy_level`).
 

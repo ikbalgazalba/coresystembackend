@@ -1,5 +1,5 @@
 {
-  "vault_version": "1.3.1",
+  "vault_version": "1.3.2",
   "generated_at": "2026-07-27T00:00:00Z",
   "phase": 1,
   "phase_total": 1,
@@ -9,7 +9,7 @@
   "prd_status": "draft",
   "output_mode": "compact",
   "mode": "existing",
-  "constitution_version": "1.3.1",
+  "constitution_version": "1.3.2",
   "constitution_hash": "6704b85140e58339c8f3b42116d1d76a769679f686c9dcb31614287bb56a7a97",
   "parent_vault": "../acquisition/",
   "slice_scope": "module 07 (master-data) — full module",
@@ -702,8 +702,11 @@
       "classification_confidence": "medium",
       "scan_query": "verify ms_credit_source physical location: FC_ACQ_MCF local vs FC_MSTAPP_MCF export artifact (DB-CONVENTIONS census)",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "ms_credit_source genuinely lokal atau artefak export? Menentukan CREDIT_SOURCE migrasi bareng acquisition atau masters-service."
+      "status": "resolved",
+      "text": "ms_credit_source genuinely lokal atau artefak export? Menentukan CREDIT_SOURCE migrasi bareng acquisition atau masters-service.",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "ms_credit_source = LOKAL acquisition DB (BR-CREDITSRC-1 VERIFIED). Migrasi bareng acquisition (Tier A owned), BUKAN masters-service terpisah."
     },
     {
       "tag": "OQ-DLRPTN-07",
@@ -712,8 +715,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Sumber otoritatif BPKB location: lokal vs union linked-server MsLokasiBPKB? Single source saat migrasi."
+      "status": "deferred",
+      "text": "Sumber otoritatif BPKB location: lokal vs union linked-server MsLokasiBPKB? Single source saat migrasi.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA — sumber otoritatif BPKB location (lokal vs union linked-server MsLokasiBPKB); domain kolateral, bukan 07 langsung"
     },
     {
       "tag": "OQ-CUSTMASTER-02",
@@ -722,8 +728,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Lookup reference type dipakai apa? Set applicant-type hanya P/C atau ada nilai lain? (OQ-CUSTMASTER-07)"
+      "status": "deferred",
+      "text": "Lookup reference type dipakai apa? Set applicant-type hanya P/C atau ada nilai lain? (OQ-CUSTMASTER-07)",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu stakeholder/data — makna lookup reference type + set applicant-type (P/C atau nilai lain)"
     },
     {
       "tag": "OQ-PRODASSET-01",
@@ -732,8 +741,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Katalog asset otoritatif (asset-* vs item-brand-*)? Endpoint product list legacy=stub — sumber UI? (OQ-PRODASSET-03)"
+      "status": "deferred",
+      "text": "Katalog asset otoritatif (asset-* vs item-brand-*)? Endpoint product list legacy=stub — sumber UI? (OQ-PRODASSET-03)",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu keputusan desain + stakeholder — katalog asset otoritatif (asset-* vs item-brand-*); sumber UI product list"
     },
     {
       "tag": "OQ-REF-01",
@@ -742,8 +754,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Nilai application_type_id di-parse sistem eksternal (Passnet/GL)? LOCKED vs INTENT."
+      "status": "deferred",
+      "text": "Nilai application_type_id di-parse sistem eksternal (Passnet/GL)? LOCKED vs INTENT.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu stakeholder/eksternal — nilai application_type_id di-parse Passnet/GL (LOCKED vs INTENT)"
     },
     {
       "tag": "OQ-EXTMASTERS-08",
@@ -753,8 +768,11 @@
       "classification_confidence": "medium",
       "scan_query": "compare MsPublicHoliday rows in FC_ACQ_MCF vs FC_MSTAPP_MCF dumps — which authoritative for mst_public_holiday migration",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "MsPublicHoliday di DUA database (FC_ACQ_MCF & FC_MSTAPP_MCF) — copy mana otoritatif? [scan portion: compare dumps; governance portion: DBA decides — parent umbrella classifies business/blocking, sub-vault tech/scan for scan dimension]"
+      "status": "resolved",
+      "text": "MsPublicHoliday di DUA database (FC_ACQ_MCF & FC_MSTAPP_MCF) — copy mana otoritatif? [scan portion: compare dumps; governance portion: DBA decides — parent umbrella classifies business/blocking, sub-vault tech/scan for scan dimension]",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "FC_ACQ_MCF otoritatif untuk mst_public_holiday (BE-07 §3.4: LOKAL FC_ACQ_MCF, DDL 3 kolom terverifikasi). Copy FC_MSTAPP_MCF = secondary/ignore."
     },
     {
       "tag": "OQ-DLRPTN-10",
@@ -763,8 +781,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Arti kode legal entity PT='2'/'3' + enum Dt2Type kota/kabupaten (OQ-DLRPTN-11)."
+      "status": "resolved",
+      "text": "Arti kode legal entity PT='2'/'3' + enum Dt2Type kota/kabupaten (OQ-DLRPTN-11).",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Kode legal entity PT=2/3 dibawa verbatim LOCKED (external-FK ke company master — jangan ubah nilai). Dt2Type = enum eksplisit di target (kota/kabupaten), bukan string bebas. Preserve nilai + redesign enum. (covers OQ-DLRPTN-11)"
     },
     {
       "tag": "OQ-BE07-06",
@@ -786,8 +807,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "MsInsuranceByDealerR2/R4 hidup atau orphan; insurance source shape (OQ-DLRPTN-12/15)."
+      "status": "deferred",
+      "text": "MsInsuranceByDealerR2/R4 hidup atau orphan; insurance source shape (OQ-DLRPTN-12/15).",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA/profiling — MsInsuranceByDealerR2/R4 hidup/orphan; insurance downstream, bukan 07"
     },
     {
       "tag": "OQ-DLRPTN-08",
@@ -796,8 +820,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "sp_get_branch_exception stub mati/unfinished; payment-point branch-scoping? (OQ-DLRPTN-09)"
+      "status": "deferred",
+      "text": "sp_get_branch_exception stub mati/unfinished; payment-point branch-scoping? (OQ-DLRPTN-09)",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA/code archaeology — sp_get_branch_exception stub mati/unfinished; payment-point branch-scoping minor"
     },
     {
       "tag": "OQ-MASTERDATA-07",
@@ -806,8 +833,11 @@
       "resolution_mode": "blocking",
       "classification_confidence": "high",
       "doc": "00-index.md",
-      "status": "open",
-      "text": "Layar Dukcapil/Fidusia//CRUD demo masih reachable dari menu live? (Menentukan data migrasi menu; /CRUD=ARTIFACT discard.)"
+      "status": "resolved",
+      "text": "Layar Dukcapil/Fidusia//CRUD demo masih reachable dari menu live? (Menentukan data migrasi menu; /CRUD=ARTIFACT discard.)",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "/CRUD demo + layar Dukcapil/Fidusia = ARTIFACT discard — TIDAK reachable di rebuild menu seed. Menu migrasi bersih (reject entri mati + register)."
     }
   ],
   "open_questions_summary": {
@@ -818,9 +848,9 @@
       "P3": 5
     },
     "by_status": {
-      "open": 10,
-      "resolved": 8,
-      "deferred": 10,
+      "open": 0,
+      "resolved": 12,
+      "deferred": 16,
       "out_of_scope": 0
     },
     "by_category": {
@@ -855,6 +885,11 @@
       "version": "1.3.1",
       "date": "2026-07-27",
       "change": "resolve-oq round 1 (P1 triage): OQ-BE07-01 RESOLVED (Checker=Kepala Cabang all resources, credit_id minting stays BE); OQ-BE07-02 DEFERRED (HR/ITEC); OQ-BE07-03 DEFERRED (governance/stakeholder). BR-BE07-05 scope final. Constitution §I-002 + 06-constraints updated. | Batch 2: OQ-DLRPTN-01 RESOLVED (MsDealer live, backup ARTIFACT); OQ-MASTERDATA-02 DEFERRED (OQ-MIG-05); OQ-BE07-04 RESOLVED (multi-branch); OQ-BE07-05 RESOLVED (role-based + special grant governance). 03-data-model/06-constraints updated. | Batch 3: OQ-BE07-06 RESOLVED (deactivate-only no delete); OQ-DLRPTN-04 RESOLVED (expose all types); OQ-MASTERDATA-01 RESOLVED (BR-BE07-03 LOCKED). External defer: OQ-EXTMASTERS-01/07, OQ-ARCH-STACK, OQ-AC-PROVENANCE, OQ-MEET-02, OQ-REF-05, OQ-CUSTMASTER-04."
+    },
+    {
+      "version": "1.3.2",
+      "date": "2026-07-27",
+      "change": "resolve-oq round 2 (P2/P3 triage): 4 RESOLVED (OQ-DLRPTN-02 lokal Tier A, OQ-EXTMASTERS-08 FC_ACQ_MCF otoritatif, OQ-MASTERDATA-07 /CRUD discard, OQ-DLRPTN-10/11 verbatim LOCKED + enum redesign); 6 DEFERRED (OQ-CUSTMASTER-02, OQ-DLRPTN-07, OQ-PRODASSET-01, OQ-REF-01, OQ-DLRPTN-06, OQ-DLRPTN-08)."
     }
   ],
   "advisor": {
