@@ -50,5 +50,24 @@ public interface EmployeeMirrorRepository extends JpaRepository<EmployeeMirror, 
 	 */
 	Page<EmployeeMirror> findByNikContainingIgnoreCaseAndIsResignedFalse(String nik, Pageable pageable);
 
+	/**
+	 * E28 PIC picker search: case-insensitive name OR NIK substring match, active (non-resigned)
+	 * employees only. Used by {@link com.coresystem.coresystembackend.masterdata.transtype.HierarchyMatrixService#searchPicCandidates}
+	 * to populate the PIC picker dropdown when building an approval hierarchy.
+	 *
+	 * <p>The {@code isResignedFalse} filter is baked into the query name so the default picker view
+	 * never surfaces resigned employees (BR-BE07-17 guard — a resigned employee cannot be a PIC).
+	 *
+	 * <p>Job-title filter is deferred (stub) — the current implementation searches by name/NIK only.
+	 * A future unit may add a position-id filter parameter.
+	 *
+	 * @param name the name substring to search for (case-insensitive)
+	 * @param nik the NIK substring to search for (case-insensitive)
+	 * @param pageable pagination information
+	 * @return a page of active employees whose name or NIK contains the search string
+	 */
+	Page<EmployeeMirror> findByNameContainingIgnoreCaseOrNikContainingIgnoreCaseAndIsResignedFalse(
+			String name, String nik, Pageable pageable);
+
 }
 // SDD-PROVENANCE: U-002 | vault: .mega-sdd/vaults/acquisition-master-data | EmployeeMirrorRepository extends JpaRepository — findByNik (business key lookup) + findByNikContainingIgnoreCaseAndIsResignedFalse (E8 active-only search); Tier B read-only (no custom write methods, sync job is sole writer BR-EMPLOYEE-1)
