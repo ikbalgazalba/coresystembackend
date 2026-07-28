@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +58,7 @@ import com.coresystem.coresystembackend.masterdata.common.PageResponse;
  * filter chain ({@code SecurityConfig}), not by this controller. The {@code /employees} path is
  * not in the {@code permitAll} list, so it requires an authenticated request.
  */
+@ConditionalOnBean(JpaRepository.class)
 @RestController
 @RequestMapping("/employees")
 public class EmployeeMirrorController {

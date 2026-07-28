@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +66,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * {@code include_inactive=true} toggle is a caller-responsibility contract (the caller's UI
  * decides whether to show the toggle), not a server-enforced role gate in this unit.
  */
+@ConditionalOnBean(JpaRepository.class)
 @RestController
 @RequestMapping("/lookups")
 public class LookupController {

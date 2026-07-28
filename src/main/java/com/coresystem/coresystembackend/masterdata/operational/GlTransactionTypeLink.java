@@ -30,6 +30,9 @@ public class GlTransactionTypeLink extends VersionedEntity {
 	@Column(name = "gl_account_no")
 	private String glAccountNo;
 
+	@Column(name = "is_active", nullable = false)
+	private boolean active = true;
+
 	public Long getId() { return id; }
 	public void setId(Long id) { this.id = id; }
 	public String getTrxId() { return trxId; }
@@ -38,5 +41,7 @@ public class GlTransactionTypeLink extends VersionedEntity {
 	public void setClassId(String classId) { this.classId = classId; }
 	public String getGlAccountNo() { return glAccountNo; }
 	public void setGlAccountNo(String glAccountNo) { this.glAccountNo = glAccountNo; }
+	public boolean isActive() { return active; }
+	public void setActive(boolean active) { this.active = active; }
 }
 // SDD-PROVENANCE: U-012 | vault: .mega-sdd/vaults/acquisition-master-data | GlTransactionTypeLink @Entity map_transaction_type_gl extends VersionedEntity; [LOCKED] CoA zero-diff C-16; unique ux_map_transaction_type_gl_trx_id_class_id (trx_id, class_id); no delete BR-BE07-24; maker-checker PATCH BR-BE07-05

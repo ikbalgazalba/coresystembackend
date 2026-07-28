@@ -86,7 +86,7 @@ public final class MasterOperationalEntities {
 	public static class GeneralParameter extends VersionedEntity {
 		@Id @GeneratedValue(strategy = GenerationType.IDENTITY) @Column(name = "id") private Long id;
 		@Column(name = "parameter", unique = true, nullable = false) private String parameter;
-		@Column(name = "value") private String value;
+		@Column(name = "param_value") private String value;
 		@Column(name = "unit") private String unit;
 		@Column(name = "description") private String description;
 		@Column(name = "is_updateable", nullable = false) private boolean isUpdateable;

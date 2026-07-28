@@ -3,6 +3,8 @@ package com.coresystem.coresystembackend.masterdata.menu;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +22,7 @@ import com.coresystem.coresystembackend.masterdata.user.Role;
 /**
  * REST controller for the menu tree + role grants + menu efektif (E6/E9-E11, BE-07 §5).
  */
+@ConditionalOnBean(JpaRepository.class)
 @RestController
 @RequestMapping("/menus")
 public class MenuController {
