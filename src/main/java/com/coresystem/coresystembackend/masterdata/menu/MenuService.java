@@ -1,5 +1,6 @@
 package com.coresystem.coresystembackend.masterdata.menu;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,12 +39,10 @@ import com.coresystem.coresystembackend.masterdata.user.Role;
  * response lists the transaction-types ter-impact (those referencing the prefix). The menu's
  * routing and other fields remain unchanged until the checker approves.
  *
- * <p>Guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaRepository.class)} to avoid
  * context-load regression in tests that exclude JPA autoconfiguration (same pattern as
  * {@code AppUserService} and {@code MakerCheckerService}).
  */
 @Service
-@ConditionalOnBean(JpaRepository.class)
 public class MenuService {
 
 	private final MenuRepository menuRepository;
@@ -550,4 +547,3 @@ public class MenuService {
 	}
 
 }
-// SDD-PROVENANCE: U-004 | vault: .mega-sdd/vaults/acquisition-master-data | MenuService @Service @ConditionalOnBean(JpaRepository) — E6 menu efektif (role grants + special grants − inactive; transTypeIdPrefix NOT exposed); E9 CRUD deactivate-only (BR-BE07-03); AC-5 prefix change → MakerCheckerService.submit (BR-BE07-14 pending_approval + transaction-type ter-impact listed; routing unchanged without approve); E10 GET/PUT role menu-grants; E11 GET/PUT user special grants (granted_reason wajib OQ-BE07-05 governance + audit); MenuTreeNode record (no transTypeIdPrefix); PrefixChangeResult; RoleGrantRequest; SpecialGrantRequest; MenuNotFoundException 404; MenuConflictException 409

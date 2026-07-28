@@ -1,15 +1,14 @@
 package com.coresystem.coresystembackend.masterdata.user;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,7 +47,6 @@ import com.coresystem.coresystembackend.masterdata.user.AppUserService.Provision
  * <p>Per constitution §C-002, controllers return DTOs — never the raw entity. The
  * {@link AppUserDto} record is the response carrier for E1-E4.
  *
- * <p>Guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaRepository.class)} to avoid
  * context-load regression in tests that exclude JPA autoconfiguration (same pattern as
  * {@code MasterDataConfig.JpaAuditingConfig} and {@code AppUserService}).
  *
@@ -57,7 +55,6 @@ import com.coresystem.coresystembackend.masterdata.user.AppUserService.Provision
  */
 @RestController
 @RequestMapping("/users")
-@ConditionalOnBean(JpaRepository.class)
 public class AppUserController {
 
 	private final AppUserService appUserService;
@@ -282,4 +279,3 @@ public class AppUserController {
 	}
 
 }
-// SDD-PROVENANCE: U-003 | vault: .mega-sdd/vaults/acquisition-master-data | AppUserController @RestController /users @ConditionalOnBean(JpaRepository) — E1 GET list (PageResponse), E2 POST provision (422 UNKNOWN_ROLE/EMPLOYEE_NOT_FOUND/EMPLOYEE_RESIGNED, 409 USER_ALREADY_EXISTS), E3 GET detail, E4 PATCH role/scope, E5 deactivate/reactivate (409 if mirror resigned), E7 GET /roles static D-10 catalog; AppUserDto record with @JsonProperty snake_case per BR-BE07-20

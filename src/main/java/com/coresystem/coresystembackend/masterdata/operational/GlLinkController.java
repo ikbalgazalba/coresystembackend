@@ -1,13 +1,12 @@
 package com.coresystem.coresystembackend.masterdata.operational;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,7 +26,6 @@ import com.coresystem.coresystembackend.masterdata.makercheck.MakerCheckerServic
 import com.coresystem.coresystembackend.masterdata.makercheck.MasterChangeRequest;
 import com.coresystem.coresystembackend.masterdata.makercheck.MasterChangeRequest.Action;
 
-@ConditionalOnBean(JpaRepository.class)
 @RestController
 @RequestMapping("/gl-transaction-type-links")
 public class GlLinkController {
@@ -75,7 +73,6 @@ public class GlLinkController {
 				.body(Map.of("error", "NOT_FOUND", "message", ex.getMessage()));
 	}
 
-	@ConditionalOnBean(JpaRepository.class)
 	@Service
 	public static class GlLinkService {
 

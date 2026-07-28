@@ -1,11 +1,10 @@
 package com.coresystem.coresystembackend.masterdata.transtype;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,10 +45,8 @@ import com.coresystem.coresystembackend.masterdata.user.EmployeeMirrorRepository
  * <p>All validation happens BEFORE the maker-checker submit — invalid data never enters the
  * change-request pipeline.
  *
- * <p>Guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaRepository.class)} so the service
  * only activates when JPA is available (same pattern as {@link MakerCheckerService}).
  */
-@ConditionalOnBean(JpaRepository.class)
 @Service
 public class HierarchyMatrixService {
 
@@ -319,4 +316,3 @@ public class HierarchyMatrixService {
 	}
 
 }
-// SDD-PROVENANCE: U-008 | vault: .mega-sdd/vaults/acquisition-master-data | HierarchyMatrixService @ConditionalOnBean(JpaRepository) — E26 list per type; E27 upsert with server-side validation (BR-BE07-15 level==1&&isApprover→422 HIERARCHY_RULE_VIOLATION; BR-BE07-16 next_pic required/empty; BR-BE07-17 PIC not found/resigned OQ-MASTERDATA-02 V4/V6 fix); APPROVAL_HIERARCHY_LEVEL write → MakerCheckerService.submit (BR-BE07-05); E28 PIC picker name/NIK search (stub filter, job-title deferred); nested exceptions (HierarchyRuleViolation/NextPicRequired/NextPicMustBeEmpty/PicNotFound/PicResigned)

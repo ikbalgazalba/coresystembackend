@@ -1,10 +1,9 @@
 package com.coresystem.coresystembackend.masterdata.transtype;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -52,10 +51,8 @@ import com.coresystem.coresystembackend.masterdata.user.EmployeeMirror;
  * {@code TransactionTypeController}). The controller accepts the NIK explicitly in the request
  * body for now.
  *
- * <p>Guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaRepository.class)} so the controller
  * only activates when JPA is available (same pattern as {@code TransactionTypeController}).
  */
-@ConditionalOnBean(JpaRepository.class)
 @RestController
 @RequestMapping("/hierarchy-matrix")
 public class HierarchyMatrixController {
@@ -246,4 +243,3 @@ public class HierarchyMatrixController {
 	}
 
 }
-// SDD-PROVENANCE: U-008 | vault: .mega-sdd/vaults/acquisition-master-data | HierarchyMatrixController @ConditionalOnBean(JpaRepository) @RestController — E26 GET /hierarchy-matrix?transaction_type_code= (list per type, PageResponse); E27 POST /hierarchy-matrix (upsert via maker-checker BR-BE07-05, server-side validation BR-BE07-15/16/17 → 422); E28 GET /hierarchy-matrix/pic-candidates?search= (PIC picker name/NIK search, stub filter); exception mapping 422 (HIERARCHY_RULE_VIOLATION/NEXT_PIC_REQUIRED/NEXT_PIC_MUST_BE_EMPTY/PIC_NOT_FOUND/PIC_RESIGNED); DTOs (HierarchyMatrixResponse, UpsertHierarchyLevelRequest, ErrorResponse)

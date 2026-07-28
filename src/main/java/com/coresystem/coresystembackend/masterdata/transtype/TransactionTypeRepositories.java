@@ -1,10 +1,10 @@
 package com.coresystem.coresystembackend.masterdata.transtype;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository interfaces for the Transaction-Type hierarchy config (2 tables).

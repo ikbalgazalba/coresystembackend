@@ -1,11 +1,10 @@
 package com.coresystem.coresystembackend.masterdata.operational;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Map;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +29,8 @@ import com.coresystem.coresystembackend.masterdata.operational.MasterOperational
 import com.coresystem.coresystembackend.masterdata.operational.MasterOperationalService.NotFoundException;
 import com.coresystem.coresystembackend.masterdata.operational.MasterOperationalService.NotUpdateableException;
 
-@ConditionalOnBean(JpaRepository.class) @RestController @RequestMapping("/master-data")
+@RestController
+@RequestMapping("/master-data")
 public class MasterOperationalController {
 	private final MasterOperationalService service;
 	public MasterOperationalController(MasterOperationalService service) { this.service = service; }

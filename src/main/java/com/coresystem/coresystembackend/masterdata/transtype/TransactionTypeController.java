@@ -1,10 +1,9 @@
 package com.coresystem.coresystembackend.masterdata.transtype;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -56,10 +55,8 @@ import com.coresystem.coresystembackend.masterdata.transtype.TransactionTypeServ
  * {@code MasterChangeRequestController}). The controller accepts the NIK explicitly in the request
  * body for now.
  *
- * <p>Guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaRepository.class)} so the controller
  * only activates when JPA is available (same pattern as {@code MasterChangeRequestController}).
  */
-@ConditionalOnBean(JpaRepository.class)
 @RestController
 @RequestMapping("/transaction-types")
 public class TransactionTypeController {
@@ -290,4 +287,3 @@ public class TransactionTypeController {
 	}
 
 }
-// SDD-PROVENANCE: U-007 | vault: .mega-sdd/vaults/acquisition-master-data | TransactionTypeController @ConditionalOnBean(JpaRepository) @RestController — E22 GET /transaction-codes?branch_id=; E23 PUT /transaction-codes/{branchId}/{code} (upsert BR-BE07-19); E24 GET /transaction-types?transaction_code=; E25 POST /transaction-types (create via maker-checker), PATCH /transaction-types/{code} (is_active ONLY 422 BR-BE07-18/AC-11); exception mapping 422/404; DTOs (TransactionCodeResponse, TransactionTypeResponse)

@@ -8,8 +8,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +48,6 @@ import com.coresystem.coresystembackend.masterdata.makercheck.MakerCheckerServic
  * <p>Actor NIK is passed explicitly from the controller (stub until JWT auth is wired for
  * master-data endpoints, OQ-ARCH-STACK). Audit columns are set from this actor.
  */
-@ConditionalOnBean(JpaRepository.class)
 @Service
 public class DealerService {
 

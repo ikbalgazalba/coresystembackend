@@ -35,7 +35,6 @@ coresystem:
     host: localhost
     aesKey: test-aes-key-1234567890123456
 
-# Swagger UI accessible without auth
 springdoc:
   swagger-ui:
     enabled: true

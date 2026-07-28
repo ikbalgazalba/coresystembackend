@@ -1,9 +1,9 @@
 package com.coresystem.coresystembackend.masterdata.dealer;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Repository interfaces for the dealer master family (6 tables).

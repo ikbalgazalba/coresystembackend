@@ -1,11 +1,10 @@
 package com.coresystem.coresystembackend.masterdata.operational;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.util.Optional;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.coresystem.coresystembackend.masterdata.makercheck.MakerCheckerService;
@@ -19,7 +18,6 @@ import com.coresystem.coresystembackend.masterdata.operational.MasterOperational
 import com.coresystem.coresystembackend.masterdata.operational.MasterOperationalEntities.PublicHoliday;
 import com.coresystem.coresystembackend.masterdata.operational.MasterOperationalEntities.PromotionLineText;
 
-@ConditionalOnBean(JpaRepository.class)
 @Service
 public class MasterOperationalService {
 	private final ApprovalReasonRepository approvalReasonRepo;
@@ -144,12 +142,5 @@ public class MasterOperationalService {
 	public static class NotUpdateableException extends RuntimeException { private final String parameterName; public NotUpdateableException(String parameterName) { super("Parameter '" + parameterName + "' is not updateable (is_updateable=false, BR-BE07-23)"); this.parameterName = parameterName; } public String getParameterName() { return parameterName; } }
 	public static class NotFoundException extends RuntimeException { public NotFoundException(String resource, Long id) { super(resource + " " + id + " not found"); } }
 
-	public interface ApprovalReasonRepository extends JpaRepository<ApprovalReason, Long> { Page<ApprovalReason> findByIsActiveTrue(Pageable pageable); Page<ApprovalReason> findByTypeAndIsActiveTrue(String type, Pageable pageable); }
-	public interface CreditSourceRepository extends JpaRepository<CreditSource, Long> { Page<CreditSource> findByIsActiveTrue(Pageable pageable); }
-	public interface BranchCreditSourceRepository extends JpaRepository<BranchCreditSource, Long> { Page<BranchCreditSource> findByIsActiveTrue(Pageable pageable); Page<BranchCreditSource> findByBranchIdAndIsActiveTrue(String branchId, Pageable pageable); }
-	public interface BlacklistOverrideRepository extends JpaRepository<BlacklistOverride, Long> { Page<BlacklistOverride> findByIsActiveTrue(Pageable pageable); Page<BlacklistOverride> findByNationalIdAndIsActiveTrue(String nationalId, Pageable pageable); }
-	public interface PublicHolidayRepository extends JpaRepository<PublicHoliday, Long> {}
-	public interface GeneralParameterRepository extends JpaRepository<GeneralParameter, Long> { Optional<GeneralParameter> findByParameter(String parameter); Page<GeneralParameter> findByIsVisibleTrue(Pageable pageable); }
-	public interface PromotionLineTextRepository extends JpaRepository<PromotionLineText, Long> { Page<PromotionLineText> findByIsActiveTrue(Pageable pageable); }
 }
 // SDD-PROVENANCE: U-010 | vault: .mega-sdd/vaults/acquisition-master-data | MasterOperationalService E29-E35 + 7 repos

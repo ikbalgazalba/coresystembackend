@@ -1,11 +1,10 @@
 package com.coresystem.coresystembackend.masterdata.user;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,12 +43,10 @@ import org.springframework.transaction.annotation.Transactional;
  * job detects a resignation. It finds the linked {@link AppUser} and auto-deactivates it
  * with {@code deactivationReason=hr_resigned}. This is non-reactivatable.
  *
- * <p>Guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaRepository.class)} to avoid
  * context-load regression in tests that exclude JPA autoconfiguration (same pattern as
  * {@code MasterDataConfig.JpaAuditingConfig}).
  */
 @Service
-@ConditionalOnBean(JpaRepository.class)
 public class AppUserService {
 
 	private final AppUserRepository appUserRepository;
@@ -332,4 +329,3 @@ public class AppUserService {
 	}
 
 }
-// SDD-PROVENANCE: U-003 | vault: .mega-sdd/vaults/acquisition-master-data | AppUserService @Service @ConditionalOnBean(JpaRepository) — E2 provision (Role.fromName reject UNKNOWN_ROLE D-09; NIK exists in mirror !resigned BR-BE07-02; 409 duplicate); E5 deactivate/reactivate (409 if mirror resigned BR-BE07-27); @EventListener EmployeeResignedEvent → auto-deactivate hr_resigned; ProvisioningException+ErrorCode for explicit HTTP status mapping

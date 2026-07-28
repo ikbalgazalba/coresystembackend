@@ -3,10 +3,8 @@ package com.coresystem.coresystembackend.masterdata.operational;
 import java.time.LocalDate;
 import java.util.Map;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,7 +22,6 @@ import com.coresystem.coresystembackend.masterdata.makercheck.MasterChangeReques
 import com.coresystem.coresystembackend.masterdata.operational.NumberFormat.ResetPeriod;
 import com.coresystem.coresystembackend.masterdata.operational.NumberFormatService.NumberFormatNotFoundException;
 
-@ConditionalOnBean(JpaRepository.class)
 @RestController
 @RequestMapping("/number-formats")
 public class NumberFormatController {

@@ -1,8 +1,8 @@
 package com.coresystem.coresystembackend.masterdata.makercheck;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Spring Data JPA repository for {@link MasterChangeRequest} (E37 envelope, BR-BE07-05).
@@ -30,7 +30,11 @@ public interface MasterChangeRequestRepository extends JpaRepository<MasterChang
 	 * @param pageable the pagination request
 	 * @return a page of matching change-requests
 	 */
-	Page<MasterChangeRequest> findByStatusAndResource(String status, String resource, Pageable pageable);
+	Page<MasterChangeRequest> findByStatusAndResource(MasterChangeRequest.Status status, String resource, Pageable pageable);
+
+	Page<MasterChangeRequest> findByStatus(MasterChangeRequest.Status status, Pageable pageable);
+
+	Page<MasterChangeRequest> findByResource(String resource, Pageable pageable);
 
 }
 // SDD-PROVENANCE: U-009 | vault: .mega-sdd/vaults/acquisition-master-data | MasterChangeRequestRepository — JpaRepository + findByStatusAndResource (checker inbox query E37)

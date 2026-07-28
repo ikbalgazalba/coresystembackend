@@ -1,8 +1,8 @@
 package com.coresystem.coresystembackend.masterdata.user;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Spring Data JPA repository for {@link AppUser} (Tier A owned, table {@code mst_user}).

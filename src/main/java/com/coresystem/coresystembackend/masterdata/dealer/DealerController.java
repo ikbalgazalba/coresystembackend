@@ -1,11 +1,10 @@
 package com.coresystem.coresystembackend.masterdata.dealer;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,10 +62,8 @@ import com.coresystem.coresystembackend.masterdata.makercheck.MakerCheckerServic
  * <p>Auth: the actor NIK is accepted explicitly in request bodies for now (stub until JWT auth is
  * wired for master-data endpoints, OQ-ARCH-STACK).
  *
- * <p>Guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaRepository.class)} so the controller
  * only activates when JPA is auto-configured (consistent with the maker-checker controller pattern).
  */
-@ConditionalOnBean(JpaRepository.class)
 @RestController
 @RequestMapping("/dealers")
 public class DealerController {
@@ -669,4 +666,3 @@ public class DealerController {
 	}
 
 }
-// SDD-PROVENANCE: U-006 | vault: .mega-sdd/vaults/acquisition-master-data | DealerController @RestController /dealers — E12-E21 endpoints; E12 branch_id filter (BR-BE07-07); E13 422/409/422 PARENT_DEALER_NOT_FOUND; E18→202 pending_approval; E21 payment-eligible-contacts; @ConditionalOnBean(JpaRepository); 403 SELF_APPROVAL_BLOCKED handler

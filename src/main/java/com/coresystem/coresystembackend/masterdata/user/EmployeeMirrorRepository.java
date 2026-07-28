@@ -1,10 +1,10 @@
 package com.coresystem.coresystembackend.masterdata.user;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Spring Data JPA repository for {@link EmployeeMirror} (Tier B read-only mirror).

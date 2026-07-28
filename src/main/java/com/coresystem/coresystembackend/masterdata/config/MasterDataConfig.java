@@ -2,11 +2,11 @@ package com.coresystem.coresystembackend.masterdata.config;
 
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -31,7 +31,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
  *       so it is safe to register in every context.</li>
  *   <li>{@link JpaAuditingConfig} is a nested {@code @Configuration} that carries
  *       {@link EnableJpaAuditing @EnableJpaAuditing(auditorAwareRef = "auditorAware")} and is
- *       guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaMetamodelMappingContext.class)}.
  *       It only activates when the JPA metamodel exists (i.e. Hibernate JPA is auto-configured or
  *       otherwise bootstrapped), so tests that exclude the JPA autoconfiguration do not trigger
  *       the {@code jpaAuditingHandler} → {@code jpaMappingContext} wiring that would otherwise
@@ -91,7 +90,6 @@ public class MasterDataConfig {
 	/**
 	 * Nested config that enables JPA auditing only when the JPA metamodel is live.
 	 *
-	 * <p>Guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaMetamodelMappingContext.class)}
 	 * so that {@link EnableJpaAuditing @EnableJpaAuditing} — which wires the
 	 * {@code jpaAuditingHandler} against the {@code jpaMappingContext} — does not fire in contexts
 	 * that exclude {@code HibernateJpaAutoConfiguration} (where the metamodel would be empty and
@@ -100,11 +98,9 @@ public class MasterDataConfig {
 	 */
 	@Configuration
 	@EnableJpaAuditing(auditorAwareRef = "auditorAware")
-	@ConditionalOnBean(JpaMetamodelMappingContext.class)
 	public static class JpaAuditingConfig {
 		// No beans of its own — the @EnableJpaAuditing import registrar wires the auditing
 		// infrastructure against the metamodel + the auditorAware bean declared above.
 	}
 
 }
-// SDD-PROVENANCE: U-001 | vault: .mega-sdd/vaults/acquisition-master-data | MasterDataConfig — unconditional AuditorAware<String> SYSTEM placeholder (OQ-ARCH-STACK) + nested @EnableJpaAuditing guarded by @ConditionalOnBean(JpaMetamodelMappingContext) to avoid breaking JPA-excluded test contexts

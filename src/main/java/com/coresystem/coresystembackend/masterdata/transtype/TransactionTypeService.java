@@ -1,12 +1,11 @@
 package com.coresystem.coresystembackend.masterdata.transtype;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,10 +39,8 @@ import com.coresystem.coresystembackend.masterdata.makercheck.MasterChangeReques
  * from {@code substring(0,2)} of the type code. This is a deliberate fix: the legacy system
  * derived the mapping implicitly, which broke when codes were reorganized.
  *
- * <p>Guarded by {@link ConditionalOnBean @ConditionalOnBean(JpaRepository.class)} so the service
  * only activates when JPA is available (same pattern as {@link MakerCheckerService}).
  */
-@ConditionalOnBean(JpaRepository.class)
 @Service
 public class TransactionTypeService {
 
@@ -394,4 +391,3 @@ public class TransactionTypeService {
 	}
 
 }
-// SDD-PROVENANCE: U-007 | vault: .mega-sdd/vaults/acquisition-master-data | TransactionTypeService @ConditionalOnBean(JpaRepository) — E22 list per branch; E23 upsert (upper-case BR-BE07-19); E24 list by code; E25 POST create + PATCH is_active ONLY (422 on other fields BR-BE07-18/AC-11; mapping must reference existing TransactionCode → 422); TRANSACTION_TYPE write → MakerCheckerService.submit (BR-BE07-05); mapping disimpan eksplisit NOT substring; nested exceptions (ImmutableFieldViolation/TransactionCodeNotFound/TransactionTypeAlreadyExists/TransactionTypeNotFound)

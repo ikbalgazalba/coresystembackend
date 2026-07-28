@@ -1,12 +1,11 @@
 package com.coresystem.coresystembackend.masterdata.operational;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,6 @@ import com.coresystem.coresystembackend.masterdata.makercheck.MakerCheckerServic
 import com.coresystem.coresystembackend.masterdata.makercheck.MasterChangeRequest;
 import com.coresystem.coresystembackend.masterdata.makercheck.MasterChangeRequest.Action;
 
-@ConditionalOnBean(JpaRepository.class)
 @Service
 public class NumberFormatService {
 

@@ -271,19 +271,19 @@ class MakerCheckerEnvelopeTest {
 		service.submit("dealer-bank-reference", Action.update, "{}", "NIK003");
 
 		Pageable pageable = PageRequest.of(0, 10);
-		when(repository.findByStatusAndResource("pending_approval", "dealer-bank-reference", pageable))
+		when(repository.findByStatusAndResource(MasterChangeRequest.Status.pending_approval, "dealer-bank-reference", pageable))
 				.thenAnswer(inv -> {
-					String status = inv.getArgument(0);
+					MasterChangeRequest.Status status = inv.getArgument(0);
 					String resource = inv.getArgument(1);
 					List<MasterChangeRequest> filtered = store.values().stream()
-							.filter(r -> r.getStatus().name().equals(status))
+							.filter(r -> r.getStatus().equals(status))
 							.filter(r -> r.getResource().equals(resource))
 							.toList();
 					return new PageImpl<>(filtered, pageable, filtered.size());
 				});
 
 		Page<MasterChangeRequest> page = repository.findByStatusAndResource(
-				"pending_approval", "dealer-bank-reference", pageable);
+				MasterChangeRequest.Status.pending_approval, "dealer-bank-reference", pageable);
 
 		assertThat(page.getContent()).hasSize(2);
 		assertThat(page.getTotalElements()).isEqualTo(2);

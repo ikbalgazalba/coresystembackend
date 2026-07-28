@@ -2,8 +2,6 @@ package com.coresystem.coresystembackend.masterdata.makercheck;
 
 import java.time.Instant;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,7 +47,6 @@ import com.coresystem.coresystembackend.masterdata.makercheck.MasterChangeReques
  * rather than as separate files to keep the maker-checker module's surface within the unit's
  * target files. The controller maps each to its HTTP status.
  */
-@ConditionalOnBean(JpaRepository.class)
 @Service
 public class MakerCheckerService {
 
@@ -234,7 +231,18 @@ public class MakerCheckerService {
 	@Transactional(readOnly = true)
 	public org.springframework.data.domain.Page<MasterChangeRequest> list(
 			String status, String resource, org.springframework.data.domain.Pageable pageable) {
-		return repository.findByStatusAndResource(status, resource, pageable);
+		MasterChangeRequest.Status statusEnum = (status != null && !status.isBlank())
+				? MasterChangeRequest.Status.valueOf(status)
+				: null;
+		if (statusEnum != null && resource != null && !resource.isBlank()) {
+			return repository.findByStatusAndResource(statusEnum, resource, pageable);
+		} else if (statusEnum != null) {
+			return repository.findByStatus(statusEnum, pageable);
+		} else if (resource != null && !resource.isBlank()) {
+			return repository.findByResource(resource, pageable);
+		} else {
+			return repository.findAll(pageable);
+		}
 	}
 
 	// --- helpers ---
