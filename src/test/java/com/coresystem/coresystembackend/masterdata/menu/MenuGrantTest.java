@@ -374,9 +374,9 @@ class MenuGrantTest {
 					.andExpect(status().isOk()).andExpect(jsonPath("$").isArray())
 					.andExpect(jsonPath("$[0].name").value("Acquisition"))
 					.andExpect(jsonPath("$[0].route").value("/acq"))
-					.andExpect(jsonPath("$[0].is_view_only").value(false))
+					.andExpect(jsonPath("$[0].isViewOnly").value(false))
 					.andExpect(jsonPath("$[0].children[0].name").value("Application"))
-					.andExpect(jsonPath("$[0].children[0].is_view_only").value(true));
+					.andExpect(jsonPath("$[0].children[0].isViewOnly").value(true));
 		}
 
 		@Test
@@ -397,8 +397,8 @@ class MenuGrantTest {
 					.content("{\"trans_type_id_prefix\":\"NEW_PREFIX\",\"maker_nik\":\"SYSTEM\"}"))
 					.andExpect(status().isAccepted())
 					.andExpect(jsonPath("$.status").value("pending_approval"))
-					.andExpect(jsonPath("$.affected_transaction_types").isArray())
-					.andExpect(jsonPath("$.affected_transaction_types[0]").exists());
+					.andExpect(jsonPath("$.affectedTransactionTypes").isArray())
+					.andExpect(jsonPath("$.affectedTransactionTypes[0]").exists());
 		}
 
 		@Test
@@ -417,7 +417,7 @@ class MenuGrantTest {
 		@Test
 		void e9DeactivateReturns200() throws Exception {
 			when(menuService.deactivate(eq(1L), anyString())).thenReturn(menu(1L, null, "ACQ", "Acquisition", "/acq", "PREFIX", 1, false));
-			mockMvc.perform(post("/menus/{id}/deactivate", 1L).param("maker_nik", "SYSTEM")).andExpect(status().isOk()).andExpect(jsonPath("$.is_active").value(false));
+			mockMvc.perform(post("/menus/{id}/deactivate", 1L).param("maker_nik", "SYSTEM")).andExpect(status().isOk()).andExpect(jsonPath("$.active").value(false));
 		}
 
 		@Test
@@ -429,34 +429,34 @@ class MenuGrantTest {
 		@Test
 		void e10GetRoleMenuGrantsReturns200() throws Exception {
 			when(menuService.getRoleGrants(Role.CREDIT_ANALYST)).thenReturn(List.of(grant(1L, Role.CREDIT_ANALYST, 10L, false, true)));
-			mockMvc.perform(get("/menus/roles/{role}/menu-grants", "CREDIT_ANALYST")).andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$[0].menu_id").value(10));
+			mockMvc.perform(get("/menus/roles/{role}/menu-grants", "CREDIT_ANALYST")).andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$[0].menuId").value(10));
 		}
 
 		@Test
 		void e10PutRoleMenuGrantsReturns200() throws Exception {
 			when(menuService.replaceRoleGrants(eq(Role.CREDIT_ANALYST), any(), anyString())).thenReturn(List.of(grant(1L, Role.CREDIT_ANALYST, 10L, false, true)));
 			mockMvc.perform(put("/menus/roles/{role}/menu-grants", "CREDIT_ANALYST").contentType(MediaType.APPLICATION_JSON).param("maker_nik", "SYSTEM")
-					.content("[{\"menu_id\":10,\"is_view_only\":false,\"is_active\":true}]")).andExpect(status().isOk()).andExpect(jsonPath("$[0].menu_id").value(10));
+					.content("[{\"menuId\":10,\"isViewOnly\":false,\"isActive\":true}]")).andExpect(status().isOk()).andExpect(jsonPath("$[0].menuId").value(10));
 		}
 
 		@Test
 		void e11GetUserSpecialGrantsReturns200() throws Exception {
 			when(menuService.getUserSpecialGrants(100L)).thenReturn(List.of(userGrant(1L, 100L, 10L, true, "Project access")));
-			mockMvc.perform(get("/menus/users/{id}/menu-grants-special", 100L)).andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$[0].granted_reason").value("Project access"));
+			mockMvc.perform(get("/menus/users/{id}/menu-grants-special", 100L)).andExpect(status().isOk()).andExpect(jsonPath("$").isArray()).andExpect(jsonPath("$[0].grantedReason").value("Project access"));
 		}
 
 		@Test
 		void e11PutUserSpecialGrantsReturns200() throws Exception {
 			when(menuService.replaceUserSpecialGrants(eq(100L), any(), anyString())).thenReturn(List.of(userGrant(1L, 100L, 10L, true, "Valid reason")));
 			mockMvc.perform(put("/menus/users/{id}/menu-grants-special", 100L).contentType(MediaType.APPLICATION_JSON).param("maker_nik", "SYSTEM")
-					.content("[{\"menu_id\":10,\"is_view_only\":true,\"granted_reason\":\"Valid reason\"}]")).andExpect(status().isOk()).andExpect(jsonPath("$[0].granted_reason").value("Valid reason"));
+					.content("[{\"menuId\":10,\"isViewOnly\":true,\"grantedReason\":\"Valid reason\"}]")).andExpect(status().isOk()).andExpect(jsonPath("$[0].grantedReason").value("Valid reason"));
 		}
 
 		@Test
 		void e11PutUserSpecialGrantsWithoutReasonReturns400() throws Exception {
 			when(menuService.replaceUserSpecialGrants(eq(100L), any(), anyString())).thenThrow(new IllegalArgumentException("granted_reason is required"));
 			mockMvc.perform(put("/menus/users/{id}/menu-grants-special", 100L).contentType(MediaType.APPLICATION_JSON).param("maker_nik", "SYSTEM")
-					.content("[{\"menu_id\":10,\"is_view_only\":true}]")).andExpect(status().isBadRequest());
+					.content("[{\"menuId\":10,\"isViewOnly\":true}]")).andExpect(status().isBadRequest());
 		}
 
 		@TestConfiguration
