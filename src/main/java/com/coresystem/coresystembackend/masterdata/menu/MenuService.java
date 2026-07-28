@@ -126,7 +126,7 @@ public class MenuService {
 		Map<Long, MenuTreeNode> nodeMap = new HashMap<>();
 		List<Menu> grantedMenus = new ArrayList<>();
 		for (Menu menu : allActiveMenus) {
-			if (grantedMenuIds.contains(menu.getId())) {
+			if (menu.isActive() && grantedMenuIds.contains(menu.getId())) {
 				grantedMenus.add(menu);
 			}
 		}
