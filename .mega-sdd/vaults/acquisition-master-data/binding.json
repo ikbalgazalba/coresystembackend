@@ -1,0 +1,58 @@
+{
+  "vault": ".mega-sdd/vaults/acquisition-master-data/",
+  "vault_version": "1.3.0",
+  "bound_at": "2026-07-27T00:00:00Z",
+  "head": "0cc72f8820b258a8c5ae1aa923b0e480c56fc9c2",
+  "codebase_map_provenance": {
+    "path": ".mega-sdd/codebase/codebase-map.md",
+    "generated_at": "2026-07-24T03:47:51Z",
+    "last_scanned_commit": "0682bb58c2755f8a6ef86566127a9147233d311e",
+    "engine": "tree-sitter",
+    "precision_tier": "ast"
+  },
+  "kb": "skipped (--no-kb; .mega-sdd/knowledge-base/ absent — OQ-AC-PROVENANCE)",
+  "framework_pack": "references/framework-conventions/spring.md (spring-boot 4.1.1-SNAPSHOT, pack_tier full, confidence high)",
+  "project_constitution_gate": "skipped (.mega-sdd/constitution.md absent — per-vault constitutions only)",
+  "summary": {
+    "claims_total": 19,
+    "confirmed": 0,
+    "conflict": 0,
+    "oq": 0,
+    "new": 19,
+    "implemented": 0,
+    "unknown": 0
+  },
+  "verdict": "CLEAN",
+  "gate": "bound/ produced (conflict==0; --strict not set)",
+  "claims": [
+    {"id": "C-01", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "all fields new", "vault_source": "03-data-model.md §3.1; constitution §I-004/005"},
+    {"id": "C-02", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "all fields new", "vault_source": "03-data-model.md §3.1"},
+    {"id": "C-03", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "all fields new (6 tables)", "vault_source": "03-data-model.md §3.2"},
+    {"id": "C-04", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "all fields new (3 tables)", "vault_source": "03-data-model.md §3.3; 05-decisions.md D-MD-03"},
+    {"id": "C-05", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "all fields new (7 tables)", "vault_source": "03-data-model.md §3.4"},
+    {"id": "C-06", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "all fields new", "vault_source": "03-data-model.md §3.4"},
+    {"id": "C-07", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "all fields new", "vault_source": "03-data-model.md §3.4; 05-decisions.md D-MD-05"},
+    {"id": "C-08", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "all fields new (2 log tables)", "vault_source": "03-data-model.md §Audit"},
+    {"id": "C-09", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "E1-E11 endpoints new (existing /api/auth/dologin = jwt-login distinct)", "vault_source": "04-flows.md F-U-001/002/003"},
+    {"id": "C-10", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "E12-E21 endpoints new", "vault_source": "04-flows.md F-U-004"},
+    {"id": "C-11", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "E22-E28 endpoints new", "vault_source": "04-flows.md F-U-005"},
+    {"id": "C-12", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "E29-E38 endpoints new", "vault_source": "04-flows.md F-U-006/007"},
+    {"id": "C-13", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "ACL infra new (no local table)", "vault_source": "03-data-model.md §Tier C; constitution §I-008/B-016"},
+    {"id": "C-14", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "E37 envelope new (legacy tidak punya maker-checker)", "vault_source": "04-flows.md F-U-007; constitution §I-002"},
+    {"id": "C-15", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "role enum D-10 new (existing Users.urole Long = jwt-login distinct)", "vault_source": "constitution §I-004; 06-constraints.md BR-BE07-01"},
+    {"id": "C-16", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "external-FK LOCKED new", "vault_source": "constitution §I-007; 06-constraints.md BR-BE07-14/18"},
+    {"id": "C-17", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "ladder validation new (no ladder code)", "vault_source": "constitution §I-006; 06-constraints.md BR-BE07-15/16/17"},
+    {"id": "C-18", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "lifecycle + error-mapping new", "vault_source": "constitution §I-003/008"},
+    {"id": "C-19", "verdict": "NEW", "state": "NEW", "anchor": null, "confidence": "high", "field_diff": "cfg_hierarchy_matrix shared config new (no Flowable in map)", "vault_source": "02-architecture.md §C-010/011; 05-decisions.md D-MD-03"}
+  ],
+  "suggested_hard_rules": [
+    {"rule": "Controller classes MUST end with Controller suffix", "source": "framework-conventions/spring.md §Naming; codebase-map §5", "promoted": true},
+    {"rule": "Service classes MUST end with Service suffix", "source": "framework-conventions/spring.md; codebase-map §5", "promoted": true},
+    {"rule": "Repository interfaces MUST extend JpaRepository + Repository suffix", "source": "framework-conventions/spring.md; codebase-map §2", "promoted": true},
+    {"rule": "Constructor injection (final fields); field @Autowired dilarang", "source": "framework-conventions/spring.md §Idioms; codebase-map §6; constitution §C-004", "promoted": true},
+    {"rule": "Entity tidak di-expose langsung dari REST controller — pakai DTO", "source": "framework-conventions/spring.md §Idioms; codebase-map §2; constitution §C-002", "promoted": true},
+    {"rule": "jakarta.persistence.* wajib; javax.persistence.* dilarang", "source": "constitution §B-001; codebase-map §7", "promoted": true}
+  ],
+  "advisor": "pending (clean binding; greenfield module — no false-CONFIRMED possible)",
+  "next_step": "/mega-sdd:generate-units .mega-sdd/vaults/acquisition-master-data/"
+}

@@ -1,21 +1,25 @@
-# Dev profile — real PostgreSQL (tibsdbdev), no auth for API testing.
-# Usage: ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+# Local/dev profile — H2 in-memory OR real PostgreSQL depending on env.
+# Default: H2. Set SPRING_DATASOURCE_URL to use real DB.
+# Usage: ./mvnw spring-boot:run -Dspring-boot.run.profiles=local -DskipTests
+#        SPRING_DATASOURCE_URL=jdbc:postgresql://tibsdbdev... ./mvnw spring-boot:run -Dspring-boot.run.profiles=local -DskipTests
 spring:
   main:
     allow-bean-definition-overriding: true
   datasource:
-    url: jdbc:postgresql://tibsdbdev.bankmegadev.net:5432/coresystem
-    username: postgres
-    password: P@ssw0rd
-    driver-class-name: org.postgresql.Driver
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:coresystem;DB_CLOSE_DELAY=-1;MODE=PostgreSQL}
+    username: ${SPRING_DATASOURCE_USERNAME:sa}
+    password: ${SPRING_DATASOURCE_PASSWORD:}
+    driver-class-name: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: ${HIBERNATE_DDL:create-drop}
     show-sql: false
   flyway:
-    enabled: true
-    locations: classpath:db/migration
-    baseline-on-migrate: true
+    enabled: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
 
 coresystem:
   app:

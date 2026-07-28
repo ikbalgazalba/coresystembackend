@@ -1,0 +1,923 @@
+{
+  "vault_version": "1.3.2",
+  "generated_at": "2026-07-27T00:00:00Z",
+  "phase": 1,
+  "phase_total": 1,
+  "project_shape": "api-only",
+  "implementation_mode": "existing",
+  "mode_migrate_after": null,
+  "prd_status": "draft",
+  "output_mode": "compact",
+  "mode": "existing",
+  "constitution_version": "1.3.2",
+  "constitution_hash": "6704b85140e58339c8f3b42116d1d76a769679f686c9dcb31614287bb56a7a97",
+  "parent_vault": "../acquisition/",
+  "slice_scope": "module 07 (master-data) — full module",
+  "source_documents": [
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-07-master-data-menus.md",
+      "version": "2.1",
+      "date": "2026-07-22",
+      "sha256": "6e3b8b503ce148fcf3226a736d8e19978150cd71c79a5581d23882b62d28a6e3"
+    },
+    {
+      "type": "PRD",
+      "path": "docs/prd/acquisition/BE-00-OVERVIEW.md",
+      "version": "2.1",
+      "date": "2026-07-22",
+      "sha256": "0aaf1e37a545604f4803b864769f0e35b1409ab1a1cb8098b385ccd1c11d5811",
+      "sections_used": "§6.3 registry owner 07, §2 role census D-10"
+    },
+    {
+      "type": "companion",
+      "path": "docs/DB-CONVENTIONS.md",
+      "version": "2026-07-14",
+      "date": "2026-07-14"
+    },
+    {
+      "type": "companion",
+      "path": "docs/ARCHITECTURE-PROPOSAL.md",
+      "version": "2026-07-14",
+      "date": "2026-07-14",
+      "sections_used": "§3/§5 M7 trunk reference leaf, §4 ADR-02/03/05/07/13/14/15"
+    }
+  ],
+  "entities": [
+    {
+      "name": "mst_user",
+      "purpose": "APP_USER provisioning (REBUILD no legacy RBAC); role enum D-10; TANPA password; TANPA super-user",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_user_branch_scope",
+      "purpose": "Child normalisasi branch_scope list (single vs multi OQ-BE07-04)",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "cfg_menu",
+      "purpose": "Menu tree (penerus ms_module_menu); trans_type_id_prefix LOCKED verbatim; role-driven",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "cfg_menu_role_grant",
+      "purpose": "Grant menu per role D-10 (re-key position→role, bukan copy 1:1)",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "cfg_menu_user_grant_special",
+      "purpose": "Grant khusus per user (OQ-BE07-05 — risiko backdoor D-09)",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_employee_mirror",
+      "purpose": "HR sync mirror (Tier B read-only; write only sync job); is_resigned wajib eksplisit",
+      "doc": "03-data-model.md",
+      "tier": "B"
+    },
+    {
+      "name": "mst_dealer",
+      "purpose": "Dealer master (DDL 51 kolom); KTP/NPWP zero-diff; is_sub_dealer_enabled flag (fix EC6)",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_dealer_document",
+      "purpose": "Normalisasi 6 kolom path dealer → object storage",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_dealer_personnel",
+      "purpose": "Dealer personnel (DDL 27 kolom); status=A filter eligibility pembayaran",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_dealer_job_title",
+      "purpose": "Dealer job title + dealer_payment_code",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_dealer_bank_reference",
+      "purpose": "Rekening dealer; account_number/name LOCKED payout zero-diff; maker-checker WAJIB",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_dealer_branch_access",
+      "purpose": "Akses cabang dealer (BR-DEALER-1 branch-scoped picker)",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "cfg_transaction_code",
+      "purpose": "Transaction code per branch (upsert BR-BE07-19)",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "cfg_transaction_type",
+      "purpose": "Transaction type; transaction_type_code LOCKED external-FK; PATCH hanya is_active",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "cfg_hierarchy_matrix",
+      "purpose": "Approval hierarchy level (SINGLE SOURCE — admin write + 03 walk tabel sama; OQ-MASTERDATA-03 ✅)",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_approval_reason",
+      "purpose": "Approval reason (type 1/2/3/9 — OQ-DLRPTN-04); consumed 03/05",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_credit_source",
+      "purpose": "Credit source LOKAL acquisition (BR-CREDITSRC-1); scoped per branch",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_branch_credit_source",
+      "purpose": "Mapping branch↔credit-source + flag photo_required/print_survey_report",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_blacklist_override",
+      "purpose": "Whitelist/override AML; national_id LOCKED; maker-checker WAJIB + append-only audit",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_public_holiday",
+      "purpose": "Public holiday (satu-satunya 07 fisik di FC_ACQ_MCF); satu-satunya ber-DELETE (OQ-BE07-06)",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_general_parameter",
+      "purpose": "General parameter key/value; is_updateable=false→409; no create/delete via API",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "mst_promotion_line_text",
+      "purpose": "Promotion banner text + display color",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "map_transaction_type_gl",
+      "purpose": "GL CoA mapping LOCKED zero-diff; maker-checker WAJIB; no delete; data milik finance",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "cfg_number_format",
+      "purpose": "Numbering config (CREDIT_ID code_type LOCKED); counter→DB sequence; consumer BE-01 mint credit_id",
+      "doc": "03-data-model.md",
+      "tier": "A"
+    },
+    {
+      "name": "log_master_change_request",
+      "purpose": "Audit maker-checker envelope E37 + keputusan checker (append-only)",
+      "doc": "03-data-model.md",
+      "tier": "log"
+    },
+    {
+      "name": "log_master_audit",
+      "purpose": "Audit before-after mutasi Tier A (append-only)",
+      "doc": "03-data-model.md",
+      "tier": "log"
+    }
+  ],
+  "documented_dtos": [],
+  "flows": [
+    {
+      "id": "F-U-001",
+      "title": "Provision & lifecycle APP_USER (E1-E7)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-07 §4.1",
+        "§9 AC-1/2/3/4"
+      ],
+      "dod_count": 6
+    },
+    {
+      "id": "F-U-002",
+      "title": "Menu & grants (E9-E11)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-07 §4.1",
+        "§9 AC-4/5"
+      ],
+      "dod_count": 3,
+      "workflow": true,
+      "operator_surface": [
+        "worklist",
+        "decision",
+        "state-labels",
+        "audit-timeline"
+      ]
+    },
+    {
+      "id": "F-U-003",
+      "title": "HR mirror picker (E8)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-07 §4.1",
+        "§9 AC-3"
+      ],
+      "dod_count": 3
+    },
+    {
+      "id": "F-U-004",
+      "title": "Dealer family CRUD (E12-E21)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-07 §4.2",
+        "§9 AC-6/7/8/9"
+      ],
+      "dod_count": 7,
+      "workflow": true,
+      "operator_surface": [
+        "worklist",
+        "decision",
+        "state-labels",
+        "audit-timeline"
+      ]
+    },
+    {
+      "id": "F-U-005",
+      "title": "Transaction-Type Hierarchy config (E22-E28)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-07 §4.3",
+        "§9 AC-10/11"
+      ],
+      "dod_count": 7,
+      "workflow": true,
+      "operator_surface": [
+        "worklist",
+        "decision",
+        "state-labels",
+        "audit-timeline"
+      ]
+    },
+    {
+      "id": "F-U-006",
+      "title": "Master operasional + lookup + numbering (E29-E38)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-07 §4.4",
+        "§9 AC-12/13/14/15/16"
+      ],
+      "dod_count": 9
+    },
+    {
+      "id": "F-U-007",
+      "title": "Maker-checker envelope generik (E37)",
+      "type": "user",
+      "doc": "04-flows.md",
+      "source_acs": [
+        "BE-07 §5 E37",
+        "§9 AC-8"
+      ],
+      "dod_count": 4,
+      "workflow": true,
+      "operator_surface": [
+        "worklist",
+        "decision",
+        "state-labels",
+        "audit-timeline"
+      ]
+    }
+  ],
+  "adrs": [
+    {
+      "id": "ADR-02",
+      "title": "Zero stored procedure (inherited — validasi ladder V1-V9 di service Java)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-03",
+      "title": "Satu schema + prefix kelas + ownership registry (inherited — cfg_hierarchy_matrix single source)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-05",
+      "title": "Anti-Corruption Layer (inherited — Tier C FC_MSTAPP_MCF + Tier B HR sync)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-07",
+      "title": "RBAC 5 peran + maker-checker server-side (inherited — 07 sumber data authz)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-13",
+      "title": "Flowable embedded (inherited — 07 definisi ladder, 03 eksekusi)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-14",
+      "title": "Standarisasi schema DB-CONVENTIONS (inherited)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "ADR-15",
+      "title": "Migrasi simulation-first (inherited — cleansing V4/V6 ladder)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "D-MD-01",
+      "title": "Tiga tier kepemilikan master (A/B/C)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "D-MD-02",
+      "title": "Maker-checker envelope generik E37",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "D-MD-03",
+      "title": "Single-source cfg_hierarchy_matrix (OQ-MASTERDATA-03 ✅)",
+      "doc": "05-decisions.md",
+      "status": "accepted"
+    },
+    {
+      "id": "D-MD-04",
+      "title": "Role enum tertutup D-10 (no mst_role table selama tertutup)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    },
+    {
+      "id": "D-MD-05",
+      "title": "cfg_number_format + DB sequence (ganti manual-increment legacy)",
+      "doc": "05-decisions.md",
+      "status": "proposed"
+    }
+  ],
+  "hard_rules": [
+    {
+      "id": "constitution-B-012",
+      "rule": "Super-user DIHAPUS; no role/grant/bypass setara; audit override historis survive migrasi",
+      "source": "constitution §B-012; D-09; BR-BE07-01"
+    },
+    {
+      "id": "constitution-B-015",
+      "rule": "MsBank.PasscodeBiBca REDACTED-SECRET — tidak diekspos/tidak dimigrasi tanpa security review",
+      "source": "constitution §B-015; BR-BE07-25; OQ-DLRPTN-05"
+    },
+    {
+      "id": "constitution-B-016",
+      "rule": "ACL boundary Tier C — no cross-DB/linked-server pola aplikasi baru; lookup fail=503 bukan sukses-kosong",
+      "source": "constitution §B-016; BR-BE07-22/26"
+    },
+    {
+      "id": "constitution-C-010",
+      "rule": "07 trunk reference leaf — konsumen baca via API publik read-only; no direct repo access; cfg_hierarchy_matrix single source 07+03",
+      "source": "constitution §C-010; OQ-MASTERDATA-03 ✅"
+    },
+    {
+      "id": "constitution-I-002",
+      "rule": "Maker-checker WAJIB BR-BE07-05: DEALER_BANK_REFERENCE, BLACKLIST_OVERRIDE, GL_TRANSACTION_TYPE_LINK, GENERAL_PARAMETER, MENU.trans_type_id_prefix, TRANSACTION_TYPE/APPROVAL_HIERARCHY_LEVEL, dealer legal identity, NUMBER_FORMAT CREDIT_ID",
+      "source": "constitution §I-002; BR-BE07-05"
+    },
+    {
+      "id": "constitution-I-003",
+      "rule": "No hard delete master konfigurasi (deactivate-only); DELETE→405/404 (kecuali PUBLIC_HOLIDAY OQ-BE07-06)",
+      "source": "constitution §I-003; BR-BE07-03"
+    },
+    {
+      "id": "constitution-I-004",
+      "rule": "Role enum tertutup D-10 VARCHAR+CHECK; no SUPER_USER; no mst_role selama tertutup",
+      "source": "constitution §I-004; BR-BE07-01; D-MD-04"
+    },
+    {
+      "id": "constitution-I-005",
+      "rule": "APP_USER TANPA password (LDAP); hanya NIK ada & tidak resigned di mirror; no POST /employees",
+      "source": "constitution §I-005; BR-BE07-02/BR-SHELL-1/BR-EMPLOYEE-1"
+    },
+    {
+      "id": "constitution-I-006",
+      "rule": "Validasi ladder server-side: Level-1 is_approver ditolak; next_pic required/empty; PIC tidak resigned (fix V4)",
+      "source": "constitution §I-006; BR-BE07-15/16/17; OQ-MASTERDATA-02"
+    },
+    {
+      "id": "constitution-I-007",
+      "rule": "transaction_type_code + trans_type_id_prefix = external-FK LOCKED char-for-char; mutasi prefix→maker-checker; mapping disimpan eksplisit (bukan derive substring)",
+      "source": "constitution §I-007; BR-BE07-14/18; BR-PRODASSET-7/14"
+    },
+    {
+      "id": "constitution-I-008",
+      "rule": "Lookup fail=error eksplisit 503/404 (bukan sukses-kosong); resigned/not-found/source-error = 3 sinyal berbeda",
+      "source": "constitution §I-008; BR-BE07-22"
+    },
+    {
+      "id": "constitution-I-009",
+      "rule": "cfg_number_format + DB sequence; counter last_number tidak dimigrasi; CREDIT_ID code_type change→maker-checker",
+      "source": "constitution §I-009; D-MD-05; OQ-GT-02 ✅"
+    },
+    {
+      "id": "rule-zero-diff-locked",
+      "rule": "Field LOCKED zero-diff migrasi: KTP/NPWP dealer, account_number/name payout, CoA GL, trans_type_id_prefix, transaction_type_code",
+      "source": "06-constraints.md; BE-07 §3/§11"
+    },
+    {
+      "id": "rule-do-not-replicate",
+      "rule": "Do-not-replicate EC1/EC5/EC6/EC7/EC12/EC14 + vestigial hidden fields + file-path columns + TOP1-no-ORDER-BY + /CRUD demo",
+      "source": "06-constraints.md; BE-07 §11 marker-fidelity"
+    }
+  ],
+  "target_files": [],
+  "provenance": {
+    "source_prd_primary": "BE-07-master-data-menus.md",
+    "parent_vault": "../acquisition/ (umbrella — source of truth boundary antar-modul)",
+    "kb_cited_but_absent": true,
+    "kb_caveat": "BE-07 cites .mega-sdd/knowledge-base/ (10-domains/10..11..12, 50-integrations/external-masters, 30-data-model/reference-entities, 60-frontend/66) as authoritative but KB absent on disk; inherited OQ-AC-PROVENANCE from umbrella",
+    "multi_prd": {
+      "sibling_vaults": [
+        "acquisition (parent)",
+        "jwt-login",
+        "api-platform"
+      ],
+      "route": "sub-slice of acquisition epic (module 07)",
+      "constitution_extends": "acquisition v1.2.0"
+    },
+    "oq_id_strategy": "PRD OQ-IDs preserved verbatim (OQ-EXTMASTERS-*, OQ-DLRPTN-*, OQ-CUSTMASTER-*, OQ-PRODASSET-*, OQ-MASTERDATA-*, OQ-BE07-*, OQ-REF-*, OQ-ACQCAS-*, OQ-MEET-*, OQ-GT-*, OQ-MIG-*, OQ-ARCH-STACK, OQ-AC-PROVENANCE, OQ-SHELL-*)"
+  },
+  "open_questions": [
+    {
+      "tag": "OQ-EXTMASTERS-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Masters FC_MSTAPP_MCF owned vs read-only per master + liveness linked-server (DDL ✅ 2026-07-22, sisa kepemilikan) — menentukan Tier C mana naik Tier A.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA/ITEC ownership per-master + linked-server liveness"
+    },
+    {
+      "tag": "OQ-EXTMASTERS-07",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "8 objek dirujuk code acquisition ABSEN dari dump (mis. ms_insurance_cover_type) — drop/pindah DB/ekspor parsial?",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA klarifikasi 8 objek absen dari dump"
+    },
+    {
+      "tag": "OQ-DLRPTN-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "Shape dealer live: MsDealer vs MsDealer1 vs MsDealerBackup20221227 — menentukan field census final DEALER.",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "MsDealer = live (field census §3.2). MsDealer1/MsDealerBackup20221227 = ARTIFACT discard (data diarsip Prinsip 2). Field ekstra MsDealer1 (Phone2/Fax/EmailGroup/IsDefaultMokas) NOT dibawa."
+    },
+    {
+      "tag": "OQ-REF-05",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "[SECURITY] MsBank.PasscodeBiBca live credential? + plaintext MINIAPI cred — aksi security independen rebuild (OQ-DLRPTN-05/OQ-EXTMASTERS-05).",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu security review MsBank.PasscodeBiBca (aksi independen rebuild)"
+    },
+    {
+      "tag": "OQ-CUSTMASTER-04",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Bagaimana ~27 lookup + dealer/bank masters di-maintain hari ini (no write path)? Sibling admin app? (OQ-DLRPTN-13)",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu konfirmasi stakeholder bagaimana ~27 lookup + master di-maintain (sibling admin app?)"
+    },
+    {
+      "tag": "OQ-BE07-01",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "Scope final maker-checker (BR-BE07-05) + siapa checker per resource (Kepala Cabang? HO role?) — sign-off bisnis/COBS.",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Checker = Kepala Cabang for ALL maker-checker resources (cabang-scope, consistent D-10). credit_id minting stays BE (ADR-08/OQ-GT-02 LOCKED — FE only requests/displays). BR-BE07-05 scope final."
+    },
+    {
+      "tag": "OQ-BE07-02",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Mekanisme & frekuensi sync HR → mst_employee_mirror (batch/CDC/API); field resign real-time cukup utk auto-deactivate (BR-BE07-27)?",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu HR system capability assessment + ITEC D-11 topologi (mechanism batch/CDC/API undecided)"
+    },
+    {
+      "tag": "OQ-BE07-03",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Role HO (master-data checker HO, Compliance/AML, Area/Regional Head di PIC picker) — expand enum D-10? governance?",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu governance decision role HO + stakeholder sign-off; mst_role TIDAK dibuat selama D-10 tertutup (D-MD-04)"
+    },
+    {
+      "tag": "OQ-MASTERDATA-02",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "TER-KOREKSI SEBAGIAN 2026-07-22: backend legacy validasi V1-V3/V7-V8 di SP; celah nyata V4 (NIK tanpa guard) + V6 (kontiguitas level). Cleansing import wajib + profil prod (OQ-MIG-05). [NOTE: parent umbrella erroneously lists as fully RESOLVED; BE-07 §11 qualifies partial — sub-vault OPEN is correct]",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "runtime validation V4/V6 RESOLVED (U-008 BR-BE07-15..17); cleansing import profil data prod = OQ-MIG-05"
+    },
+    {
+      "tag": "OQ-ARCH-STACK",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Framework BE (USULAN Spring Boot), transport, topologi — ITEC D-11. Java LOCKED D-12.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu deliverable ITEC D-11 (framework/transport/topologi). Java LOCKED D-12."
+    },
+    {
+      "tag": "OQ-AC-PROVENANCE",
+      "priority": "P1",
+      "category": "tech",
+      "resolution_mode": "scan",
+      "classification_confidence": "high",
+      "scan_query": "find .mega-sdd/knowledge-base/ dir + cited files (10-domains, 50-integrations/external-masters, 30-data-model/reference-entities, 60-frontend/66)",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "KB .mega-sdd/knowledge-base/ tidak ada di disk (inherited umbrella) padahal BE-07 sitasi sebagai sumber otoritatif.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu restore/move KB atau ubah sitasi PRD. Tidak block unit generation."
+    },
+    {
+      "tag": "OQ-MEET-02",
+      "priority": "P1",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Owner master loan — inherited umbrella (bukan 07 langsung, tapi 07 sediakan lookup).",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "inherited umbrella — owner master loan menunggu ITEC D-11. 07 sediakan lookup."
+    },
+    {
+      "tag": "OQ-MASTERDATA-03",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "resolved_at": "2026-07-22",
+      "resolution": "Admin surface menulis LANGSUNG ke ms_hierarchy_transaction → target tunggal cfg_hierarchy_matrix (tabel SAMA yang di-walk 03). NO separate cfg_approval_hierarchy_level.",
+      "text": "Apa konsumsi nyata konfigurasi TransTypeHierarchy (router komite vs ladder CA)? RESOLVED — single source cfg_hierarchy_matrix."
+    },
+    {
+      "tag": "OQ-MASTERDATA-01",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "Deactivate-only (no hard delete) = kebutuhan audit disengaja? Upgrade BR-BE07-03 ke LOCKED?",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "LOCKED — deactivate-only = kebutuhan audit disengaja; BR-BE07-03 upgrade ke [LOCKED] (preservasi historis routing)."
+    },
+    {
+      "tag": "OQ-DLRPTN-04",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "Makna type approval-reason '1'|'2'|'3'|'9' + apakah '9' diekspos.",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Expose semua type 1/2/3/9 (no hardcode subset; endpoint read accepts filter type eksplisit, NOT hide 9). Makna semantik TBD tapi data verbatim dibawa."
+    },
+    {
+      "tag": "OQ-BE07-04",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "Scope user: single-branch atau multi-branch (branch_scope list)?",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Multi-branch: branch_scope = list (mendukung Kepala Cabang/Compliance cover >1 cabang). mst_user_branch_scope child table relevan."
+    },
+    {
+      "tag": "OQ-BE07-05",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "Model akses menu: role-based murni vs position-based legacy vs hybrid; USER_MENU_GRANT_SPECIAL dipertahankan? (risiko backdoor D-09).",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Role-based + special grant retained WITH governance: cfg_menu_user_grant_special DIBANGUN (U-004) dengan granted_reason wajib + audit append-only + TIDAK boleh setara super-user D-09."
+    },
+    {
+      "tag": "OQ-DLRPTN-02",
+      "priority": "P2",
+      "category": "tech",
+      "resolution_mode": "scan",
+      "classification_confidence": "medium",
+      "scan_query": "verify ms_credit_source physical location: FC_ACQ_MCF local vs FC_MSTAPP_MCF export artifact (DB-CONVENTIONS census)",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "ms_credit_source genuinely lokal atau artefak export? Menentukan CREDIT_SOURCE migrasi bareng acquisition atau masters-service.",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "ms_credit_source = LOKAL acquisition DB (BR-CREDITSRC-1 VERIFIED). Migrasi bareng acquisition (Tier A owned), BUKAN masters-service terpisah."
+    },
+    {
+      "tag": "OQ-DLRPTN-07",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Sumber otoritatif BPKB location: lokal vs union linked-server MsLokasiBPKB? Single source saat migrasi.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA — sumber otoritatif BPKB location (lokal vs union linked-server MsLokasiBPKB); domain kolateral, bukan 07 langsung"
+    },
+    {
+      "tag": "OQ-CUSTMASTER-02",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Lookup reference type dipakai apa? Set applicant-type hanya P/C atau ada nilai lain? (OQ-CUSTMASTER-07)",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu stakeholder/data — makna lookup reference type + set applicant-type (P/C atau nilai lain)"
+    },
+    {
+      "tag": "OQ-PRODASSET-01",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Katalog asset otoritatif (asset-* vs item-brand-*)? Endpoint product list legacy=stub — sumber UI? (OQ-PRODASSET-03)",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu keputusan desain + stakeholder — katalog asset otoritatif (asset-* vs item-brand-*); sumber UI product list"
+    },
+    {
+      "tag": "OQ-REF-01",
+      "priority": "P2",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "Nilai application_type_id di-parse sistem eksternal (Passnet/GL)? LOCKED vs INTENT.",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu stakeholder/eksternal — nilai application_type_id di-parse Passnet/GL (LOCKED vs INTENT)"
+    },
+    {
+      "tag": "OQ-EXTMASTERS-08",
+      "priority": "P2",
+      "category": "tech",
+      "resolution_mode": "scan",
+      "classification_confidence": "medium",
+      "scan_query": "compare MsPublicHoliday rows in FC_ACQ_MCF vs FC_MSTAPP_MCF dumps — which authoritative for mst_public_holiday migration",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "MsPublicHoliday di DUA database (FC_ACQ_MCF & FC_MSTAPP_MCF) — copy mana otoritatif? [scan portion: compare dumps; governance portion: DBA decides — parent umbrella classifies business/blocking, sub-vault tech/scan for scan dimension]",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "FC_ACQ_MCF otoritatif untuk mst_public_holiday (BE-07 §3.4: LOKAL FC_ACQ_MCF, DDL 3 kolom terverifikasi). Copy FC_MSTAPP_MCF = secondary/ignore."
+    },
+    {
+      "tag": "OQ-DLRPTN-10",
+      "priority": "P3",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "Arti kode legal entity PT='2'/'3' + enum Dt2Type kota/kabupaten (OQ-DLRPTN-11).",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Kode legal entity PT=2/3 dibawa verbatim LOCKED (external-FK ke company master — jangan ubah nilai). Dt2Type = enum eksplisit di target (kota/kabupaten), bukan string bebas. Preserve nilai + redesign enum. (covers OQ-DLRPTN-11)"
+    },
+    {
+      "tag": "OQ-BE07-06",
+      "priority": "P3",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "PUBLIC_HOLIDAY boleh hard-delete (USULAN E33) atau deactivate-only demi audit kalkulasi due-date historis?",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "Deactivate-only (no hard-delete) — PUBLIC_HOLIDAY ikut BR-BE07-03 LOCKED; E33 DELETE dropped, PATCH is_active."
+    },
+    {
+      "tag": "OQ-DLRPTN-06",
+      "priority": "P3",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "MsInsuranceByDealerR2/R4 hidup atau orphan; insurance source shape (OQ-DLRPTN-12/15).",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA/profiling — MsInsuranceByDealerR2/R4 hidup/orphan; insurance downstream, bukan 07"
+    },
+    {
+      "tag": "OQ-DLRPTN-08",
+      "priority": "P3",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "deferred",
+      "text": "sp_get_branch_exception stub mati/unfinished; payment-point branch-scoping? (OQ-DLRPTN-09)",
+      "deferred_at": "2026-07-27T00:00:00Z",
+      "defer_to": "stakeholder",
+      "deferred_reason": "menunggu DBA/code archaeology — sp_get_branch_exception stub mati/unfinished; payment-point branch-scoping minor"
+    },
+    {
+      "tag": "OQ-MASTERDATA-07",
+      "priority": "P3",
+      "category": "business",
+      "resolution_mode": "blocking",
+      "classification_confidence": "high",
+      "doc": "00-index.md",
+      "status": "resolved",
+      "text": "Layar Dukcapil/Fidusia//CRUD demo masih reachable dari menu live? (Menentukan data migrasi menu; /CRUD=ARTIFACT discard.)",
+      "resolved_at": "2026-07-27T00:00:00Z",
+      "resolver_owner": "user (session)",
+      "resolution": "/CRUD demo + layar Dukcapil/Fidusia = ARTIFACT discard — TIDAK reachable di rebuild menu seed. Menu migrasi bersih (reject entri mati + register)."
+    }
+  ],
+  "open_questions_summary": {
+    "total": 28,
+    "by_priority": {
+      "P1": 12,
+      "P2": 11,
+      "P3": 5
+    },
+    "by_status": {
+      "open": 0,
+      "resolved": 12,
+      "deferred": 16,
+      "out_of_scope": 0
+    },
+    "by_category": {
+      "business": 25,
+      "tech": 3
+    },
+    "note": "Roll-up dari ~27 OQ BE-07 §11 + inherited umbrella blocker (OQ-AC-PROVENANCE, OQ-MEET-02, OQ-ARCH-STACK). Tag PRD dipreserve. OQ-MASTERDATA-03 ✅ RESOLVED 2026-07-22 (single source cfg_hierarchy_matrix). OQ-REF-04 ✅ + OQ-PRODASSET-05 ✅ RESOLVED (dump + V1-V9 verified) TIDAK dimasukkan sebagai blocker."
+  },
+  "design_system_flags": {
+    "HAS_UI_COMPONENTS": false,
+    "HAS_TOKENS": false,
+    "HAS_A11Y": false,
+    "HAS_VOICE_BRAND": false
+  },
+  "changelog": [
+    {
+      "version": "1.3.0",
+      "date": "2026-07-27",
+      "change": "Initial generation — sub-slice of acquisition epic (module 07 master-data, full module). Source BE-07 v2.1. Constitution extends acquisition v1.2.0 (§A–§H inherited + §I master-data). 26 target tables + 2 log. 38 endpoints E1-E38. OQ-IDs PRD preserved. Cross-reference parent vault ../acquisition/ for boundary antar-modul."
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-07-27",
+      "change": "bind-codebase: CLEAN binding (conflict==0). 19 claims all NEW (greenfield module 07 in brownfield repo). codebase-map 0682bb58 ast. --no-kb (KB absent OQ-AC-PROVENANCE). framework pack spring.md loaded (6 hard rules promoted). Project constitution gate skipped (no .mega-sdd/constitution.md). Coexistence note: mst_user(07) vs Users/mojf_users(jwt-login) distinct, not CONFLICT. bound/ produced. validate-binding-json.sh PASS."
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-07-27",
+      "change": "generate-units: 12 units (U-001..U-012) all task_type=create (greenfield module 07). DAG no cycles. 4 waves topo order. OQ propagation Step 12.5.g PASS (all P1 OQ in binding_refs). Maker-checker U-009 load-bearing foundation (6 dependents)."
+    },
+    {
+      "version": "1.3.1",
+      "date": "2026-07-27",
+      "change": "resolve-oq round 1 (P1 triage): OQ-BE07-01 RESOLVED (Checker=Kepala Cabang all resources, credit_id minting stays BE); OQ-BE07-02 DEFERRED (HR/ITEC); OQ-BE07-03 DEFERRED (governance/stakeholder). BR-BE07-05 scope final. Constitution §I-002 + 06-constraints updated. | Batch 2: OQ-DLRPTN-01 RESOLVED (MsDealer live, backup ARTIFACT); OQ-MASTERDATA-02 DEFERRED (OQ-MIG-05); OQ-BE07-04 RESOLVED (multi-branch); OQ-BE07-05 RESOLVED (role-based + special grant governance). 03-data-model/06-constraints updated. | Batch 3: OQ-BE07-06 RESOLVED (deactivate-only no delete); OQ-DLRPTN-04 RESOLVED (expose all types); OQ-MASTERDATA-01 RESOLVED (BR-BE07-03 LOCKED). External defer: OQ-EXTMASTERS-01/07, OQ-ARCH-STACK, OQ-AC-PROVENANCE, OQ-MEET-02, OQ-REF-05, OQ-CUSTMASTER-04."
+    },
+    {
+      "version": "1.3.2",
+      "date": "2026-07-27",
+      "change": "resolve-oq round 2 (P2/P3 triage): 4 RESOLVED (OQ-DLRPTN-02 lokal Tier A, OQ-EXTMASTERS-08 FC_ACQ_MCF otoritatif, OQ-MASTERDATA-07 /CRUD discard, OQ-DLRPTN-10/11 verbatim LOCKED + enum redesign); 6 DEFERRED (OQ-CUSTMASTER-02, OQ-DLRPTN-07, OQ-PRODASSET-01, OQ-REF-01, OQ-DLRPTN-06, OQ-DLRPTN-08)."
+    }
+  ],
+  "advisor": {
+    "model": "mega-sdd:phase-advisor",
+    "ran_at": "2026-07-27T00:00:00Z",
+    "findings": {
+      "high": 1,
+      "medium": 2,
+      "low": 2
+    },
+    "materialized": [
+      "SMD-ADV-001 miscount fix (24 target+2 log=26, not 28)",
+      "SMD-ADV-002 summary recomputed (P2=11,P3=5,business=25,tech=3)",
+      "SMD-ADV-003 OQ-EXTMASTERS-08 dual-classification note",
+      "SMD-ADV-004 typo defnisi→definisi",
+      "SMD-ADV-005 OQ-MASTERDATA-02 parent-drift note"
+    ]
+  },
+  "binding_state": {
+    "bound": true,
+    "conflict": 0,
+    "claims": 19,
+    "new": 19,
+    "verified_at": "2026-07-27T00:00:00Z"
+  },
+  "units_state": {
+    "count": 12,
+    "all_create": true,
+    "generated_at": "2026-07-27T00:00:00Z"
+  }
+}
