@@ -1,9 +1,9 @@
 {
   "status": "PASS",
   "validator": "ui-deferral",
-  "ts": "2026-07-24T09:46:01.686770Z",
+  "ts": "2026-07-30T02:56:05.280628Z",
   "summary": {
-    "bolt_reports_scanned": 14,
+    "bolt_reports_scanned": 15,
     "units_with_ui_contract": 0,
     "deferral_count": 0
   },

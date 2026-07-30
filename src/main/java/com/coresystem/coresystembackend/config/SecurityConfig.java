@@ -41,7 +41,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
  */
 @Configuration
 @EnableWebSecurity
-@org.springframework.context.annotation.Profile({"!local", "!dev"})
 public class SecurityConfig {
 
 	/**

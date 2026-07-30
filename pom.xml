@@ -117,6 +117,15 @@
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-database-postgresql</artifactId>
 		</dependency>
+
+		<!-- Flowable embedded workflow engine (ADR-13 — approval/human-task layer).
+		     ACT_* tables auto-created on startup; BPMN versioned in repo;
+		     log_approval_history = independent regulatory audit (DB-CONVENTIONS §8). -->
+		<dependency>
+			<groupId>org.flowable</groupId>
+			<artifactId>flowable-spring-boot-starter</artifactId>
+			<version>7.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
