@@ -1,4 +1,13 @@
-# .env
-# run-app.sh
+.env
+run-app.sh
+target/
+*.class
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+.DS_Store
+Thumbs.db
 /mcp/
-/target/
