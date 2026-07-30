@@ -6,6 +6,16 @@
     "drop_count": 0,
     "advisory_count": 0,
     "vaults": {
+      "acquisition": {
+        "flows_checked": 0,
+        "flows_with_kb_source": 0,
+        "staging_drops": 0
+      },
+      "acquisition-master-data": {
+        "flows_checked": 0,
+        "flows_with_kb_source": 0,
+        "staging_drops": 0
+      },
       "api-platform": {
         "flows_checked": 0,
         "flows_with_kb_source": 0,

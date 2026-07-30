@@ -1,8 +1,13 @@
 {
-  "ts": "2026-07-24T09:46:01.771729Z",
+  "ts": "2026-07-30T02:56:05.368761Z",
   "status": "FAIL",
   "validator": "validate-vault-binding-coverage.sh",
   "slice4_summary": {
+    "acquisition-master-data": {
+      "vault_sections_found": 7,
+      "orphaned_in_binding": 2,
+      "binding_doc": ".mega-sdd/vaults/acquisition-master-data/binding.md"
+    },
     "api-platform": {
       "vault_sections_found": 0,
       "orphaned_in_binding": 0,
@@ -15,6 +20,10 @@
     }
   },
   "slice5_summary": {
+    "acquisition-master-data": {
+      "units_count": 12,
+      "units_without_bolt_report": 11
+    },
     "api-platform": {
       "units_count": 5,
       "units_without_bolt_report": 0
@@ -24,8 +33,19 @@
       "units_without_bolt_report": 0
     }
   },
-  "issues_count": 1,
+  "issues_count": 3,
   "issues": [
+    {
+      "halt_type": "vault_binding_coverage_gap",
+      "vault": "acquisition-master-data",
+      "detail": "vault acquisition-master-data has 2 section(s) not tracked in binding.md",
+      "orphaned_sections": [
+        "F-U-002",
+        "F-U-003"
+      ],
+      "binding_doc": ".mega-sdd/vaults/acquisition-master-data/binding.md",
+      "severity": "advisory"
+    },
     {
       "halt_type": "vault_binding_coverage_gap",
       "vault": "jwt-login",
@@ -34,6 +54,25 @@
         "F-U-001"
       ],
       "binding_doc": ".mega-sdd/vaults/jwt-login/binding.md",
+      "severity": "advisory"
+    },
+    {
+      "halt_type": "units_bolts_partial_execution",
+      "bound_vault": "acquisition-master-data",
+      "detail": "11 of 12 units lack bolt-report.md (partial execution)",
+      "units_without_bolt": [
+        "U-002",
+        "U-003",
+        "U-004",
+        "U-005",
+        "U-006",
+        "U-007",
+        "U-008",
+        "U-009",
+        "U-010",
+        "U-011",
+        "U-012"
+      ],
       "severity": "advisory"
     }
   ],

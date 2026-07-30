@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "pg-mcp-server": {
+      "command": "mcp/pg-mcp-server/.venv/bin/python",
+      "args": ["-m", "pg_mcp_server"],
+      "env": {
+        "SPRING_DATASOURCE_URL": "jdbc:postgresql://tibsdbdev.bankmegadev.net:5432/coresystem",
+        "SPRING_DATASOURCE_USERNAME": "postgres",
+        "SPRING_DATASOURCE_PASSWORD": "P@ssw0rd",
+        "MCP_PG_WRITE_MODE": "confirm"
+      }
+    }
+  }
+}
